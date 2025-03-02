@@ -28,17 +28,21 @@ We solve this by doing all of the work client side so that your device does the 
 
 ## FAQ
 
-1. How can I change the port?
+### How can I change the port?
 
-The port is hardcoded in `vite.config.ts` and `src/main.ts`. You can change it there.
+The port itself is hardcoded in the `vite.config.ts` file, however it is also mentioned
 
-2. How can I change the default bang?
+in the `src/main.ts` file for instructional purposes. (this one doesn't matter for actual functionality)
+
+### How can I change the default bang?
 
 The default bang is hardcoded in `src/main.ts`.
 
-You can also change it by first looking in the `src/bangs.ts` file to find the correct bang shortcut, and then changing the `LS_DEFAULT_BANG` variable in `src/main.ts`.
+Change it by first finding the correct bang code in the `src/bang.ts` file
 
-For example, searching by default using google is `g`, and searching using brave is `brave` (which is the default already).
+and swapping it in `src/main.ts`.
+
+For example, google's code is `g` and brave's is `brave` (which is the default)
 
 ## Credits
 
