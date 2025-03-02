@@ -122107,4 +122107,13 @@ export const bangs = [
     sc: "AI",
     u: "https://chat.openai.com?model=o1&q={{{s}}}",
   },
+  {
+    c: "AI",
+    d: "huggingface.co",
+    r: 0,
+    s: "Hugging Face",
+    t: "hf",
+    sc: "AI",
+    u: "https://huggingface.co/search/full-text?q={{{s}}}",
+  },
 ];
