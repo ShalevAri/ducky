@@ -11,6 +11,15 @@ export const bangs = [
     u: "https://www.t3.chat/new?q={{{s}}}",
   },
   {
+    c: "AI",
+    d: "www.perplexity.ai",
+    r: 0,
+    s: "Perplexity",
+    sc: "AI",
+    t: "ppx",
+    u: "https://www.perplexity.ai/search?q={{{s}}}",
+  },
+  {
     c: "Tech",
     d: "www.01net.com",
     r: 4,
@@ -43143,7 +43152,7 @@ export const bangs = [
     s: "GOG.com",
     sc: "Games (general)",
     t: "gog",
-    u: "https://www.gog.com/games?search={{{s}}}",
+    u: "https://www.gog.com/games?query={{{s}}}",
   },
   {
     c: "Tech",
