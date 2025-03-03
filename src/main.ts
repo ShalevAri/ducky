@@ -1,9 +1,9 @@
-import {bangs} from "./bang"
-import "./global.css"
+import { bangs } from './bang'
+import './global.css'
 
 function noSearchDefaultPageRender() {
-	const app = document.querySelector<HTMLDivElement>("#app")!
-	app.innerHTML = `
+  const app = document.querySelector<HTMLDivElement>('#app')!
+  app.innerHTML = `
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
       <div class="content-container">
         <h1>Ducky</h1>
@@ -46,137 +46,133 @@ function noSearchDefaultPageRender() {
     </div>
   `
 
-	const copyButton = app.querySelector<HTMLButtonElement>(".copy-button")!
-	const copyIcon = copyButton.querySelector("img")!
-	const urlInput = app.querySelector<HTMLInputElement>(".url-input")!
-	const defaultBangInput = app.querySelector<HTMLInputElement>(
-		".default-bang-input"
-	)!
-	const saveBangButton =
-		app.querySelector<HTMLButtonElement>(".save-bang-button")!
-	const saveIcon = saveBangButton.querySelector<HTMLImageElement>(".save-icon")!
-	const checkIcon =
-		saveBangButton.querySelector<HTMLImageElement>(".check-icon")!
-	const bangSaveStatus = app.querySelector<HTMLDivElement>(".bang-save-status")!
+  const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')!
+  const copyIcon = copyButton.querySelector('img')!
+  const urlInput = app.querySelector<HTMLInputElement>('.url-input')!
+  const defaultBangInput = app.querySelector<HTMLInputElement>('.default-bang-input')!
+  const saveBangButton = app.querySelector<HTMLButtonElement>('.save-bang-button')!
+  const saveIcon = saveBangButton.querySelector<HTMLImageElement>('.save-icon')!
+  const checkIcon = saveBangButton.querySelector<HTMLImageElement>('.check-icon')!
+  const bangSaveStatus = app.querySelector<HTMLDivElement>('.bang-save-status')!
 
-	copyButton.addEventListener("click", async () => {
-		await navigator.clipboard.writeText(urlInput.value)
-		copyIcon.src = "/clipboard-check.svg"
+  copyButton.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(urlInput.value)
+    copyIcon.src = '/clipboard-check.svg'
 
-		setTimeout(() => {
-			copyIcon.src = "/clipboard.svg"
-		}, 2000)
-	})
+    setTimeout(() => {
+      copyIcon.src = '/clipboard.svg'
+    }, 2000)
+  })
 
-	function validateAndSaveBang() {
-		const inputValue = defaultBangInput.value.trim()
-		// Remove ! from start or end of input
-		const cleanBang = inputValue.replace(/^!|!$/g, "")
+  function validateAndSaveBang() {
+    const inputValue = defaultBangInput.value.trim()
+    // Remove ! from start or end of input
+    const cleanBang = inputValue.replace(/^!|!$/g, '')
 
-		const selectedBang = bangs.find((b) => b.t === cleanBang)
+    const selectedBang = bangs.find((b) => b.t === cleanBang)
 
-		if (!selectedBang) {
-			bangSaveStatus.style.opacity = "1"
-			bangSaveStatus.style.color = "#dc3545"
-			bangSaveStatus.textContent = `Bang "!${cleanBang}" doesn't exist`
-			defaultBangInput.style.borderColor = "#dc3545"
-			return
-		}
+    if (!selectedBang) {
+      bangSaveStatus.style.opacity = '1'
+      bangSaveStatus.style.color = '#dc3545'
+      bangSaveStatus.textContent = `Bang "!${cleanBang}" doesn't exist`
+      defaultBangInput.style.borderColor = '#dc3545'
+      return
+    }
 
-		localStorage.setItem("default-bang", cleanBang)
+    localStorage.setItem('default-bang', cleanBang)
 
-		defaultBangInput.style.borderColor = "#ddd"
+    defaultBangInput.style.borderColor = '#ddd'
 
-		bangSaveStatus.style.opacity = "1"
-		bangSaveStatus.style.color = "#28a745"
-		bangSaveStatus.textContent = `Using !${cleanBang} (${selectedBang.s}) as default bang`
+    bangSaveStatus.style.opacity = '1'
+    bangSaveStatus.style.color = '#28a745'
+    bangSaveStatus.textContent = `Using !${cleanBang} (${selectedBang.s}) as default bang`
 
-		saveIcon.style.opacity = "0"
-		checkIcon.style.opacity = "1"
+    saveIcon.style.opacity = '0'
+    checkIcon.style.opacity = '1'
 
-		setTimeout(() => {
-			bangSaveStatus.style.opacity = "0"
-			saveIcon.style.opacity = "1"
-			checkIcon.style.opacity = "0"
-		}, 2000)
-	}
+    setTimeout(() => {
+      bangSaveStatus.style.opacity = '0'
+      saveIcon.style.opacity = '1'
+      checkIcon.style.opacity = '0'
+    }, 2000)
+  }
 
-	saveBangButton.addEventListener("click", validateAndSaveBang)
-	defaultBangInput.addEventListener("keypress", (e) => {
-		if (e.key !== "Enter") return
+  saveBangButton.addEventListener('click', validateAndSaveBang)
+  defaultBangInput.addEventListener('keypress', (e) => {
+    if (e.key !== 'Enter') return
 
-		validateAndSaveBang()
-	})
+    validateAndSaveBang()
+  })
 }
 
-const LS_DEFAULT_BANG = localStorage.getItem("default-bang") ?? "brave"
+const LS_DEFAULT_BANG = localStorage.getItem('default-bang') ?? 'brave'
 const defaultBang = bangs.find((b) => b.t === LS_DEFAULT_BANG)
 
 function getBangredirectUrl() {
-	const url = new URL(window.location.href)
-	const query = url.searchParams.get("q")?.trim() ?? ""
-	if (!query) {
-		noSearchDefaultPageRender()
-		return null
-	}
+  const url = new URL(window.location.href)
+  const query = url.searchParams.get('q')?.trim() ?? ''
+  if (!query) {
+    noSearchDefaultPageRender()
+    return null
+  }
 
-	// Match both !bang and bang! formats
-	const prefixMatch = query.match(/!(\S+)/i)
-	const suffixMatch = query.match(/(\S+)!/)
+  // Match both !bang and bang! formats
+  const prefixMatch = query.match(/!(\S+)/i)
+  const suffixMatch = query.match(/(\S+)!/)
 
-	const bangCandidate = (prefixMatch?.[1] ?? suffixMatch?.[1])?.toLowerCase()
-	const selectedBang = bangs.find((b) => b.t === bangCandidate) ?? defaultBang
+  const bangCandidate = (prefixMatch?.[1] ?? suffixMatch?.[1])?.toLowerCase()
+  const selectedBang = bangs.find((b) => b.t === bangCandidate) ?? defaultBang
 
-	// Remove the bang from either position
-	const cleanQuery = query
-		.replace(/!\S+\s*/i, "") // Remove prefix bang
-		.replace(/\s*\S+!/, "") // Remove suffix bang
-		.trim()
+  // Remove the bang from either position
+  const cleanQuery = query
+    .replace(/!\S+\s*/i, '') // Remove prefix bang
+    .replace(/\s*\S+!/, '') // Remove suffix bang
+    .trim()
 
-	// Format of the url is:
-	// https://www.google.com/search?q={{{s}}}
-	const searchUrl = selectedBang?.u.replace(
-		"{{{s}}}",
-		// Replace %2F with / to fix formats like "!ghr+ShalevAri/ducky"
-		encodeURIComponent(cleanQuery).replace(/%2F/g, "/")
-	)
-	if (!searchUrl) return null
+  // Format of the url is:
+  // https://www.google.com/search?q={{{s}}}
+  const searchUrl = selectedBang?.u.replace(
+    '{{{s}}}',
+    // Replace %2F with / to fix formats like "!ghr+ShalevAri/ducky"
+    encodeURIComponent(cleanQuery).replace(/%2F/g, '/')
+  )
+  if (!searchUrl) return null
 
-	return searchUrl
+  return searchUrl
 }
 
 function feelingLuckyRedirect(query: string) {
-	const cleanQuery = query.replace("!", "").trim()
+  const cleanQuery = query.replace('!', '').trim()
 
-	return `https://duckduckgo.com/?q=!ducky+${encodeURIComponent(cleanQuery)}`
+  return `https://duckduckgo.com/?q=!ducky+${encodeURIComponent(cleanQuery)}`
 }
 
 function doRedirect() {
-	const url = new URL(window.location.href)
-	const query = url.searchParams.get("q")?.trim() ?? ""
+  const url = new URL(window.location.href)
+  const query = url.searchParams.get('q')?.trim() ?? ''
 
-	if (!query) {
-		noSearchDefaultPageRender()
-		return null
-	}
+  if (!query) {
+    noSearchDefaultPageRender()
+    return null
+  }
 
-	const type = /!(?:\s|$)/i.test(query)
+  const type = /!(?:\s|$)/i.test(query)
 
-	if (type) {
-		const searchUrl = feelingLuckyRedirect(query)
-		if (!searchUrl) return
+  if (type) {
+    const searchUrl = feelingLuckyRedirect(query)
+    if (!searchUrl) return
 
-		const link = document.createElement("a")
-		link.href = searchUrl
-		link.rel = "noreferrer noopener"
-		link.click()
+    const link = document.createElement('a')
+    link.href = searchUrl
+    link.rel = 'noreferrer noopener'
+    link.click()
 
-		return
-	}
+    return
+  }
 
-	const searchUrl = getBangredirectUrl()
-	if (!searchUrl) return
-	window.location.replace(searchUrl)
+  const searchUrl = getBangredirectUrl()
+  if (!searchUrl) return
+  window.location.replace(searchUrl)
 }
 
 doRedirect()
