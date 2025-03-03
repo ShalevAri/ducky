@@ -8,8 +8,6 @@ export default defineConfig({
     })
   ],
   server: {
-    port: 49152,
-    host: true, // Listen on all local IPs
-    open: true // Automatically open browser
+    port: 49152
   }
 })
