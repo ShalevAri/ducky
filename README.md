@@ -14,7 +14,7 @@ We solve this by doing all of the work client side so that your device does the 
 2. Run `pnpm i` or equivalent to download the (few) dependencies.
 3. Run `pnpm run build` to build the project.
 4. Run `pnpm dev` to start the server.
-5. Add `http://localhost:49152` to your browser as a custom search engine (I use the Zen browser)
+5. Add `http://localhost:49152?q=%s` to your browser as a custom search engine (I use the Zen browser)
 
 ## Example Commands
 
