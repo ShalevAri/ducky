@@ -122102,7 +122102,7 @@ export const bangs = [
     c: 'AI',
     d: 'chatgpt.com',
     r: 0,
-    s: 'ChatGPT',
+    s: 'ChatGPT Temporary',
     sc: 'AI',
     t: 'cgptt',
     u: 'https://chatgpt.com?temporary-chat=true&q={{{s}}}'
@@ -122120,10 +122120,28 @@ export const bangs = [
     c: 'AI',
     d: 'chatgpt.com',
     r: 0,
+    s: 'ChatGPT 4o Temporary',
+    sc: 'AI',
+    t: 'cgptt-4o',
+    u: 'https://chatgpt.com?model=4o&temporary-chat=true&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'chatgpt.com',
+    r: 0,
     s: 'ChatGPT o3-mini',
     sc: 'AI',
     t: 'cgpt-o3-mm',
     u: 'https://chatgpt.com?model=o3-mini&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'chatgpt.com',
+    r: 0,
+    s: 'ChatGPT o3-mini Temporary',
+    sc: 'AI',
+    t: 'cgptt-o3-mm',
+    u: 'https://chatgpt.com?model=o3-mini&temporary-chat=true&q={{{s}}}'
   },
   {
     c: 'AI',
@@ -122138,10 +122156,28 @@ export const bangs = [
     c: 'AI',
     d: 'chatgpt.com',
     r: 0,
+    s: 'ChatGPT o3-mini-high Temporary',
+    sc: 'AI',
+    t: 'cgptt-o3-mh',
+    u: 'https://chatgpt.com?model=o3-mini-high&temporary-chat=true&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'chatgpt.com',
+    r: 0,
     s: 'ChatGPT o1',
     t: 'cgpt-o1',
     sc: 'AI',
     u: 'https://chatgpt.com?model=o1&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'chatgpt.com',
+    r: 0,
+    s: 'ChatGPT o1 Temporary',
+    t: 'cgptt-o1',
+    sc: 'AI',
+    u: 'https://chatgpt.com?model=o1&temporary-chat=true&q={{{s}}}'
   },
   {
     c: 'AI',
