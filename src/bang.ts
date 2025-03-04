@@ -122100,6 +122100,15 @@ export const bangs = [
   },
   {
     c: 'AI',
+    d: 'chatgpt.com',
+    r: 0,
+    s: 'ChatGPT',
+    sc: 'AI',
+    t: 'cgptt',
+    u: 'https://chatgpt.com?temporary-chat=true&q={{{s}}}'
+  },
+  {
+    c: 'AI',
     d: 'chat.openai.com',
     r: 0,
     s: 'ChatGPT 4o',
