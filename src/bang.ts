@@ -122109,39 +122109,39 @@ export const bangs = [
   },
   {
     c: 'AI',
-    d: 'chat.openai.com',
+    d: 'chatgpt.com',
     r: 0,
     s: 'ChatGPT 4o',
     sc: 'AI',
     t: 'cgpt-4o',
-    u: 'https://chat.openai.com?model=4o&q={{{s}}}'
+    u: 'https://chatgpt.com?model=4o&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'chat.openai.com',
+    d: 'chatgpt.com',
     r: 0,
     s: 'ChatGPT o3-mini',
     sc: 'AI',
     t: 'cgpt-o3-mm',
-    u: 'https://chat.openai.com?model=o3-mini&q={{{s}}}'
+    u: 'https://chatgpt.com?model=o3-mini&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'chat.openai.com',
+    d: 'chatgpt.com',
     r: 0,
     s: 'ChatGPT o3-mini-high',
     sc: 'AI',
     t: 'cgpt-o3-mh',
-    u: 'https://chat.openai.com?model=o3-mini-high&q={{{s}}}'
+    u: 'https://chatgpt.com?model=o3-mini-high&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'chat.openai.com',
+    d: 'chatgpt.com',
     r: 0,
     s: 'ChatGPT o1',
     t: 'cgpt-o1',
     sc: 'AI',
-    u: 'https://chat.openai.com?model=o1&q={{{s}}}'
+    u: 'https://chatgpt.com?model=o1&q={{{s}}}'
   },
   {
     c: 'AI',
