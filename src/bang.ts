@@ -122091,12 +122091,12 @@ export const bangs = [
   },
   {
     c: 'AI',
-    d: 'chat.openai.com',
+    d: 'chatgpt.com',
     r: 0,
     s: 'ChatGPT',
     sc: 'AI',
     t: 'cgpt',
-    u: 'https://chat.openai.com?q={{{s}}}'
+    u: 'https://chatgpt.com?q={{{s}}}'
   },
   {
     c: 'AI',
