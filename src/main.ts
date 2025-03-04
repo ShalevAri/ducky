@@ -2,6 +2,7 @@ import { bangs } from './bang'
 import './global.css'
 
 function noSearchDefaultPageRender() {
+  const currentUrl = window.location.href.replace(/\/+$/, '')
   const app = document.querySelector<HTMLDivElement>('#app')!
   app.innerHTML = `
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
@@ -15,7 +16,7 @@ function noSearchDefaultPageRender() {
           <input 
             type="text" 
             class="url-input"
-            value="http://localhost:49152?q=%s"
+            value="${currentUrl}?q=%s"
             readonly 
           />
           <button class="copy-button">
