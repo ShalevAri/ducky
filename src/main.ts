@@ -129,6 +129,8 @@ function getBangredirectUrl() {
     .replace(/\s*\S+!/, '') // Remove suffix bang
     .trim()
 
+  if (cleanQuery === '') return selectedBang ? `https://${selectedBang.d}` : null
+
   // Format of the url is:
   // https://www.google.com/search?q={{{s}}}
   const searchUrl = selectedBang?.u.replace(
