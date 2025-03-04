@@ -90975,7 +90975,7 @@ export const bangs = [
     s: 'Rate Your Music genre search',
     sc: 'Music',
     t: 'rymgenre',
-    u: 'https://rateyourmusic.com/search?searchtype=g&searchterm={{{s}}}'
+    u: 'https://rateyourmusic.com/search?searchtype=h&searchterm={{{s}}}'
   },
   {
     c: 'Entertainment',
