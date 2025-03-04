@@ -22,6 +22,22 @@ function noSearchDefaultPageRender() {
             <img src="/clipboard.svg" alt="Copy" />
           </button>
         </div>
+        <form class="bang-form">
+          <label for="bang-input">Care to pick a default bang?</label>
+          <div class="bang-container">
+            <input
+              id="bang-input"
+              type="text"
+              class="bang-input"
+              value="g"
+              list="bang-list"
+              spellcheck="false"
+            />
+            <input type="submit" value="Apply" class"bang-confirm"/>
+          </div>
+          <datalist id="bang-list"></datalist>
+        </form>
+        <p class="bang-error"></p>
         </div>
       </div>
     </div>
@@ -30,6 +46,27 @@ function noSearchDefaultPageRender() {
   const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')!
   const copyIcon = copyButton.querySelector('img')!
   const urlInput = app.querySelector<HTMLInputElement>('.url-input')!
+  const bangDatalist = app.querySelector<HTMLDataListElement>('#bang-list')!
+  const bangForm = app.querySelector<HTMLFormElement>('.bang-form')!
+  const bangInput = app.querySelector<HTMLInputElement>('#bang-input')!
+  const bangErrorDiv = app.querySelector<HTMLParagraphElement>('.bang-error')!
+
+  bangs.forEach((b) => {
+    const option = document.createElement('option')
+    option.value = b.t
+    bangDatalist.appendChild(option)
+  })
+
+  bangForm.addEventListener('submit', (submitEvent: SubmitEvent) => {
+    submitEvent.preventDefault()
+    const bangName = bangInput.value.trim()
+    if (!bangs.find((b) => b.t === bangName)) {
+      bangErrorDiv.innerHTML = `This bang is not known. Check the <a href="https://duckduckgo.com/bang.html" target="_blank">list of available bangs.</a>`
+      return
+    }
+    bangErrorDiv.innerHTML = ''
+    urlInput.value = `http://localhost:49152?q=%s&default_bang=${encodeURIComponent(bangName)}`
+  })
 
   copyButton.addEventListener('click', async () => {
     await navigator.clipboard.writeText(urlInput.value)
@@ -41,8 +78,22 @@ function noSearchDefaultPageRender() {
   })
 }
 
-const LS_DEFAULT_BANG = localStorage.getItem('default-bang') ?? 'brave'
-const defaultBang = bangs.find((b) => b.t === LS_DEFAULT_BANG)
+function findBang(url: URL) {
+  //Honoring legacy local-storage defined bangs
+  const LS_DEFAULT_BANG = localStorage.getItem('default-bang')
+  if (LS_DEFAULT_BANG) {
+    const defaultBang = bangs.find((b) => b.t === LS_DEFAULT_BANG)
+    if (defaultBang) return defaultBang
+  }
+
+  //Obtaining default bang from URL
+  const URL_DEFAULT_BANG = url.searchParams.get('default_bang')?.trim() ?? 'g' //can contain invalid bang
+  const defaultUrlBang = bangs.find((b) => b.t == URL_DEFAULT_BANG)
+  if (defaultUrlBang) return defaultUrlBang
+
+  //In case everything else is invalid
+  return bangs.find((b) => b.t == 'g')!
+}
 
 function getBangredirectUrl() {
   const url = new URL(window.location.href)
@@ -57,7 +108,7 @@ function getBangredirectUrl() {
   const suffixMatch = query.match(/(\S+)!/)
 
   const bangCandidate = (prefixMatch?.[1] ?? suffixMatch?.[1])?.toLowerCase()
-  const selectedBang = bangs.find((b) => b.t === bangCandidate) ?? defaultBang
+  const selectedBang = bangs.find((b) => b.t === bangCandidate) ?? findBang(url)
 
   // Remove the bang from either position
   const cleanQuery = query
