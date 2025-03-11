@@ -1,0 +1,29 @@
+---
+description: The project's structure
+globs: 
+alwaysApply: true
+---
+## Project Structure
+.
+├── LICENSE
+├── README.md
+├── docker
+│   └── Dockerfile
+├── docker-compose.yml
+├── index.html
+├── node_modules
+├── package.json
+├── pnpm-lock.yaml
+├── public
+│   ├── clipboard-check.svg
+│   ├── clipboard.svg
+│   └── search.svg
+├── src
+│   ├── bang.ts
+│   ├── global.css
+│   ├── hashbang.ts
+│   ├── hashbanggen.ts
+│   ├── main.ts
+│   └── vite-env.d.ts
+├── tsconfig.json
+└── vite.config.ts
