@@ -1,6 +1,43 @@
 import './global.css'
 import { bangs } from './hashbang.ts'
 
+// Ducky Islands - Custom prompt injection prefixes
+interface DuckyIsland {
+  key: string // The suffix key (e.g., 'a' in !t3a)
+  name: string // Display name for the island
+  prompt: string // The prompt text to inject
+}
+
+// Load custom islands from localStorage
+function loadDuckyIslands(): { [key: string]: DuckyIsland } {
+  const islands = localStorage.getItem('ducky-islands')
+  if (!islands) return {}
+  try {
+    return JSON.parse(islands)
+  } catch (e) {
+    console.error('Failed to parse ducky islands', e)
+    return {}
+  }
+}
+
+// Save islands to localStorage
+function saveDuckyIslands(islands: { [key: string]: DuckyIsland }) {
+  localStorage.setItem('ducky-islands', JSON.stringify(islands))
+}
+
+// Get stored islands or initialize with defaults if none exist
+const duckyIslands = loadDuckyIslands()
+if (Object.keys(duckyIslands).length === 0) {
+  // Add a default "answer first" island
+  duckyIslands['a'] = {
+    key: 'a',
+    name: 'Just Give Me The Answer',
+    prompt:
+      'The user is going to give you a question (the input). Give them the tl;dr version of the answer first, and only then explain it. For example, if it is a terminal command, first output the command in a code block, and only then explain it. If it is a code snippet, output the code snippet in a code block. If it is a general question, provide a tl;dr version of the answer that is easy to read and understand quickly, and only then go in depth. The tl;dr version should be titled accordingly with a heading for clarity. Then, include the explanation heading and answer as usual. Input: '
+  }
+  saveDuckyIslands(duckyIslands)
+}
+
 // Check for default_bang parameter in URL first, then localStorage, then fallback to "g"
 const url = new URL(window.location.href)
 const urlDefaultBang = url.searchParams.get('default_bang')
@@ -38,6 +75,43 @@ function updateRecentBangs(bangName: string) {
 
   // Save back to localStorage
   localStorage.setItem('recent-bangs', JSON.stringify(recentBangs))
+}
+
+// Render the list of Ducky Islands
+function renderIslandsList(): string {
+  const islands = Object.values(duckyIslands)
+  if (islands.length === 0) {
+    return '<p>No custom islands created yet.</p>'
+  }
+
+  return `
+    <table class="islands-table">
+      <thead>
+        <tr>
+          <th>Suffix</th>
+          <th>Name</th>
+          <th>Prompt</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${islands
+          .map(
+            (island) => `
+          <tr data-key="${island.key}">
+            <td>${island.key}</td>
+            <td>${island.name}</td>
+            <td class="prompt-cell">${island.prompt}</td>
+            <td>
+              <button class="delete-island" data-key="${island.key}">Delete</button>
+            </td>
+          </tr>
+        `
+          )
+          .join('')}
+      </tbody>
+    </table>
+  `
 }
 
 function noSearchDefaultPageRender() {
@@ -115,6 +189,48 @@ function noSearchDefaultPageRender() {
           <datalist id="bang-list"></datalist>
         </form>
         <p class="bang-error"></p>
+        
+        <div class="ducky-islands-container">
+          <h2>Ducky Islands</h2>
+          <p>Ducky Islands allow you to create custom prompt prefixes for AI bangs.</p>
+          <p>For example, using <code>!t3a</code> instead of <code>!t3</code> will tell the AI to give you the answer first.</p>
+          
+          <div class="islands-list">
+            ${renderIslandsList()}
+          </div>
+          
+          <button class="add-island-button">Add New Island</button>
+          
+          <div class="island-form-container" style="display: none;">
+            <form class="island-form">
+              <h3>Create New Island</h3>
+              
+              <div class="form-group">
+                <label for="island-key">Suffix Key:</label>
+                <input type="text" id="island-key" class="island-input" maxlength="3" required>
+                <p class="form-help">The letter(s) to add after a bang (e.g., 'a' for !t3a)</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="island-name">Island Name:</label>
+                <input type="text" id="island-name" class="island-input" required>
+                <p class="form-help">A descriptive name for this island</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="island-prompt">Prompt Text:</label>
+                <textarea id="island-prompt" class="island-textarea" rows="4" required></textarea>
+                <p class="form-help">The text to inject before your query</p>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="cancel-button">Cancel</button>
+                <button type="submit" class="save-button">Save Island</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
         ${recentBangsHtml}
       </div>
       <div class="footer">
@@ -189,6 +305,96 @@ function noSearchDefaultPageRender() {
       }
     })
   })
+
+  // Ducky Islands event handlers
+  const addIslandButton = app.querySelector<HTMLButtonElement>('.add-island-button')
+  const islandFormContainer = app.querySelector<HTMLDivElement>('.island-form-container')
+  const islandForm = app.querySelector<HTMLFormElement>('.island-form')
+  const cancelButton = app.querySelector<HTMLButtonElement>('.cancel-button')
+  const islandKeyInput = app.querySelector<HTMLInputElement>('#island-key')
+  const islandNameInput = app.querySelector<HTMLInputElement>('#island-name')
+  const islandPromptInput = app.querySelector<HTMLTextAreaElement>('#island-prompt')
+
+  if (addIslandButton && islandFormContainer && islandForm && cancelButton) {
+    // Show the form when Add New Island is clicked
+    addIslandButton.addEventListener('click', () => {
+      islandFormContainer.style.display = 'block'
+      addIslandButton.style.display = 'none'
+    })
+
+    // Hide the form when Cancel is clicked
+    cancelButton.addEventListener('click', () => {
+      islandFormContainer.style.display = 'none'
+      addIslandButton.style.display = 'block'
+      islandForm.reset()
+    })
+
+    // Handle form submission
+    islandForm.addEventListener('submit', (event) => {
+      event.preventDefault()
+
+      if (!islandKeyInput || !islandNameInput || !islandPromptInput) return
+
+      const key = islandKeyInput.value.trim()
+      const name = islandNameInput.value.trim()
+      const prompt = islandPromptInput.value.trim()
+
+      // Validate inputs
+      if (!key || !name || !prompt) {
+        alert('All fields are required')
+        return
+      }
+
+      if (duckyIslands[key]) {
+        alert(`Island with suffix "${key}" already exists. Please choose a different suffix.`)
+        return
+      }
+
+      // Add the new island
+      duckyIslands[key] = { key, name, prompt }
+      saveDuckyIslands(duckyIslands)
+
+      // Reset and hide the form
+      islandForm.reset()
+      islandFormContainer.style.display = 'none'
+      addIslandButton.style.display = 'block'
+
+      // Refresh the islands list
+      const islandsList = app.querySelector<HTMLDivElement>('.islands-list')
+      if (islandsList) {
+        islandsList.innerHTML = renderIslandsList()
+        // Re-attach delete event handlers
+        attachDeleteHandlers()
+      }
+    })
+
+    // Attach delete event handlers
+    function attachDeleteHandlers() {
+      const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-island')
+      deleteButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.key
+          if (key && duckyIslands[key]) {
+            if (confirm(`Are you sure you want to delete the "${duckyIslands[key].name}" island?`)) {
+              delete duckyIslands[key]
+              saveDuckyIslands(duckyIslands)
+
+              // Refresh the islands list
+              const islandsList = app.querySelector<HTMLDivElement>('.islands-list')
+              if (islandsList) {
+                islandsList.innerHTML = renderIslandsList()
+                // Re-attach delete event handlers
+                attachDeleteHandlers()
+              }
+            }
+          }
+        })
+      })
+    }
+
+    // Initial attachment of delete handlers
+    attachDeleteHandlers()
+  }
 }
 
 function getBangredirectUrl() {
@@ -201,7 +407,24 @@ function getBangredirectUrl() {
 
   // Match a bang in the query (only prefix bang is supported)
   const match = query.match(/!(\S+)/i)
-  const bangCandidate: string = match?.[1]?.toLowerCase() ?? ''
+  const bangWithIslandCandidate: string = match?.[1]?.toLowerCase() ?? ''
+
+  // Check if the bang has a Ducky Island suffix
+  let bangCandidate = bangWithIslandCandidate
+  let islandKey = ''
+  let injectionPrompt = ''
+
+  // Look for suffixes that match our islands
+  for (const key of Object.keys(duckyIslands)) {
+    if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
+      // Found a matching island suffix
+      bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
+      islandKey = key
+      injectionPrompt = duckyIslands[key].prompt
+      break
+    }
+  }
+
   const selectedBang = bangs[bangCandidate] ?? defaultBang
 
   // Update recent bangs if a bang was used
@@ -213,7 +436,10 @@ function getBangredirectUrl() {
   const cleanQuery = query.replace(/!\S+\s*/i, '').trim()
   if (cleanQuery === '') return selectedBang ? `https://${selectedBang.d}` : null
 
-  const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(cleanQuery).replace(/%2F/g, '/'))
+  // If we have an island, inject the prompt
+  const finalQuery = islandKey ? `${injectionPrompt}${cleanQuery}` : cleanQuery
+
+  const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(finalQuery).replace(/%2F/g, '/'))
   if (!searchUrl) return null
 
   return searchUrl

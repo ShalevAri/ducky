@@ -248,3 +248,142 @@ input[type='submit'] {
 .recent-bang:active {
   background-color: var(--button-active-bg);
 }
+
+/* Ducky Islands Styles */
+.ducky-islands-container {
+  margin-top: 32px;
+  text-align: left;
+}
+
+.ducky-islands-container h2 {
+  margin-bottom: 8px;
+}
+
+.ducky-islands-container p {
+  margin-bottom: 16px;
+}
+
+.ducky-islands-container code {
+  background-color: var(--input-bg);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.islands-list {
+  margin-bottom: 16px;
+}
+
+.islands-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+.islands-table th,
+.islands-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.islands-table th {
+  font-weight: 600;
+}
+
+.prompt-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-island-button {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-island-button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.island-form-container {
+  margin-top: 16px;
+  background-color: var(--input-bg);
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.island-form h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.island-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.island-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  resize: vertical;
+}
+
+.form-help {
+  margin-top: 4px;
+  font-size: 0.8em;
+  color: var(--footer-color);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cancel-button,
+.save-button,
+.delete-island {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.save-button:hover,
+.cancel-button:hover,
+.delete-island:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.delete-island {
+  font-size: 0.9em;
+  padding: 4px 8px;
+}
