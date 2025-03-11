@@ -74050,7 +74050,7 @@ export const bangs = [
     s: 'Nix Discourse',
     sc: 'Sysadmin',
     t: 'nixcourse',
-    u: 'https://discourse.nixos.org/search?q={{{s}}}'
+    u: 'https://nixos.org/nixos/options.html?query={{{s}}}'
   },
   {
     c: 'Tech',
