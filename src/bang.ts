@@ -5667,7 +5667,7 @@ export const bangs = [
     s: 'Album of The Year',
     sc: 'Music',
     t: 'aoty',
-    u: 'https://www.albumoftheyear.org/search.php?q={{{s}}}'
+    u: 'https://www.albumoftheyear.org/search?q={{{s}}}'
   },
   {
     c: 'Entertainment',
