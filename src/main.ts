@@ -3,6 +3,11 @@ import './global.css'
 import { bangs } from './hashbang.ts'
 import { DuckyIsland, defaultIslands } from './islands.ts'
 
+// Initialize ducklings if none exist
+if (loadDucklings().length === 0) {
+  saveDucklings(defaultDucklings)
+}
+
 // Load custom islands from localStorage
 function loadDuckyIslands(): { [key: string]: DuckyIsland } {
   const islands = localStorage.getItem('ducky-islands')
@@ -248,13 +253,19 @@ function noSearchDefaultPageRender() {
               <div class="form-group">
                 <label for="duckling-pattern">Pattern:</label>
                 <input type="text" id="duckling-pattern" class="duckling-input" required>
-                <p class="form-help">The text pattern to match (e.g., 'shalevari/ducky')</p>
+                <p class="form-help">The search pattern to match (e.g., 'ducky')</p>
               </div>
               
               <div class="form-group">
                 <label for="duckling-bang">Bang Command:</label>
                 <input type="text" id="duckling-bang" class="duckling-input" required>
                 <p class="form-help">The bang command to use (e.g., 'ghr')</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="duckling-target-value">Target Value:</label>
+                <input type="text" id="duckling-target-value" class="duckling-input" required>
+                <p class="form-help">The value to use with the bang command (e.g., 'shalevari/ducky')</p>
               </div>
               
               <div class="form-group">
@@ -443,6 +454,7 @@ function noSearchDefaultPageRender() {
   const ducklingCancelButton = app.querySelector<HTMLButtonElement>('.duckling-cancel-button')
   const ducklingPatternInput = app.querySelector<HTMLInputElement>('#duckling-pattern')
   const ducklingBangInput = app.querySelector<HTMLInputElement>('#duckling-bang')
+  const ducklingTargetValueInput = app.querySelector<HTMLInputElement>('#duckling-target-value')
   const ducklingDescriptionInput = app.querySelector<HTMLInputElement>('#duckling-description')
 
   addDucklingButton?.addEventListener('click', () => {
@@ -459,9 +471,10 @@ function noSearchDefaultPageRender() {
 
     const pattern = ducklingPatternInput?.value.trim() || ''
     const bangCommand = ducklingBangInput?.value.trim().replace(/^!/, '') || ''
+    const targetValue = ducklingTargetValueInput?.value.trim() || ''
     const description = ducklingDescriptionInput?.value.trim() || ''
 
-    if (!pattern || !bangCommand || !description) return
+    if (!pattern || !bangCommand || !targetValue || !description) return
 
     // Add the new duckling
     const ducklings = loadDucklings()
@@ -470,10 +483,10 @@ function noSearchDefaultPageRender() {
     const existingIndex = ducklings.findIndex((d) => d.pattern === pattern)
     if (existingIndex >= 0) {
       // Update existing duckling
-      ducklings[existingIndex] = { pattern, bangCommand, description }
+      ducklings[existingIndex] = { pattern, bangCommand, targetValue, description }
     } else {
       // Add new duckling
-      ducklings.push({ pattern, bangCommand, description })
+      ducklings.push({ pattern, bangCommand, targetValue, description })
     }
 
     saveDucklings(ducklings)
@@ -584,15 +597,7 @@ function getBangredirectUrl() {
       // Update recent bangs
       updateRecentBangs(bangCommand)
 
-      // For an exact match (when remainingQuery is empty), we should use the pattern itself as the query
-      // This makes sure GitHub repo patterns like "shalevari/ducky" go to the right place
-      if (remainingQuery === '') {
-        // Use the original query (which is the pattern) as the search query
-        const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
-        return searchUrl
-      }
-
-      // For partial matches, use the remaining query
+      // Use the remainingQuery (which now contains the targetValue or targetValue + additional query)
       const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
       return searchUrl
     }
@@ -634,3 +639,8 @@ function doRedirect() {
 }
 
 doRedirect()
+
+// Initialize function to be called after DOM loads
+document.addEventListener('DOMContentLoaded', function () {
+  // ... existing code ...
+})

@@ -1,6 +1,7 @@
 export interface Duckling {
-  pattern: string // The pattern to match (e.g., "shalevari/ducky")
-  bangCommand: string // The bang command to apply (e.g., "ghr")
+  pattern: string // The pattern to match (e.g., "ducky")
+  bangCommand: string // The bang command (e.g., "ghr")
+  targetValue: string // The value to be used with the bang command (e.g., "shalevari/ducky")
   description: string // A description of what this duckling does
 }
 
@@ -9,7 +10,18 @@ export function loadDucklings(): Duckling[] {
   const ducklings = localStorage.getItem('ducky-ducklings')
   if (!ducklings) return []
   try {
-    return JSON.parse(ducklings)
+    // Handle backward compatibility for older duckling format
+    const parsedDucklings = JSON.parse(ducklings)
+    return parsedDucklings.map((duckling: any) => {
+      // If it's an old format duckling (no targetValue), set targetValue to pattern
+      if (!duckling.targetValue) {
+        return {
+          ...duckling,
+          targetValue: duckling.pattern
+        }
+      }
+      return duckling
+    })
   } catch (e) {
     console.error('Failed to parse ducklings', e)
     return []
@@ -24,8 +36,9 @@ export function saveDucklings(ducklings: Duckling[]): void {
 // Initial default ducklings
 export const defaultDucklings: Duckling[] = [
   {
-    pattern: 'shalevari/ducky',
+    pattern: 'ducky',
     bangCommand: 'ghr',
+    targetValue: 'shalevari/ducky',
     description: 'Go to the Ducky GitHub repository'
   }
 ]
@@ -35,26 +48,18 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   const ducklings = loadDucklings()
 
   for (const duckling of ducklings) {
-    // Check if the query starts with, ends with, or equals the pattern
-    if (
-      query === duckling.pattern ||
-      query.startsWith(duckling.pattern + ' ') ||
-      query.endsWith(' ' + duckling.pattern)
-    ) {
-      // If the query is exactly the pattern, return the bang command with empty remaining query
+    // Check if the query is exactly the pattern, or starts with the pattern followed by a space
+    if (query === duckling.pattern || query.startsWith(duckling.pattern + ' ')) {
+      // If the query is exactly the pattern, return the bang command with the targetValue
       if (query === duckling.pattern) {
-        return { bangCommand: duckling.bangCommand, remainingQuery: '' }
+        return { bangCommand: duckling.bangCommand, remainingQuery: duckling.targetValue }
       }
 
-      // If the query starts with the pattern
+      // If the query starts with the pattern and has additional content
       if (query.startsWith(duckling.pattern + ' ')) {
-        const remainingQuery = query.slice(duckling.pattern.length + 1)
-        return { bangCommand: duckling.bangCommand, remainingQuery }
-      }
-
-      // If the query ends with the pattern
-      if (query.endsWith(' ' + duckling.pattern)) {
-        const remainingQuery = query.slice(0, query.length - duckling.pattern.length - 1)
+        const additionalQuery = query.slice(duckling.pattern.length + 1)
+        // Combine the targetValue with the additional query if needed
+        const remainingQuery = duckling.targetValue + ' ' + additionalQuery
         return { bangCommand: duckling.bangCommand, remainingQuery }
       }
     }
@@ -77,6 +82,7 @@ export function renderDucklingsList(): string {
         <tr>
           <th>Pattern</th>
           <th>Bang Command</th>
+          <th>Target Value</th>
           <th>Description</th>
           <th>Actions</th>
         </tr>
@@ -88,6 +94,7 @@ export function renderDucklingsList(): string {
           <tr data-pattern="${duckling.pattern}">
             <td>${duckling.pattern}</td>
             <td>!${duckling.bangCommand}</td>
+            <td>${duckling.targetValue}</td>
             <td>${duckling.description}</td>
             <td>
               <button class="delete-duckling" data-pattern="${duckling.pattern}">Delete</button>
