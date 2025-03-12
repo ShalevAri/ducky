@@ -1,12 +1,6 @@
 import './global.css'
 import { bangs } from './hashbang.ts'
-
-// Ducky Islands - Custom prompt injection prefixes
-interface DuckyIsland {
-  key: string // The suffix key (e.g., 'a' in !t3a)
-  name: string // Display name for the island
-  prompt: string // The prompt text to inject
-}
+import { DuckyIsland, defaultIslands } from './islands.ts'
 
 // Load custom islands from localStorage
 function loadDuckyIslands(): { [key: string]: DuckyIsland } {
@@ -28,13 +22,10 @@ function saveDuckyIslands(islands: { [key: string]: DuckyIsland }) {
 // Get stored islands or initialize with defaults if none exist
 const duckyIslands = loadDuckyIslands()
 if (Object.keys(duckyIslands).length === 0) {
-  // Add a default "answer first" island
-  duckyIslands['a'] = {
-    key: 'a',
-    name: 'Just Give Me The Answer',
-    prompt:
-      'The user is going to give you a question (the input). Give them the tl;dr version of the answer first, and only then explain it. For example, if it is a terminal command, first output the command in a code block, and only then explain it. If it is a code snippet, output the code snippet in a code block. If it is a general question, provide a tl;dr version of the answer that is easy to read and understand quickly, and only then go in depth. The tl;dr version should be titled accordingly with a heading for clarity. Then, include the explanation heading and answer as usual. Input: '
-  }
+  // Initialize with default islands
+  defaultIslands.forEach((island) => {
+    duckyIslands[island.key] = island
+  })
   saveDuckyIslands(duckyIslands)
 }
 
