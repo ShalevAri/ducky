@@ -1,3 +1,4 @@
+import { defaultDucklings, loadDucklings, matchDuckling, renderDucklingsList, saveDucklings } from './ducklings.ts'
 import './global.css'
 import { bangs } from './hashbang.ts'
 import { DuckyIsland, defaultIslands } from './islands.ts'
@@ -27,6 +28,13 @@ if (Object.keys(duckyIslands).length === 0) {
     duckyIslands[island.key] = island
   })
   saveDuckyIslands(duckyIslands)
+}
+
+// Get stored ducklings or initialize with defaults if none exist
+const ducklings = loadDucklings()
+if (ducklings.length === 0) {
+  // Initialize with default ducklings
+  saveDucklings(defaultDucklings)
 }
 
 // Check for default_bang parameter in URL first, then localStorage, then fallback to "g"
@@ -222,6 +230,47 @@ function noSearchDefaultPageRender() {
           </div>
         </div>
         
+        <div class="ducklings-container">
+          <h2>Ducklings</h2>
+          <p>Ducklings allow you to create automatic bang redirects for specific patterns.</p>
+          <p>For example, typing <code>shalevari/ducky</code> will automatically use <code>!ghr</code> bang.</p>
+          
+          <div class="ducklings-list">
+            ${renderDucklingsList()}
+          </div>
+          
+          <button class="add-duckling-button">Add New Duckling</button>
+          
+          <div class="duckling-form-container" style="display: none;">
+            <form class="duckling-form">
+              <h3>Create New Duckling</h3>
+              
+              <div class="form-group">
+                <label for="duckling-pattern">Pattern:</label>
+                <input type="text" id="duckling-pattern" class="duckling-input" required>
+                <p class="form-help">The text pattern to match (e.g., 'shalevari/ducky')</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="duckling-bang">Bang Command:</label>
+                <input type="text" id="duckling-bang" class="duckling-input" required>
+                <p class="form-help">The bang command to use (e.g., 'ghr')</p>
+              </div>
+              
+              <div class="form-group">
+                <label for="duckling-description">Description:</label>
+                <input type="text" id="duckling-description" class="duckling-input" required>
+                <p class="form-help">A short description of what this duckling does</p>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="duckling-cancel-button">Cancel</button>
+                <button type="submit" class="duckling-save-button">Save Duckling</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
         ${recentBangsHtml}
       </div>
       <div class="footer">
@@ -386,6 +435,86 @@ function noSearchDefaultPageRender() {
     // Initial attachment of delete handlers
     attachDeleteHandlers()
   }
+
+  // Add Ducklings event handlers
+  const addDucklingButton = app.querySelector<HTMLButtonElement>('.add-duckling-button')
+  const ducklingFormContainer = app.querySelector<HTMLDivElement>('.duckling-form-container')
+  const ducklingForm = app.querySelector<HTMLFormElement>('.duckling-form')
+  const ducklingCancelButton = app.querySelector<HTMLButtonElement>('.duckling-cancel-button')
+  const ducklingPatternInput = app.querySelector<HTMLInputElement>('#duckling-pattern')
+  const ducklingBangInput = app.querySelector<HTMLInputElement>('#duckling-bang')
+  const ducklingDescriptionInput = app.querySelector<HTMLInputElement>('#duckling-description')
+
+  addDucklingButton?.addEventListener('click', () => {
+    ducklingFormContainer?.style.setProperty('display', 'block')
+  })
+
+  ducklingCancelButton?.addEventListener('click', () => {
+    ducklingFormContainer?.style.setProperty('display', 'none')
+    ducklingForm?.reset()
+  })
+
+  ducklingForm?.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    const pattern = ducklingPatternInput?.value.trim() || ''
+    const bangCommand = ducklingBangInput?.value.trim().replace(/^!/, '') || ''
+    const description = ducklingDescriptionInput?.value.trim() || ''
+
+    if (!pattern || !bangCommand || !description) return
+
+    // Add the new duckling
+    const ducklings = loadDucklings()
+
+    // Check if the pattern already exists
+    const existingIndex = ducklings.findIndex((d) => d.pattern === pattern)
+    if (existingIndex >= 0) {
+      // Update existing duckling
+      ducklings[existingIndex] = { pattern, bangCommand, description }
+    } else {
+      // Add new duckling
+      ducklings.push({ pattern, bangCommand, description })
+    }
+
+    saveDucklings(ducklings)
+
+    // Reset form and hide
+    ducklingForm.reset()
+    ducklingFormContainer?.style.setProperty('display', 'none')
+
+    // Update the ducklings list display
+    const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')
+    if (ducklingsList) {
+      ducklingsList.innerHTML = renderDucklingsList()
+      // Re-attach delete handlers
+      attachDucklingDeleteHandlers()
+    }
+  })
+
+  function attachDucklingDeleteHandlers() {
+    const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-duckling')
+    deleteButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const pattern = button.dataset.pattern
+        if (!pattern) return
+
+        const ducklings = loadDucklings()
+        const updatedDucklings = ducklings.filter((d) => d.pattern !== pattern)
+        saveDucklings(updatedDucklings)
+
+        // Update the list display
+        const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')
+        if (ducklingsList) {
+          ducklingsList.innerHTML = renderDucklingsList()
+          // Re-attach delete handlers
+          attachDucklingDeleteHandlers()
+        }
+      })
+    })
+  }
+
+  // Attach delete handlers for ducklings
+  attachDucklingDeleteHandlers()
 }
 
 function getBangredirectUrl() {
@@ -396,44 +525,82 @@ function getBangredirectUrl() {
     return null
   }
 
-  // Match a bang in the query (only prefix bang is supported)
-  const match = query.match(/!(\S+)/i)
-  const bangWithIslandCandidate: string = match?.[1]?.toLowerCase() ?? ''
+  // First, check if the query has an explicit bang command
+  const bangMatch = query.match(/!(\S+)/i)
 
-  // Check if the bang has a Ducky Island suffix
-  let bangCandidate = bangWithIslandCandidate
-  let islandKey = ''
-  let injectionPrompt = ''
+  if (bangMatch) {
+    // Process as normal with existing bang logic
+    const bangWithIslandCandidate: string = bangMatch?.[1]?.toLowerCase() ?? ''
 
-  // Look for suffixes that match our islands
-  for (const key of Object.keys(duckyIslands)) {
-    if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
-      // Found a matching island suffix
-      bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
-      islandKey = key
-      injectionPrompt = duckyIslands[key].prompt
-      break
+    // Check if the bang has a Ducky Island suffix
+    let bangCandidate = bangWithIslandCandidate
+    let islandKey = ''
+    let injectionPrompt = ''
+
+    // Look for suffixes that match our islands
+    for (const key of Object.keys(duckyIslands)) {
+      if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
+        // Found a matching island suffix
+        bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
+        islandKey = key
+        injectionPrompt = duckyIslands[key].prompt
+        break
+      }
     }
+
+    const selectedBang = bangs[bangCandidate] ?? defaultBang
+
+    // Update recent bangs if a bang was used
+    if (bangCandidate && bangs[bangCandidate]) {
+      updateRecentBangs(bangCandidate)
+    }
+
+    // Remove the bang from the query
+    const cleanQuery = query.replace(/!\S+\s*/i, '').trim()
+    if (cleanQuery === '') return selectedBang ? `https://${selectedBang.d}` : null
+
+    // If we have an island, inject the prompt
+    const finalQuery = islandKey ? `${injectionPrompt}${cleanQuery}` : cleanQuery
+
+    const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(finalQuery).replace(/%2F/g, '/'))
+    if (!searchUrl) return null
+
+    return searchUrl
+  } else {
+    // If there's no explicit bang, check if the query matches any duckling pattern
+    const ducklingMatch = matchDuckling(query)
+
+    if (ducklingMatch) {
+      // We found a matching duckling pattern
+      const { bangCommand, remainingQuery } = ducklingMatch
+
+      // Make sure the bang command exists
+      if (!bangs[bangCommand]) {
+        // If the bang doesn't exist, fall back to default bang
+        const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
+        return searchUrl
+      }
+
+      // Update recent bangs
+      updateRecentBangs(bangCommand)
+
+      // For an exact match (when remainingQuery is empty), we should use the pattern itself as the query
+      // This makes sure GitHub repo patterns like "shalevari/ducky" go to the right place
+      if (remainingQuery === '') {
+        // Use the original query (which is the pattern) as the search query
+        const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
+        return searchUrl
+      }
+
+      // For partial matches, use the remaining query
+      const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
+      return searchUrl
+    }
+
+    // If no duckling pattern matches, use the default bang
+    const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
+    return searchUrl
   }
-
-  const selectedBang = bangs[bangCandidate] ?? defaultBang
-
-  // Update recent bangs if a bang was used
-  if (bangCandidate && bangs[bangCandidate]) {
-    updateRecentBangs(bangCandidate)
-  }
-
-  // Remove the bang from the query
-  const cleanQuery = query.replace(/!\S+\s*/i, '').trim()
-  if (cleanQuery === '') return selectedBang ? `https://${selectedBang.d}` : null
-
-  // If we have an island, inject the prompt
-  const finalQuery = islandKey ? `${injectionPrompt}${cleanQuery}` : cleanQuery
-
-  const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(finalQuery).replace(/%2F/g, '/'))
-  if (!searchUrl) return null
-
-  return searchUrl
 }
 
 function feelingLuckyRedirect(query: string) {

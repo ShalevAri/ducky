@@ -249,10 +249,11 @@ input[type='submit'] {
   background-color: var(--button-active-bg);
 }
 
-/* Ducky Islands Styles */
+/* Ducky Islands styles */
 .ducky-islands-container {
   margin-top: 32px;
   text-align: left;
+  width: 100%;
 }
 
 .ducky-islands-container h2 {
@@ -263,7 +264,8 @@ input[type='submit'] {
   margin-bottom: 16px;
 }
 
-.ducky-islands-container code {
+.ducky-islands-container code,
+.ducklings-container code {
   background-color: var(--input-bg);
   padding: 2px 4px;
   border-radius: 4px;
@@ -271,6 +273,9 @@ input[type='submit'] {
 }
 
 .islands-list {
+  margin-top: 16px;
+  max-height: 200px;
+  overflow-y: auto;
   margin-bottom: 16px;
 }
 
@@ -299,6 +304,7 @@ input[type='submit'] {
 }
 
 .add-island-button {
+  margin-top: 16px;
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: 4px;
@@ -320,7 +326,8 @@ input[type='submit'] {
   border-radius: 4px;
 }
 
-.island-form h3 {
+.island-form h3,
+.duckling-form h3 {
   margin-top: 0;
   margin-bottom: 16px;
 }
@@ -334,7 +341,8 @@ input[type='submit'] {
   margin-bottom: 4px;
 }
 
-.island-input {
+.island-input,
+.island-textarea {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--input-border);
@@ -344,12 +352,6 @@ input[type='submit'] {
 }
 
 .island-textarea {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  background: var(--bg-color);
-  color: var(--text-color);
   resize: vertical;
 }
 
@@ -359,31 +361,148 @@ input[type='submit'] {
   color: var(--footer-color);
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.cancel-button,
-.save-button,
 .delete-island {
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: 4px;
   border: 1px solid var(--input-border);
   background-color: var(--input-bg);
   color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 0.9em;
 }
 
-.save-button:hover,
-.cancel-button:hover,
 .delete-island:hover {
   background-color: var(--button-hover-bg);
 }
 
-.delete-island {
+/* Ducklings styles */
+.ducklings-container {
+  margin-top: 32px;
+  text-align: left;
+  width: 100%;
+}
+
+.ducklings-container h2 {
+  margin-bottom: 8px;
+}
+
+.ducklings-container p {
+  margin-bottom: 16px;
+}
+
+.ducklings-list {
+  margin-top: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.add-duckling-button {
+  margin-top: 16px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 8px 16px;
   font-size: 0.9em;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-duckling-button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.duckling-form-container {
+  margin-top: 16px;
+  background-color: var(--input-bg);
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.ducklings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+.ducklings-table th,
+.ducklings-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.ducklings-table th {
+  font-weight: 600;
+}
+
+.delete-duckling {
   padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9em;
+}
+
+.delete-duckling:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.duckling-input,
+.duckling-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.duckling-textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.cancel-button,
+.duckling-cancel-button {
+  padding: 6px 12px;
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-button,
+.duckling-save-button {
+  padding: 6px 12px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-button:hover,
+.duckling-save-button:hover {
+  background: var(--button-hover-bg);
+}
+
+.cancel-button:hover,
+.duckling-cancel-button:hover {
+  background: var(--button-secondary-hover-bg);
 }

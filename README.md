@@ -2,6 +2,28 @@
 
 DuckDuckGo's bang redirects are too slow. When you use Ducky as a custom search engine in your browser, it enables all of DuckDuckGo's bangs (and more!) but much faster and better.
 
+## Features
+
+### Bangs
+
+Ducky supports all of DuckDuckGo's bangs and processes them client-side for faster redirects.
+
+### Ducky Islands
+
+Ducky Islands allow you to create custom prompt prefixes for AI bangs. For example, using `!t3a` instead of `!t3` will tell the AI to give you the answer first.
+
+### Ducklings
+
+Ducklings allow you to create automatic bang redirects for specific patterns without having to type the bang command.
+
+For example, if you add a Duckling for the pattern `shalevari/ducky` with the bang command `ghr`, then typing `shalevari/ducky` in your search bar will automatically redirect you to the GitHub repository as if you had typed `!ghr shalevari/ducky`.
+
+This feature is great for:
+
+- Quickly accessing frequently visited GitHub repositories
+- Creating shortcuts for common search patterns
+- Automating navigation to specific websites based on recognizable patterns
+
 ## How Does It Work?
 
 DuckDuckGo does their redirects server side. Their DNS is...not always great. Result is that it often takes ages.
