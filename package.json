@@ -1,7 +1,9 @@
 {
   "name": "ducky",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "The fastest search router!",
+  "author": "Shalev Ari",
   "type": "module",
   "license": "AGPL-3.0-only",
   "scripts": {
