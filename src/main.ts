@@ -258,14 +258,14 @@ function noSearchDefaultPageRender() {
               
               <div class="form-group">
                 <label for="duckling-bang">Bang Command:</label>
-                <input type="text" id="duckling-bang" class="duckling-input" required>
-                <p class="form-help">The bang command to use (e.g., 'ghr')</p>
+                <input type="text" id="duckling-bang" class="duckling-input">
+                <p class="form-help">The bang command to use (e.g., 'ghr'). Optional for direct URLs.</p>
               </div>
               
               <div class="form-group">
                 <label for="duckling-target-value">Target Value:</label>
                 <input type="text" id="duckling-target-value" class="duckling-input" required>
-                <p class="form-help">The value to use with the bang command (e.g., 'shalevari/ducky')</p>
+                <p class="form-help">The value to use with the bang command or a direct URL (e.g., 'shalevari/ducky' or 'http://localhost:49152')</p>
               </div>
               
               <div class="form-group">
@@ -474,7 +474,14 @@ function noSearchDefaultPageRender() {
     const targetValue = ducklingTargetValueInput?.value.trim() || ''
     const description = ducklingDescriptionInput?.value.trim() || ''
 
-    if (!pattern || !bangCommand || !targetValue || !description) return
+    // Make bangCommand optional if targetValue is a URL
+    const isDirectUrl = targetValue.startsWith('http://') || targetValue.startsWith('https://')
+    const finalBangCommand = isDirectUrl && !bangCommand ? 'raw' : bangCommand
+
+    // Validate required fields
+    if (!pattern || (!finalBangCommand && !isDirectUrl) || !targetValue || !description) {
+      return
+    }
 
     // Add the new duckling
     const ducklings = loadDucklings()
@@ -483,10 +490,10 @@ function noSearchDefaultPageRender() {
     const existingIndex = ducklings.findIndex((d) => d.pattern === pattern)
     if (existingIndex >= 0) {
       // Update existing duckling
-      ducklings[existingIndex] = { pattern, bangCommand, targetValue, description }
+      ducklings[existingIndex] = { pattern, bangCommand: finalBangCommand, targetValue, description }
     } else {
       // Add new duckling
-      ducklings.push({ pattern, bangCommand, targetValue, description })
+      ducklings.push({ pattern, bangCommand: finalBangCommand, targetValue, description })
     }
 
     saveDucklings(ducklings)
@@ -586,6 +593,11 @@ function getBangredirectUrl() {
     if (ducklingMatch) {
       // We found a matching duckling pattern
       const { bangCommand, remainingQuery } = ducklingMatch
+
+      // Special case for 'raw' bangCommand which indicates a direct URL
+      if (bangCommand === 'raw') {
+        return remainingQuery // Direct URL, no need for further processing
+      }
 
       // Make sure the bang command exists
       if (!bangs[bangCommand]) {
