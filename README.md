@@ -48,6 +48,14 @@ We solve this by doing all of the work client side so that your device does the 
 6. Add `http://localhost:49152?q=%s` to your browser as a custom search engine.
 7. You're done!
 
+## Speed
+
+Speed is the core focus of Ducky.
+
+I'm optimizing everything to make sure you get every ounce of speed possible.
+
+The end goal is to get all the benefits of Ducky while having virtually 0 overhead.
+
 ## FAQ
 
 ### How can I change the port?
