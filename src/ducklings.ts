@@ -5,21 +5,16 @@ export interface Duckling {
   description: string // A description of what this duckling does
 }
 
-// Cache for duckling patterns to avoid repeated localStorage access
 let ducklingsCache: Duckling[] | null = null
-// Set a reasonable cache size limit to prevent memory issues
 const CACHE_SIZE_LIMIT = 100
 let ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
-// Load ducklings from localStorage
 export function loadDucklings(): Duckling[] {
   const ducklings = localStorage.getItem('ducky-ducklings')
   if (!ducklings) return []
   try {
-    // Handle backward compatibility for older duckling format
     const parsedDucklings = JSON.parse(ducklings)
     return parsedDucklings.map((duckling: any) => {
-      // If it's an old format duckling (no targetValue), set targetValue to pattern
       if (!duckling.targetValue) {
         return {
           ...duckling,
@@ -34,15 +29,12 @@ export function loadDucklings(): Duckling[] {
   }
 }
 
-// Save ducklings to localStorage
 export function saveDucklings(ducklings: Duckling[]): void {
   localStorage.setItem('ducky-ducklings', JSON.stringify(ducklings))
-  // Clear cache when ducklings are updated
   ducklingsCache = null
   ducklingMatchResultCache.clear()
 }
 
-// Initial default ducklings
 export const defaultDucklings: Duckling[] = [
   {
     pattern: 'ducky',
@@ -52,7 +44,6 @@ export const defaultDucklings: Duckling[] = [
   }
 ]
 
-// Load ducklings with caching
 function getCachedDucklings(): Duckling[] {
   if (ducklingsCache !== null) {
     return ducklingsCache
@@ -63,9 +54,7 @@ function getCachedDucklings(): Duckling[] {
   return ducklings
 }
 
-// Check if a query matches any duckling pattern
 export function matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
-  // Check cache first
   if (ducklingMatchResultCache.has(query)) {
     return ducklingMatchResultCache.get(query) || null
   }
@@ -73,16 +62,13 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   const ducklings = getCachedDucklings()
   let result: { bangCommand: string; remainingQuery: string } | null = null
 
-  // First, check for exact matches which are faster
   for (const duckling of ducklings) {
     if (query === duckling.pattern) {
       result = {
         bangCommand: duckling.bangCommand,
         remainingQuery: duckling.targetValue
       }
-      // Implement cache size management
       if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
-        // Remove oldest entry (first key in the map)
         const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
         if (firstKey) {
           ducklingMatchResultCache.delete(firstKey)
@@ -93,15 +79,12 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
     }
   }
 
-  // Then check prefix matches
   for (const duckling of ducklings) {
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
       const remainingQuery = duckling.targetValue + ' ' + additionalQuery
       result = { bangCommand: duckling.bangCommand, remainingQuery }
-      // Implement cache size management
       if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
-        // Remove oldest entry (first key in the map)
         const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
         if (firstKey) {
           ducklingMatchResultCache.delete(firstKey)
@@ -112,10 +95,7 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
     }
   }
 
-  // Cache negative results too
-  // Implement cache size management
   if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
-    // Remove oldest entry (first key in the map)
     const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
     if (firstKey) {
       ducklingMatchResultCache.delete(firstKey)
@@ -125,7 +105,6 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   return null
 }
 
-// Render the ducklings management UI
 export function renderDucklingsList(): string {
   const ducklings = loadDucklings()
 

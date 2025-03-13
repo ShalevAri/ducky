@@ -3,7 +3,6 @@ import './global.css'
 import { bangs } from './hashbang.ts'
 import { DuckyIsland, defaultIslands } from './islands.ts'
 
-// Utility function for debouncing
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
   let timeout: number | undefined
 
@@ -18,12 +17,10 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (..
   }
 }
 
-// Initialize ducklings if none exist
 if (loadDucklings().length === 0) {
   saveDucklings(defaultDucklings)
 }
 
-// Load custom islands from localStorage
 function loadDuckyIslands(): { [key: string]: DuckyIsland } {
   const islands = localStorage.getItem('ducky-islands')
   if (!islands) return {}
@@ -35,68 +32,53 @@ function loadDuckyIslands(): { [key: string]: DuckyIsland } {
   }
 }
 
-// Save islands to localStorage
 function saveDuckyIslands(islands: { [key: string]: DuckyIsland }) {
   localStorage.setItem('ducky-islands', JSON.stringify(islands))
 }
 
-// Get stored islands or initialize with defaults if none exist
 const duckyIslands = loadDuckyIslands()
 if (Object.keys(duckyIslands).length === 0) {
-  // Initialize with default islands
   defaultIslands.forEach((island) => {
     duckyIslands[island.key] = island
   })
   saveDuckyIslands(duckyIslands)
 }
 
-// Get stored ducklings or initialize with defaults if none exist
 const ducklings = loadDucklings()
 if (ducklings.length === 0) {
-  // Initialize with default ducklings
   saveDucklings(defaultDucklings)
 }
 
-// Check for default_bang parameter in URL first, then localStorage, then fallback to "g"
 const url = new URL(window.location.href)
 const urlDefaultBang = url.searchParams.get('default_bang')
 const LS_DEFAULT_BANG = urlDefaultBang || localStorage.getItem('default-bang') || 'g'
 const defaultBang = bangs[LS_DEFAULT_BANG]
 
-// Track recently used bangs
 function updateRecentBangs(bangName: string) {
   if (!bangName) return
 
-  // Get recent bangs from localStorage
   const recentBangsJson = localStorage.getItem('recent-bangs') || '[]'
   let recentBangs: string[] = []
 
   try {
     recentBangs = JSON.parse(recentBangsJson)
-    // Ensure it's an array
     if (!Array.isArray(recentBangs)) recentBangs = []
   } catch (e) {
-    // Reset if invalid JSON
     recentBangs = []
   }
 
-  // Remove the bang if it already exists
   const index = recentBangs.indexOf(bangName)
   if (index > -1) {
     recentBangs.splice(index, 1)
   }
 
-  // Add to the beginning of the array
   recentBangs.unshift(bangName)
 
-  // Keep only the 5 most recent bangs
   recentBangs = recentBangs.slice(0, 5)
 
-  // Save back to localStorage
   localStorage.setItem('recent-bangs', JSON.stringify(recentBangs))
 }
 
-// Render the list of Ducky Islands
 function renderIslandsList(): string {
   const islands = Object.values(duckyIslands)
   if (islands.length === 0) {
@@ -137,24 +119,20 @@ function noSearchDefaultPageRender() {
   const currentUrl = window.location.href.replace(/\/+$/, '')
   const app = document.querySelector<HTMLDivElement>('#app')!
 
-  // Get recent bangs
   const recentBangsJson = localStorage.getItem('recent-bangs') || '[]'
   let recentBangs: string[] = []
 
   try {
     recentBangs = JSON.parse(recentBangsJson)
-    // Ensure it's an array
     if (!Array.isArray(recentBangs)) recentBangs = []
   } catch (e) {
-    // Reset if invalid JSON
     recentBangs = []
   }
 
-  // Create recent bangs HTML if there are any
   let recentBangsHtml = ''
   if (recentBangs.length > 0) {
     const bangsHtml = recentBangs
-      .filter((bangName) => bangs[bangName]) // Filter out any invalid bangs
+      .filter((bangName) => bangs[bangName])
       .map((bangName) => {
         const bang = bangs[bangName]
         return `<button class="recent-bang" data-bang="${bangName}">!${bangName} (${bang.s})</button>`
@@ -316,7 +294,6 @@ function noSearchDefaultPageRender() {
   const bangInput = app.querySelector<HTMLInputElement>('#bang-input')!
   const bangErrorDiv = app.querySelector<HTMLParagraphElement>('.bang-error')!
 
-  // Function to copy URL to clipboard
   const copyUrlToClipboard = async () => {
     await navigator.clipboard.writeText(urlInput.value)
     copyIcon.src = '/clipboard-check.svg'
@@ -326,16 +303,13 @@ function noSearchDefaultPageRender() {
     }, 2000)
   }
 
-  // Since bangs is now a hashmap, iterate over its values
   Object.values(bangs).forEach((b) => {
     const option = document.createElement('option')
     option.value = b.t
     bangDatalist.appendChild(option)
   })
 
-  // Add keyboard shortcut for copying URL
   urlInput.addEventListener('keydown', (event) => {
-    // Check for Ctrl+C or Cmd+C when the input is focused
     if ((event.ctrlKey || event.metaKey) && event.key === 'c' && window.getSelection()?.toString() === '') {
       event.preventDefault()
       copyUrlToClipboard()
@@ -350,29 +324,24 @@ function noSearchDefaultPageRender() {
       return
     }
     bangErrorDiv.innerHTML = ''
-    // Store the selected bang in localStorage
     localStorage.setItem('default-bang', bangName)
-    // Use the current URL instead of hardcoded localhost
     const currentUrl = window.location.origin + window.location.pathname
     urlInput.value = `${currentUrl}?q=%s&default_bang=${encodeURIComponent(bangName)}`
   })
 
   copyButton.addEventListener('click', copyUrlToClipboard)
 
-  // Add event listeners for recent bang buttons
   const recentBangButtons = app.querySelectorAll<HTMLButtonElement>('.recent-bang')
   recentBangButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const bangName = button.dataset.bang || ''
       if (bangName && bangs[bangName]) {
         bangInput.value = bangName
-        // Trigger the form submission
         bangForm.dispatchEvent(new Event('submit'))
       }
     })
   })
 
-  // Ducky Islands event handlers
   const addIslandButton = app.querySelector<HTMLButtonElement>('.add-island-button')
   const islandFormContainer = app.querySelector<HTMLDivElement>('.island-form-container')
   const islandForm = app.querySelector<HTMLFormElement>('.island-form')
@@ -382,20 +351,17 @@ function noSearchDefaultPageRender() {
   const islandPromptInput = app.querySelector<HTMLTextAreaElement>('#island-prompt')
 
   if (addIslandButton && islandFormContainer && islandForm && cancelButton) {
-    // Show the form when Add New Island is clicked
     addIslandButton.addEventListener('click', () => {
       islandFormContainer.style.display = 'block'
       addIslandButton.style.display = 'none'
     })
 
-    // Hide the form when Cancel is clicked
     cancelButton.addEventListener('click', () => {
       islandFormContainer.style.display = 'none'
       addIslandButton.style.display = 'block'
       islandForm.reset()
     })
 
-    // Handle form submission
     islandForm.addEventListener('submit', (event) => {
       event.preventDefault()
 
@@ -405,7 +371,6 @@ function noSearchDefaultPageRender() {
       const name = islandNameInput.value.trim()
       const prompt = islandPromptInput.value.trim()
 
-      // Validate inputs
       if (!key || !name || !prompt) {
         alert('All fields are required')
         return
@@ -416,25 +381,20 @@ function noSearchDefaultPageRender() {
         return
       }
 
-      // Add the new island
       duckyIslands[key] = { key, name, prompt }
       saveDuckyIslands(duckyIslands)
 
-      // Reset and hide the form
       islandForm.reset()
       islandFormContainer.style.display = 'none'
       addIslandButton.style.display = 'block'
 
-      // Refresh the islands list
       const islandsList = app.querySelector<HTMLDivElement>('.islands-list')
       if (islandsList) {
         islandsList.innerHTML = renderIslandsList()
-        // Re-attach delete event handlers
         attachDeleteHandlers()
       }
     })
 
-    // Attach delete event handlers
     function attachDeleteHandlers() {
       const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-island')
       deleteButtons.forEach((button) => {
@@ -445,11 +405,9 @@ function noSearchDefaultPageRender() {
               delete duckyIslands[key]
               saveDuckyIslands(duckyIslands)
 
-              // Refresh the islands list
               const islandsList = app.querySelector<HTMLDivElement>('.islands-list')
               if (islandsList) {
                 islandsList.innerHTML = renderIslandsList()
-                // Re-attach delete event handlers
                 attachDeleteHandlers()
               }
             }
@@ -458,11 +416,9 @@ function noSearchDefaultPageRender() {
       })
     }
 
-    // Initial attachment of delete handlers
     attachDeleteHandlers()
   }
 
-  // Add Ducklings event handlers
   const addDucklingButton = app.querySelector<HTMLButtonElement>('.add-duckling-button')
   const ducklingFormContainer = app.querySelector<HTMLDivElement>('.duckling-form-container')
   const ducklingForm = app.querySelector<HTMLFormElement>('.duckling-form')
@@ -488,40 +444,29 @@ function noSearchDefaultPageRender() {
     const bangCommand = ducklingBangInput?.value.trim().replace(/^!/, '') || ''
     const targetValue = ducklingTargetValueInput?.value.trim() || ''
     const description = ducklingDescriptionInput?.value.trim() || ''
-
-    // Make bangCommand optional if targetValue is a URL
     const isDirectUrl = targetValue.startsWith('http://') || targetValue.startsWith('https://')
     const finalBangCommand = isDirectUrl && !bangCommand ? 'raw' : bangCommand
 
-    // Validate required fields
     if (!pattern || (!finalBangCommand && !isDirectUrl) || !targetValue || !description) {
       return
     }
 
-    // Add the new duckling
     const ducklings = loadDucklings()
-
-    // Check if the pattern already exists
     const existingIndex = ducklings.findIndex((d) => d.pattern === pattern)
     if (existingIndex >= 0) {
-      // Update existing duckling
       ducklings[existingIndex] = { pattern, bangCommand: finalBangCommand, targetValue, description }
     } else {
-      // Add new duckling
       ducklings.push({ pattern, bangCommand: finalBangCommand, targetValue, description })
     }
 
     saveDucklings(ducklings)
 
-    // Reset form and hide
     ducklingForm.reset()
     ducklingFormContainer?.style.setProperty('display', 'none')
 
-    // Update the ducklings list display
     const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')
     if (ducklingsList) {
       ducklingsList.innerHTML = renderDucklingsList()
-      // Re-attach delete handlers
       attachDucklingDeleteHandlers()
     }
   })
@@ -537,26 +482,21 @@ function noSearchDefaultPageRender() {
         const updatedDucklings = ducklings.filter((d) => d.pattern !== pattern)
         saveDucklings(updatedDucklings)
 
-        // Update the list display
         const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')
         if (ducklingsList) {
           ducklingsList.innerHTML = renderDucklingsList()
-          // Re-attach delete handlers
           attachDucklingDeleteHandlers()
         }
       })
     })
   }
 
-  // Attach delete handlers for ducklings
   attachDucklingDeleteHandlers()
 }
 
-// Add a memoization cache for bang redirects
 const bangRedirectCache = new Map<string, string | null>()
 const ducklingMatchCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
-// Precompile regex patterns for better performance
 const BANG_REGEX = /!(\S+)/i
 const FEELING_LUCKY_REGEX = /!(?:\s|$)/i
 const BANG_REPLACE_REGEX = /!\S+\s*/i
@@ -569,27 +509,21 @@ function getBangredirectUrl() {
     return null
   }
 
-  // Check cache first
   if (bangRedirectCache.has(query)) {
     return bangRedirectCache.get(query)
   }
 
-  // First, check if the query has an explicit bang command
   const bangMatch = BANG_REGEX.exec(query)
 
   if (bangMatch) {
-    // Process as normal with existing bang logic
     const bangWithIslandCandidate = bangMatch?.[1]?.toLowerCase() ?? ''
 
-    // Check if the bang has a Ducky Island suffix
     let bangCandidate = bangWithIslandCandidate
     let islandKey = ''
     let injectionPrompt = ''
 
-    // Look for suffixes that match our islands
     for (const key of Object.keys(duckyIslands)) {
       if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
-        // Found a matching island suffix
         bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
         islandKey = key
         injectionPrompt = duckyIslands[key].prompt
@@ -599,13 +533,10 @@ function getBangredirectUrl() {
 
     const selectedBang = bangs[bangCandidate] ?? defaultBang
 
-    // Update recent bangs if a bang was used
     if (bangCandidate && bangs[bangCandidate]) {
-      // Defer the localStorage update to not block the redirect
       setTimeout(() => updateRecentBangs(bangCandidate), 0)
     }
 
-    // Remove the bang from the query
     const cleanQuery = query.replace(BANG_REPLACE_REGEX, '').trim()
     if (cleanQuery === '') {
       const result = selectedBang ? `https://${selectedBang.d}` : null
@@ -613,18 +544,14 @@ function getBangredirectUrl() {
       return result
     }
 
-    // If we have an island, inject the prompt
     const finalQuery = islandKey ? `${injectionPrompt}${cleanQuery}` : cleanQuery
 
     const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(finalQuery).replace(/%2F/g, '/'))
     if (!searchUrl) return null
 
-    // Cache the result
     bangRedirectCache.set(query, searchUrl)
     return searchUrl
   } else {
-    // If there's no explicit bang, check if the query matches any duckling pattern
-    // Use cached duckling match if available
     let ducklingMatch
     if (ducklingMatchCache.has(query)) {
       ducklingMatch = ducklingMatchCache.get(query)
@@ -634,33 +561,25 @@ function getBangredirectUrl() {
     }
 
     if (ducklingMatch) {
-      // We found a matching duckling pattern
       const { bangCommand, remainingQuery } = ducklingMatch
 
-      // Special case for 'raw' bangCommand which indicates a direct URL
       if (bangCommand === 'raw') {
         bangRedirectCache.set(query, remainingQuery)
-        return remainingQuery // Direct URL, no need for further processing
+        return remainingQuery
       }
 
-      // Make sure the bang command exists
       if (!bangs[bangCommand]) {
-        // If the bang doesn't exist, fall back to default bang
         const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
         bangRedirectCache.set(query, searchUrl)
         return searchUrl
       }
-
-      // Update recent bangs asynchronously to not block the redirect
       setTimeout(() => updateRecentBangs(bangCommand), 0)
 
-      // Use the remainingQuery (which now contains the targetValue or targetValue + additional query)
       const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
       bangRedirectCache.set(query, searchUrl)
       return searchUrl
     }
 
-    // If no duckling pattern matches, use the default bang
     const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
     bangRedirectCache.set(query, searchUrl)
     return searchUrl
@@ -668,7 +587,6 @@ function getBangredirectUrl() {
 }
 
 function feelingLuckyRedirect(query: string) {
-  // Cache key for feeling lucky redirects
   const cacheKey = `lucky:${query}`
   if (bangRedirectCache.has(cacheKey)) {
     return bangRedirectCache.get(cacheKey)
@@ -677,7 +595,6 @@ function feelingLuckyRedirect(query: string) {
   const cleanQuery = query.replace('!', '').trim()
   const url = `https://duckduckgo.com/?q=!ducky+${encodeURIComponent(cleanQuery)}`
 
-  // Cache the result
   bangRedirectCache.set(cacheKey, url)
   return url
 }
@@ -690,13 +607,11 @@ function doRedirect() {
     return null
   }
 
-  // If the query ends with an exclamation mark, use the feeling lucky redirect
   const type = FEELING_LUCKY_REGEX.test(query)
   if (type) {
     const searchUrl = feelingLuckyRedirect(query)
     if (!searchUrl) return
 
-    // Use a more efficient redirect approach
     window.location.href = searchUrl
     return
   }
@@ -704,15 +619,11 @@ function doRedirect() {
   const searchUrl = getBangredirectUrl()
   if (!searchUrl) return
 
-  // Use replace for faster redirects
   window.location.replace(searchUrl)
 }
 
-// Initialize function to be called after DOM loads
 document.addEventListener('DOMContentLoaded', function () {
-  // Debounce the redirect for smoother experience
   const debouncedRedirect = debounce(doRedirect, 50)
 
-  // Call the debounced redirect function
   debouncedRedirect()
 })
