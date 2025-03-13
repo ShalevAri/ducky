@@ -48,13 +48,7 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   const ducklings = loadDucklings()
 
   for (const duckling of ducklings) {
-    // Special case for 'ducky' pattern - direct URL navigation
-    if (duckling.pattern === 'ducky' && (query === 'ducky' || query.startsWith('ducky '))) {
-      // We want to return a direct URL without needing a bang command
-      return { bangCommand: 'raw', remainingQuery: 'http://localhost:49152' }
-    }
-
-    // Regular duckling processing for other patterns
+    // Regular duckling processing for patterns
     if (query === duckling.pattern || query.startsWith(duckling.pattern + ' ')) {
       // If the query is exactly the pattern, return the bang command with the targetValue
       if (query === duckling.pattern) {
