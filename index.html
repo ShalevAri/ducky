@@ -1,8 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/search.svg" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
@@ -16,12 +18,14 @@
       media="print"
       onload="this.media='all'"
     />
+    <!-- Preload critical JS -->
+    <link rel="modulepreload" href="/src/main.ts" as="script" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ducky</title>
     <meta name="description" content="A better search engine (with bangs!)" />
   </head>
   <body style="background-color: transparent">
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/main.ts" async></script>
   </body>
 </html>

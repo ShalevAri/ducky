@@ -537,6 +537,15 @@ function noSearchDefaultPageRender() {
   attachDucklingDeleteHandlers()
 }
 
+// Add a memoization cache for bang redirects
+const bangRedirectCache = new Map<string, string | null>()
+const ducklingMatchCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
+
+// Precompile regex patterns for better performance
+const BANG_REGEX = /!(\S+)/i
+const FEELING_LUCKY_REGEX = /!(?:\s|$)/i
+const BANG_REPLACE_REGEX = /!\S+\s*/i
+
 function getBangredirectUrl() {
   const url = new URL(window.location.href)
   const query = url.searchParams.get('q')?.trim() ?? ''
@@ -545,12 +554,17 @@ function getBangredirectUrl() {
     return null
   }
 
+  // Check cache first
+  if (bangRedirectCache.has(query)) {
+    return bangRedirectCache.get(query)
+  }
+
   // First, check if the query has an explicit bang command
-  const bangMatch = query.match(/!(\S+)/i)
+  const bangMatch = BANG_REGEX.exec(query)
 
   if (bangMatch) {
     // Process as normal with existing bang logic
-    const bangWithIslandCandidate: string = bangMatch?.[1]?.toLowerCase() ?? ''
+    const bangWithIslandCandidate = bangMatch?.[1]?.toLowerCase() ?? ''
 
     // Check if the bang has a Ducky Island suffix
     let bangCandidate = bangWithIslandCandidate
@@ -572,12 +586,17 @@ function getBangredirectUrl() {
 
     // Update recent bangs if a bang was used
     if (bangCandidate && bangs[bangCandidate]) {
-      updateRecentBangs(bangCandidate)
+      // Defer the localStorage update to not block the redirect
+      setTimeout(() => updateRecentBangs(bangCandidate), 0)
     }
 
     // Remove the bang from the query
-    const cleanQuery = query.replace(/!\S+\s*/i, '').trim()
-    if (cleanQuery === '') return selectedBang ? `https://${selectedBang.d}` : null
+    const cleanQuery = query.replace(BANG_REPLACE_REGEX, '').trim()
+    if (cleanQuery === '') {
+      const result = selectedBang ? `https://${selectedBang.d}` : null
+      bangRedirectCache.set(query, result)
+      return result
+    }
 
     // If we have an island, inject the prompt
     const finalQuery = islandKey ? `${injectionPrompt}${cleanQuery}` : cleanQuery
@@ -585,10 +604,19 @@ function getBangredirectUrl() {
     const searchUrl = selectedBang.u.replace('{{{s}}}', encodeURIComponent(finalQuery).replace(/%2F/g, '/'))
     if (!searchUrl) return null
 
+    // Cache the result
+    bangRedirectCache.set(query, searchUrl)
     return searchUrl
   } else {
     // If there's no explicit bang, check if the query matches any duckling pattern
-    const ducklingMatch = matchDuckling(query)
+    // Use cached duckling match if available
+    let ducklingMatch
+    if (ducklingMatchCache.has(query)) {
+      ducklingMatch = ducklingMatchCache.get(query)
+    } else {
+      ducklingMatch = matchDuckling(query)
+      ducklingMatchCache.set(query, ducklingMatch)
+    }
 
     if (ducklingMatch) {
       // We found a matching duckling pattern
@@ -596,6 +624,7 @@ function getBangredirectUrl() {
 
       // Special case for 'raw' bangCommand which indicates a direct URL
       if (bangCommand === 'raw') {
+        bangRedirectCache.set(query, remainingQuery)
         return remainingQuery // Direct URL, no need for further processing
       }
 
@@ -603,26 +632,39 @@ function getBangredirectUrl() {
       if (!bangs[bangCommand]) {
         // If the bang doesn't exist, fall back to default bang
         const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
+        bangRedirectCache.set(query, searchUrl)
         return searchUrl
       }
 
-      // Update recent bangs
-      updateRecentBangs(bangCommand)
+      // Update recent bangs asynchronously to not block the redirect
+      setTimeout(() => updateRecentBangs(bangCommand), 0)
 
       // Use the remainingQuery (which now contains the targetValue or targetValue + additional query)
       const searchUrl = bangs[bangCommand].u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
+      bangRedirectCache.set(query, searchUrl)
       return searchUrl
     }
 
     // If no duckling pattern matches, use the default bang
     const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
+    bangRedirectCache.set(query, searchUrl)
     return searchUrl
   }
 }
 
 function feelingLuckyRedirect(query: string) {
+  // Cache key for feeling lucky redirects
+  const cacheKey = `lucky:${query}`
+  if (bangRedirectCache.has(cacheKey)) {
+    return bangRedirectCache.get(cacheKey)
+  }
+
   const cleanQuery = query.replace('!', '').trim()
-  return `https://duckduckgo.com/?q=!ducky+${encodeURIComponent(cleanQuery)}`
+  const url = `https://duckduckgo.com/?q=!ducky+${encodeURIComponent(cleanQuery)}`
+
+  // Cache the result
+  bangRedirectCache.set(cacheKey, url)
+  return url
 }
 
 function doRedirect() {
@@ -634,19 +676,20 @@ function doRedirect() {
   }
 
   // If the query ends with an exclamation mark, use the feeling lucky redirect
-  const type = /!(?:\s|$)/i.test(query)
+  const type = FEELING_LUCKY_REGEX.test(query)
   if (type) {
     const searchUrl = feelingLuckyRedirect(query)
     if (!searchUrl) return
-    const link = document.createElement('a')
-    link.href = searchUrl
-    link.rel = 'noreferrer noopener'
-    link.click()
+
+    // Use a more efficient redirect approach
+    window.location.href = searchUrl
     return
   }
 
   const searchUrl = getBangredirectUrl()
   if (!searchUrl) return
+
+  // Use replace for faster redirects
   window.location.replace(searchUrl)
 }
 
