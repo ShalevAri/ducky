@@ -1,3 +1,5 @@
+import { loadFromLocalStorage, saveToLocalStorage } from './utils/storage.ts'
+
 export interface Duckling {
   pattern: string // The pattern to match (e.g., "ducky")
   bangCommand: string // The bang command (e.g., "ghr")
@@ -10,27 +12,22 @@ const CACHE_SIZE_LIMIT = 100
 let ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
 export function loadDucklings(): Duckling[] {
-  const ducklings = localStorage.getItem('ducky-ducklings')
-  if (!ducklings) return []
-  try {
-    const parsedDucklings = JSON.parse(ducklings)
-    return parsedDucklings.map((duckling: any) => {
-      if (!duckling.targetValue) {
-        return {
-          ...duckling,
-          targetValue: duckling.pattern
-        }
+  const ducklings = loadFromLocalStorage<Duckling[]>('ducky-ducklings', [])
+
+  // Migrate old ducklings that don't have targetValue
+  return ducklings.map((duckling: any) => {
+    if (!duckling.targetValue) {
+      return {
+        ...duckling,
+        targetValue: duckling.pattern
       }
-      return duckling
-    })
-  } catch (e) {
-    console.error('Failed to parse ducklings', e)
-    return []
-  }
+    }
+    return duckling
+  })
 }
 
 export function saveDucklings(ducklings: Duckling[]): void {
-  localStorage.setItem('ducky-ducklings', JSON.stringify(ducklings))
+  saveToLocalStorage('ducky-ducklings', ducklings)
   ducklingsCache = null
   ducklingMatchResultCache.clear()
 }

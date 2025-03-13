@@ -2,38 +2,19 @@ import { defaultDucklings, loadDucklings, matchDuckling, renderDucklingsList, sa
 import './global.css'
 import { bangs } from './hashbang.ts'
 import { DuckyIsland, defaultIslands } from './islands.ts'
-
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
-  let timeout: number | undefined
-
-  return function (...args: Parameters<T>): void {
-    const later = () => {
-      timeout = undefined
-      func(...args)
-    }
-
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait) as unknown as number
-  }
-}
+import { debounce } from './utils/debounce.ts'
+import { loadFromLocalStorage, saveToLocalStorage } from './utils/storage.ts'
 
 if (loadDucklings().length === 0) {
   saveDucklings(defaultDucklings)
 }
 
 function loadDuckyIslands(): { [key: string]: DuckyIsland } {
-  const islands = localStorage.getItem('ducky-islands')
-  if (!islands) return {}
-  try {
-    return JSON.parse(islands)
-  } catch (e) {
-    console.error('Failed to parse ducky islands', e)
-    return {}
-  }
+  return loadFromLocalStorage('ducky-islands', {})
 }
 
 function saveDuckyIslands(islands: { [key: string]: DuckyIsland }) {
-  localStorage.setItem('ducky-islands', JSON.stringify(islands))
+  saveToLocalStorage('ducky-islands', islands)
 }
 
 const duckyIslands = loadDuckyIslands()
@@ -57,15 +38,7 @@ const defaultBang = bangs[LS_DEFAULT_BANG]
 function updateRecentBangs(bangName: string) {
   if (!bangName) return
 
-  const recentBangsJson = localStorage.getItem('recent-bangs') || '[]'
-  let recentBangs: string[] = []
-
-  try {
-    recentBangs = JSON.parse(recentBangsJson)
-    if (!Array.isArray(recentBangs)) recentBangs = []
-  } catch (e) {
-    recentBangs = []
-  }
+  let recentBangs = loadFromLocalStorage('recent-bangs', [] as string[])
 
   const index = recentBangs.indexOf(bangName)
   if (index > -1) {
@@ -73,10 +46,9 @@ function updateRecentBangs(bangName: string) {
   }
 
   recentBangs.unshift(bangName)
-
   recentBangs = recentBangs.slice(0, 5)
 
-  localStorage.setItem('recent-bangs', JSON.stringify(recentBangs))
+  saveToLocalStorage('recent-bangs', recentBangs)
 }
 
 function renderIslandsList(): string {
