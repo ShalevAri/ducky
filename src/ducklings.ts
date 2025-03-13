@@ -7,6 +7,8 @@ export interface Duckling {
 
 // Cache for duckling patterns to avoid repeated localStorage access
 let ducklingsCache: Duckling[] | null = null
+// Set a reasonable cache size limit to prevent memory issues
+const CACHE_SIZE_LIMIT = 100
 let ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
 // Load ducklings from localStorage
@@ -78,6 +80,14 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
         bangCommand: duckling.bangCommand,
         remainingQuery: duckling.targetValue
       }
+      // Implement cache size management
+      if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+        // Remove oldest entry (first key in the map)
+        const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+        if (firstKey) {
+          ducklingMatchResultCache.delete(firstKey)
+        }
+      }
       ducklingMatchResultCache.set(query, result)
       return result
     }
@@ -89,12 +99,28 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
       const additionalQuery = query.slice(duckling.pattern.length + 1)
       const remainingQuery = duckling.targetValue + ' ' + additionalQuery
       result = { bangCommand: duckling.bangCommand, remainingQuery }
+      // Implement cache size management
+      if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+        // Remove oldest entry (first key in the map)
+        const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+        if (firstKey) {
+          ducklingMatchResultCache.delete(firstKey)
+        }
+      }
       ducklingMatchResultCache.set(query, result)
       return result
     }
   }
 
   // Cache negative results too
+  // Implement cache size management
+  if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+    // Remove oldest entry (first key in the map)
+    const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+    if (firstKey) {
+      ducklingMatchResultCache.delete(firstKey)
+    }
+  }
   ducklingMatchResultCache.set(query, null)
   return null
 }

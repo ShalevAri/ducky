@@ -3,6 +3,21 @@ import './global.css'
 import { bangs } from './hashbang.ts'
 import { DuckyIsland, defaultIslands } from './islands.ts'
 
+// Utility function for debouncing
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: number | undefined
+
+  return function (...args: Parameters<T>): void {
+    const later = () => {
+      timeout = undefined
+      func(...args)
+    }
+
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait) as unknown as number
+  }
+}
+
 // Initialize ducklings if none exist
 if (loadDucklings().length === 0) {
   saveDucklings(defaultDucklings)
@@ -693,9 +708,11 @@ function doRedirect() {
   window.location.replace(searchUrl)
 }
 
-doRedirect()
-
 // Initialize function to be called after DOM loads
 document.addEventListener('DOMContentLoaded', function () {
-  // ... existing code ...
+  // Debounce the redirect for smoother experience
+  const debouncedRedirect = debounce(doRedirect, 50)
+
+  // Call the debounced redirect function
+  debouncedRedirect()
 })
