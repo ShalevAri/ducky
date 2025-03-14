@@ -83,7 +83,7 @@ export const defaultDucklings: Duckling[] = [
   {
     pattern: '21st',
     bangCommand: 'raw',
-    targetValue: 'https://21st.co/',
+    targetValue: 'https://21st.dev/?tab=components&sort=recommended',
     description: 'Navigate to the 21st website'
   }
 ]
