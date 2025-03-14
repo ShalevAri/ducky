@@ -1,7 +1,7 @@
 import { matchDuckling } from './ducklings.ts'
 import { bangs } from './hashbang.ts'
-import { Bang } from './types/bangs.ts'
-import { DuckyIsland } from './types/islands.ts'
+import { type Bang } from './types/bangs.ts'
+import { type DuckyIsland } from './types/islands.ts'
 import { loadFromLocalStorage, saveToLocalStorage } from './utils/storage.ts'
 
 // Cache for bang redirects
@@ -35,13 +35,17 @@ export function updateRecentBangs(bangName: string): void {
 /**
  * Returns the redirect URL for a bang search
  */
-export function getBangRedirectUrl(query: string, defaultBang: any, duckyIslands: any): string | null {
+export function getBangRedirectUrl(
+  query: string,
+  defaultBang: Bang,
+  duckyIslands: Record<string, DuckyIsland>
+): string | null {
   if (!query) {
     return null
   }
-
   if (bangRedirectCache.has(query)) {
-    return bangRedirectCache.get(query)
+    const cachedResult = bangRedirectCache.get(query)
+    return cachedResult !== undefined ? cachedResult : null
   }
 
   const bangMatch = BANG_REGEX.exec(query)
@@ -123,7 +127,7 @@ export function getBangRedirectUrl(query: string, defaultBang: any, duckyIslands
 export function feelingLuckyRedirect(query: string): string {
   const cacheKey = `lucky:${query}`
   if (bangRedirectCache.has(cacheKey)) {
-    return bangRedirectCache.get(cacheKey) as string
+    return bangRedirectCache.get(cacheKey)!
   }
 
   const cleanQuery = query.replace('!', '').trim()
@@ -136,7 +140,7 @@ export function feelingLuckyRedirect(query: string): string {
 /**
  * Performs the redirect based on the current URL query
  */
-export function doRedirect(defaultBang: any, duckyIslands: any, renderDefaultPage: () => void): void {
+export function doRedirect(defaultBang: { u: string }, duckyIslands: string[], renderDefaultPage: () => void): void {
   const url = new URL(window.location.href)
   const query = url.searchParams.get('q')?.trim() ?? ''
   if (!query) {
@@ -153,7 +157,11 @@ export function doRedirect(defaultBang: any, duckyIslands: any, renderDefaultPag
     return
   }
 
-  const searchUrl = getBangRedirectUrl(query, defaultBang, duckyIslands)
+  const searchUrl = getBangRedirectUrl(
+    query,
+    defaultBang as Bang,
+    duckyIslands as unknown as Record<string, DuckyIsland>
+  )
   if (!searchUrl) return
 
   window.location.replace(searchUrl)

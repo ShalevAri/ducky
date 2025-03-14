@@ -6,7 +6,7 @@ import { bangs } from './bang.ts'
  *   If you should happen to enjoy PowerShell: cd src; node --experimental-strip-types .\hashbanggen.ts; cd ../
  * */
 
-let hashbang: { [key: string]: { c?: string; d: string; r: number; s: string; sc?: string; t: string; u: string } } = {}
+const hashbang: Record<string, { c?: string; d: string; r: number; s: string; sc?: string; t: string; u: string }> = {}
 bangs.forEach((bang) => (hashbang[bang.t] = bang))
 
 writeFileSync(

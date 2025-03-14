@@ -9,13 +9,12 @@ export interface Duckling {
 
 let ducklingsCache: Duckling[] | null = null
 const CACHE_SIZE_LIMIT = 100
-let ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
+const ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
 export function loadDucklings(): Duckling[] {
   const ducklings = loadFromLocalStorage<Duckling[]>('ducky-ducklings', [])
-
   // Migrate old ducklings that don't have targetValue
-  return ducklings.map((duckling: any) => {
+  return ducklings.map((duckling: Duckling) => {
     if (!duckling.targetValue) {
       return {
         ...duckling,
@@ -101,7 +100,7 @@ function getCachedDucklings(): Duckling[] {
 
 export function matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
   if (ducklingMatchResultCache.has(query)) {
-    return ducklingMatchResultCache.get(query) || null
+    return ducklingMatchResultCache.get(query) ?? null
   }
 
   const ducklings = getCachedDucklings()

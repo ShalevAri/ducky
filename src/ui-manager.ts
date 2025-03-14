@@ -1,23 +1,24 @@
 import { loadDucklings, renderDucklingsList, saveDucklings } from './ducklings.ts'
 import { bangs } from './hashbang.ts'
-import { loadDuckyIslands, renderIslandsList, saveDuckyIslands } from './islands-manager.ts'
-import { Bang } from './types/bangs.ts'
-import { DuckyIsland } from './types/islands.ts'
-import { loadFromLocalStorage } from './utils/storage.ts'
+import { renderIslandsList, saveDuckyIslands } from './islands-manager.ts'
+import { type Bang } from './types/bangs.ts'
+import { type DuckyIsland } from './types/islands.ts'
 
 /**
  * Render the default page when no search is being performed
  */
-export function renderDefaultPage(defaultBang: Bang, duckyIslands: { [key: string]: DuckyIsland }): void {
+export function renderDefaultPage(defaultBang: Bang, duckyIslands: Record<string, DuckyIsland>): void {
   const currentUrl = window.location.href.replace(/\/+$/, '')
   const app = document.querySelector<HTMLDivElement>('#app')!
 
-  const recentBangsJson = localStorage.getItem('recent-bangs') || '[]'
+  const recentBangsJson = localStorage.getItem('recent-bangs') ?? '[]'
   let recentBangs: string[] = []
-
   try {
-    recentBangs = JSON.parse(recentBangsJson)
-    if (!Array.isArray(recentBangs)) recentBangs = []
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const parsed = JSON.parse(recentBangsJson)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    recentBangs = Array.isArray(parsed) ? parsed : []
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     recentBangs = []
   }
@@ -185,7 +186,7 @@ export function renderDefaultPage(defaultBang: Bang, duckyIslands: { [key: strin
 /**
  * Set up all event listeners for the UI
  */
-function setupEventListeners(duckyIslands: { [key: string]: DuckyIsland }): void {
+function setupEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')!
   const copyIcon = copyButton.querySelector('img')!
@@ -213,7 +214,7 @@ function setupEventListeners(duckyIslands: { [key: string]: DuckyIsland }): void
   urlInput.addEventListener('keydown', (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'c' && window.getSelection()?.toString() === '') {
       event.preventDefault()
-      copyUrlToClipboard()
+      void copyUrlToClipboard()
     }
   })
 
@@ -230,12 +231,12 @@ function setupEventListeners(duckyIslands: { [key: string]: DuckyIsland }): void
     urlInput.value = `${currentUrl}?q=%s&default_bang=${encodeURIComponent(bangName)}`
   })
 
-  copyButton.addEventListener('click', copyUrlToClipboard)
+  copyButton.addEventListener('click', () => void copyUrlToClipboard())
 
   const recentBangButtons = app.querySelectorAll<HTMLButtonElement>('.recent-bang')
   recentBangButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const bangName = button.dataset.bang || ''
+      const bangName = button.dataset.bang ?? ''
       if (bangName && bangs[bangName]) {
         bangInput.value = bangName
         bangForm.dispatchEvent(new Event('submit'))
@@ -250,7 +251,7 @@ function setupEventListeners(duckyIslands: { [key: string]: DuckyIsland }): void
 /**
  * Set up event listeners for island management
  */
-function setupIslandEventListeners(duckyIslands: { [key: string]: DuckyIsland }): void {
+function setupIslandEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const addIslandButton = app.querySelector<HTMLButtonElement>('.add-island-button')
   const islandFormContainer = app.querySelector<HTMLDivElement>('.island-form-container')
@@ -312,7 +313,7 @@ function setupIslandEventListeners(duckyIslands: { [key: string]: DuckyIsland })
 /**
  * Attach delete handlers to island delete buttons
  */
-function attachDeleteHandlers(duckyIslands: { [key: string]: DuckyIsland }): void {
+function attachDeleteHandlers(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-island')
   deleteButtons.forEach((button) => {
@@ -360,10 +361,10 @@ function setupDucklingEventListeners(): void {
   ducklingForm?.addEventListener('submit', (e) => {
     e.preventDefault()
 
-    const pattern = ducklingPatternInput?.value.trim() || ''
-    const bangCommand = ducklingBangInput?.value.trim().replace(/^!/, '') || ''
-    const targetValue = ducklingTargetValueInput?.value.trim() || ''
-    const description = ducklingDescriptionInput?.value.trim() || ''
+    const pattern = ducklingPatternInput?.value.trim() ?? ''
+    const bangCommand = ducklingBangInput?.value.trim().replace(/^!/, '') ?? ''
+    const targetValue = ducklingTargetValueInput?.value.trim() ?? ''
+    const description = ducklingDescriptionInput?.value.trim() ?? ''
     const isDirectUrl = targetValue.startsWith('http://') || targetValue.startsWith('https://')
     const finalBangCommand = isDirectUrl && !bangCommand ? 'raw' : bangCommand
 

@@ -1,25 +1,25 @@
 import { defaultIslands } from './islands.ts'
-import { DuckyIsland } from './types/islands.ts'
+import { type DuckyIsland } from './types/islands.ts'
 import { loadFromLocalStorage, saveToLocalStorage } from './utils/storage.ts'
 
 /**
  * Load islands from local storage
  */
-export function loadDuckyIslands(): { [key: string]: DuckyIsland } {
+export function loadDuckyIslands(): Record<string, DuckyIsland> {
   return loadFromLocalStorage('ducky-islands', {})
 }
 
 /**
  * Save islands to local storage
  */
-export function saveDuckyIslands(islands: { [key: string]: DuckyIsland }): void {
+export function saveDuckyIslands(islands: Record<string, DuckyIsland>): void {
   saveToLocalStorage('ducky-islands', islands)
 }
 
 /**
  * Initialize islands with defaults if none exist
  */
-export function initializeIslands(): { [key: string]: DuckyIsland } {
+export function initializeIslands(): Record<string, DuckyIsland> {
   const duckyIslands = loadDuckyIslands()
   if (Object.keys(duckyIslands).length === 0) {
     defaultIslands.forEach((island) => {
@@ -33,7 +33,7 @@ export function initializeIslands(): { [key: string]: DuckyIsland } {
 /**
  * Render the islands list as HTML
  */
-export function renderIslandsList(duckyIslands: { [key: string]: DuckyIsland }): string {
+export function renderIslandsList(duckyIslands: Record<string, DuckyIsland>): string {
   const islands = Object.values(duckyIslands)
   if (islands.length === 0) {
     return '<p>No custom islands created yet.</p>'
