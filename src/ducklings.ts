@@ -36,8 +36,56 @@ export const defaultDucklings: Duckling[] = [
   {
     pattern: 'ducky',
     bangCommand: 'ghr',
-    targetValue: 'shalevari/ducky',
+    targetValue: 'ShalevAri/ducky',
     description: 'Go to the Ducky GitHub repository'
+  },
+  {
+    pattern: 'unduck',
+    bangCommand: 'ghr',
+    targetValue: 't3dotgg/unduck',
+    description: 'Go to the unduck GitHub repository'
+  },
+  {
+    pattern: 'duckylocal',
+    bangCommand: 'raw',
+    targetValue: 'http://localhost:49152/',
+    description: 'Navigate to the local Ducky server'
+  },
+  {
+    pattern: 'github',
+    bangCommand: 'raw',
+    targetValue: 'https://github.com/',
+    description: 'Navigate to the GitHub website'
+  },
+  {
+    pattern: 't3',
+    bangCommand: 'raw',
+    targetValue: 'https://t3.chat/chat',
+    description: 'Navigate to the T3 Chat website'
+  },
+  {
+    pattern: 'posthog',
+    bangCommand: 'raw',
+    targetValue: 'https://posthog.com/',
+    description: 'Navigate to the PostHog website'
+  },
+  {
+    pattern: 'vercel',
+    bangCommand: 'raw',
+    targetValue: 'https://vercel.com/',
+    description: 'Navigate to the Vercel website'
+  },
+  {
+    pattern: 'shadcn',
+    bangCommand: 'raw',
+    targetValue: 'https://ui.shadcn.com/',
+    description: 'Navigate to the Shadcn UI website'
+  },
+  {
+    pattern: '21st',
+    bangCommand: 'raw',
+    targetValue: 'https://21st.co/',
+    description: 'Navigate to the 21st website'
   }
 ]
 
