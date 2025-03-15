@@ -122187,5 +122187,14 @@ export const bangs = [
     t: 'hf',
     sc: 'AI',
     u: 'https://huggingface.co/search/full-text?q={{{s}}}'
+  },
+  {
+    c: 'Tech',
+    d: 'grep.app',
+    r: 0,
+    s: 'Grep.app',
+    sc: 'Search code (any programming language)',
+    t: 'grepcode',
+    u: 'https://grep.app/search?q={{{s}}}'
   }
 ]
