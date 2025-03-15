@@ -140,7 +140,12 @@ export function feelingLuckyRedirect(query: string): string {
 /**
  * Performs the redirect based on the current URL query
  */
-export function doRedirect(defaultBang: { u: string }, duckyIslands: string[], renderDefaultPage: () => void): void {
+export function doRedirect(
+  defaultBang: { u: string },
+  duckyIslandKeys: string[],
+  renderDefaultPage: () => void,
+  duckyIslandsData?: Record<string, DuckyIsland>
+): void {
   const url = new URL(window.location.href)
   const query = url.searchParams.get('q')?.trim() ?? ''
   if (!query) {
@@ -157,11 +162,19 @@ export function doRedirect(defaultBang: { u: string }, duckyIslands: string[], r
     return
   }
 
-  const searchUrl = getBangRedirectUrl(
-    query,
-    defaultBang as Bang,
-    duckyIslands as unknown as Record<string, DuckyIsland>
-  )
+  // If we have the duckyIslandsData, use it directly
+  // Otherwise, convert the array of keys to an empty record
+  const duckyIslands =
+    duckyIslandsData ??
+    duckyIslandKeys.reduce(
+      (acc, key) => {
+        acc[key] = { key, name: key, prompt: '' }
+        return acc
+      },
+      {} as Record<string, DuckyIsland>
+    )
+
+  const searchUrl = getBangRedirectUrl(query, defaultBang as Bang, duckyIslands)
   if (!searchUrl) return
 
   window.location.replace(searchUrl)
