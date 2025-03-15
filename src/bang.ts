@@ -12,6 +12,69 @@ export const bangs = [
   },
   {
     c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ GPT-4o',
+    sc: 'AI',
+    t: 't3-4o',
+    u: 'https://t3.chat/new?model=gpt-4o&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ GPT-o3-mini',
+    sc: 'AI',
+    t: 't3-o3',
+    u: 'https://t3.chat/new?model=gpt-o3-mini&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ Claude 3.5',
+    sc: 'AI',
+    t: 't3-cl3.5',
+    u: 'https://t3.chat/new?model=claude-3.5&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ Claude 3.7',
+    sc: 'AI',
+    t: 't3-cl3.7',
+    u: 'https://t3.chat/new?model=claude-3.7&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ Claude 3.7 Reasoning',
+    sc: 'AI',
+    t: 't3-cl3.7r',
+    u: 'https://t3.chat/new?model=claude-3.7-reasoning&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ DeepSeek R1-Groq',
+    sc: 'AI',
+    t: 't3-r1l',
+    u: 'https://t3.chat/new?model=deepseek-r1-groq&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 'www.t3.chat',
+    r: 0,
+    s: 'T3 Chat w/ QWQ-32B',
+    sc: 'AI',
+    t: 't3-qwq',
+    u: 'https://t3.chat/new?model=qwq-32b&q={{{s}}}'
+  },
+  {
+    c: 'AI',
     d: 'www.perplexity.ai',
     r: 0,
     s: 'Perplexity',
