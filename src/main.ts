@@ -1,19 +1,21 @@
-import { defaultDucklings, loadDucklings, saveDucklings } from './ducklings.ts'
 import './global.css'
 import { bangs } from './hashbang.ts'
-import { initializeIslands } from './islands-manager.ts'
-import { doRedirect } from './redirect-manager.ts'
+import { DucklingService } from './services/ducklings/DucklingService'
+import { IslandService } from './services/islands/IslandService'
+import { RedirectService } from './services/redirect/RedirectService'
+import { UIManager } from './services/ui/UIManager'
 import { type Bang } from './types/bangs.ts'
-import { renderDefaultPage } from './ui-manager.ts'
 import { debounce } from './utils/debounce.ts'
 
-// Initialize ducklings
-if (loadDucklings().length === 0) {
-  saveDucklings(defaultDucklings)
-}
+// Initialize services
+const islandService = IslandService.getInstance()
+const ducklingService = DucklingService.getInstance()
+const redirectService = RedirectService.getInstance()
+const uiManager = UIManager.getInstance()
 
-// Initialize islands
-const duckyIslands = initializeIslands()
+// Initialize data
+ducklingService.initializeDucklings()
+const duckyIslands = islandService.initializeIslands()
 
 // Get default bang from URL or localStorage
 const url = new URL(window.location.href)
@@ -25,11 +27,12 @@ const defaultBang: Bang = bangs[LS_DEFAULT_BANG]
 document.addEventListener('DOMContentLoaded', function () {
   const debouncedRedirect = debounce(
     () =>
-      doRedirect(
+      redirectService.doRedirect(
         defaultBang,
         Object.keys(duckyIslands),
-        () => renderDefaultPage(defaultBang, duckyIslands),
-        duckyIslands
+        () => uiManager.renderDefaultPage(defaultBang, duckyIslands),
+        duckyIslands,
+        bangs
       ),
     50
   )
