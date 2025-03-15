@@ -235,6 +235,32 @@ input[type='submit'] {
   width: 100%;
 }
 
+.recent-bangs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.clear-recent-bangs {
+  padding: 4px 8px;
+  font-size: 0.9em;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clear-recent-bangs:hover {
+  background: var(--button-hover-bg);
+}
+
+.clear-recent-bangs:active {
+  background: var(--button-active-bg);
+}
+
 .recent-bangs {
   display: flex;
   flex-wrap: wrap;

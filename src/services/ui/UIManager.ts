@@ -52,7 +52,10 @@ export class UIManager {
 
     return `
       <div class="recent-bangs-container">
-        <p>Recently used bangs:</p>
+        <div class="recent-bangs-header">
+          <p>Recently used bangs:</p>
+          <button class="clear-recent-bangs">Clear</button>
+        </div>
         <div class="recent-bangs">
           ${bangsHtml}
         </div>
@@ -388,6 +391,7 @@ export class UIManager {
     const recentBangButtons = app.querySelectorAll<HTMLButtonElement>('.recent-bang')
     const bangInput = app.querySelector<HTMLInputElement>('#bang-input')!
     const bangForm = app.querySelector<HTMLFormElement>('.bang-form')!
+    const clearButton = app.querySelector<HTMLButtonElement>('.clear-recent-bangs')
 
     recentBangButtons.forEach((button) => {
       button.addEventListener('click', () => {
@@ -398,6 +402,16 @@ export class UIManager {
         }
       })
     })
+
+    if (clearButton) {
+      clearButton.addEventListener('click', () => {
+        this.storage.set('recent-bangs', [])
+        const container = app.querySelector('.recent-bangs-container')
+        if (container) {
+          container.remove()
+        }
+      })
+    }
   }
 
   private attachIslandDeleteHandlers(app: HTMLDivElement, duckyIslands: Record<string, DuckyIsland>): void {
