@@ -7,6 +7,18 @@ alwaysApply: true
 .
 ├── LICENSE
 ├── README.md
+├── dist
+│   ├── assets
+│   │   ├── index-2av2bjeG.css
+│   │   └── index-DWDXPseO.js
+│   ├── clipboard-check.svg
+│   ├── clipboard.svg
+│   ├── index.html
+│   ├── manifest.webmanifest
+│   ├── registerSW.js
+│   ├── search.svg
+│   ├── sw.js
+│   └── workbox-3e8df8c8.js
 ├── docker
 │   └── Dockerfile
 ├── docker-compose.yml
@@ -20,10 +32,26 @@ alwaysApply: true
 │   └── search.svg
 ├── src
 │   ├── bang.ts
+│   ├── ducklings.ts
 │   ├── global.css
 │   ├── hashbang.ts
 │   ├── hashbanggen.ts
+│   ├── islands-manager.ts
+│   ├── islands.ts
 │   ├── main.ts
+│   ├── redirect-manager.ts
+│   ├── types
+│   │   ├── bangs.ts
+│   │   └── islands.ts
+│   ├── ui-manager.ts
+│   ├── utils
+│   │   ├── debounce.ts
+│   │   └── storage.ts
 │   └── vite-env.d.ts
+├── tools
+│   ├── llm_api.py
+│   ├── screenshot_utils.py
+│   ├── search_engine.py
+│   └── web_scraper.py
 ├── tsconfig.json
 └── vite.config.ts
