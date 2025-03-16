@@ -2,15 +2,17 @@
 
 ## In Progress
 
-- [ ] transition to React w/ Tailwind & Shadcn
+- [ ] Improve UI/UX
 
 ## Coming Soon
 
 - [ ] Fix broken reverse bangs
-- [ ] Improve UI/UX
+
 - [ ] Choose AI model when searching in T3 Chat with `!t3a` bang
 
 ## Maybe
+
+- [ ] transition to React w/ Tailwind & Shadcn
 
 ## Done
 
