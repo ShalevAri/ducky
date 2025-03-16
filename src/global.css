@@ -74,7 +74,7 @@ body {
 }
 
 body {
-  line-height: 1.5;
+  line-height: 1.4;
   font-weight: 400;
   font-size: 16px;
   color: var(--text-color);
@@ -123,6 +123,23 @@ textarea {
   max-width: 36rem;
   text-align: center;
   padding: 0 8px;
+  margin: 0 auto;
+}
+
+/* Add main heading styles */
+.main-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.main-subheading {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  opacity: 0.9;
 }
 
 /* Update url-input width to be 100% since container will control max width */
@@ -184,7 +201,7 @@ textarea {
 }
 
 .bang-form {
-  margin-top: 32px;
+  margin-top: 2.5rem;
   text-align: left;
 }
 
@@ -289,7 +306,7 @@ input[type='submit'] {
 
 /* Ducky Islands styles */
 .ducky-islands-container {
-  margin-top: 32px;
+  margin-top: 3.5rem;
   text-align: left;
   width: 100%;
 }
@@ -311,21 +328,21 @@ input[type='submit'] {
 }
 
 .islands-list {
-  margin-top: 16px;
-  max-height: 200px;
+  margin-top: 1rem;
+  max-height: 140px;
   overflow-y: auto;
-  margin-bottom: 16px;
+  margin-bottom: 0.5rem;
 }
 
 .islands-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .islands-table th,
 .islands-table td {
-  padding: 8px;
+  padding: 6px 8px;
   text-align: left;
   border-bottom: 1px solid var(--input-border);
 }
@@ -342,7 +359,7 @@ input[type='submit'] {
 }
 
 .add-island-button {
-  margin-top: 16px;
+  margin-top: 0.5rem;
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: 4px;
@@ -416,7 +433,7 @@ input[type='submit'] {
 
 /* Ducklings styles */
 .ducklings-container {
-  margin-top: 32px;
+  margin-top: 3.5rem;
   text-align: left;
   width: 100%;
 }
@@ -430,14 +447,14 @@ input[type='submit'] {
 }
 
 .ducklings-list {
-  margin-top: 16px;
-  max-height: 200px;
+  margin-top: 1rem;
+  max-height: 140px;
   overflow-y: auto;
-  margin-bottom: 16px;
+  margin-bottom: 0.5rem;
 }
 
 .add-duckling-button {
-  margin-top: 16px;
+  margin-top: 0.5rem;
   background-color: var(--input-bg);
   border: 1px solid var(--input-border);
   border-radius: 4px;
@@ -462,12 +479,12 @@ input[type='submit'] {
 .ducklings-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .ducklings-table th,
 .ducklings-table td {
-  padding: 8px;
+  padding: 6px 8px;
   text-align: left;
   border-bottom: 1px solid var(--input-border);
 }
@@ -543,4 +560,49 @@ input[type='submit'] {
 .cancel-button:hover,
 .duckling-cancel-button:hover {
   background: var(--button-secondary-hover-bg);
+}
+
+/* Center the main container */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* Adjust table styles for both Islands and Ducklings */
+.ducklings-table th,
+.ducklings-table td,
+.islands-table th,
+.islands-table td {
+  padding: 5px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--input-border);
+  font-size: 0.9em;
+}
+
+.ducklings-table th,
+.islands-table th {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+/* Make both lists the same height */
+.islands-list,
+.ducklings-list {
+  margin-top: 0.75rem;
+  max-height: 130px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+}
+
+/* Adjust cell content */
+.prompt-cell,
+.target-cell {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
