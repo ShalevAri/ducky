@@ -58,9 +58,11 @@ The end goal is to get all the benefits of Ducky while having virtually 0 overhe
 
 ## Debug Mode
 
-Ducky has a debug mode that allows you to see all the redirects that are happening.
+Ducky has a Debug Mode that allows you to see the time it takes for each redirect to happen.
 
-To enable it, simply click on the "Enable Debug Mode" button in the top right corner of the page.
+To enable it, open the `http://localhost:49152` Ducky UI page in your browser, inspect it, add the `DEBUG_MODE` variable to `localStorage` with the value `true` and then refresh the page.
+
+Then, open the console and navigate to a website. You'll now see the debug information.
 
 ## FAQ
 
