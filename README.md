@@ -56,6 +56,12 @@ I'm optimizing everything to make sure you get every ounce of speed possible.
 
 The end goal is to get all the benefits of Ducky while having virtually 0 overhead.
 
+## Debug Mode
+
+Ducky has a debug mode that allows you to see all the redirects that are happening.
+
+To enable it, simply click on the "Enable Debug Mode" button in the top right corner of the page.
+
 ## FAQ
 
 ### How can I change the port?

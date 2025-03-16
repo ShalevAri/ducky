@@ -3,6 +3,7 @@ import { IslandForm } from '../../components/forms/IslandForm'
 import { bangs } from '../../hashbang'
 import { type Bang } from '../../types/bangs'
 import { type DuckyIsland } from '../../types/islands'
+import { PerformanceMonitor } from '../../utils/performance'
 import { DucklingService } from '../ducklings/DucklingService'
 import { IslandService } from '../islands/IslandService'
 import { StorageService } from '../storage/StorageService'
@@ -12,11 +13,13 @@ export class UIManager {
   private islandService: IslandService
   private ducklingService: DucklingService
   private storage: StorageService
+  private performanceMonitor: PerformanceMonitor
 
   private constructor() {
     this.islandService = IslandService.getInstance()
     this.ducklingService = DucklingService.getInstance()
     this.storage = StorageService.getInstance()
+    this.performanceMonitor = PerformanceMonitor.getInstance()
   }
 
   static getInstance(): UIManager {
@@ -70,143 +73,138 @@ export class UIManager {
     recentBangsHtml: string
   ): string {
     return `
-      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
-        <div class="content-container">
-          <!-- Header Section -->
-          <h1>Ducky</h1>
-          <p>DuckDuckGo's bang redirects are too slow.</p>
-          <p>Add the following URL as a custom search engine to your browser.</p>
-          <p>Enables <a href="https://duckduckgo.com/bang.html" target="_blank">all of DuckDuckGo's bangs</a> (and more!).</p>
-          <p>NOTE: Make sure to follow all of the instructions in the <a href="https://github.com/ShalevAri/ducky" target="_blank">README</a> before using this.</p>
-          
-          <!-- URL Input Section -->
-          <div class="url-container"> 
-            <input 
-              type="text" 
-              class="url-input"
-              value="${currentUrl}?q=%s"
-              readonly 
-            />
-            <button class="copy-button">
-              <img src="/clipboard.svg" alt="Copy" />
-            </button>
-          </div>
-
-          <!-- Bang Form Section -->
-          <form class="bang-form">
-            <label for="bang-input">Care to pick a default bang?</label>
-            <div class="bang-container">
-              <input
-                id="bang-input"
-                type="text"
-                class="bang-input"
-                value="${defaultBang.t}"
-                list="bang-list"
-                spellcheck="false"
+      <div class="container">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+          <div class="content-container">
+            <!-- URL Input Section -->
+            <div class="url-container"> 
+              <input 
+                type="text" 
+                class="url-input"
+                value="${currentUrl}?q=%s"
+                readonly 
               />
-              <input type="submit" value="Apply" class="bang-confirm"/>
+              <button class="copy-button">
+                <img src="/clipboard.svg" alt="Copy" />
+              </button>
             </div>
-            <datalist id="bang-list"></datalist>
-          </form>
-          <p class="bang-error"></p>
 
-          <!-- Ducky Islands Section -->
-          <div class="ducky-islands-container">
-            <h2>Ducky Islands</h2>
-            <p>Ducky Islands allow you to create custom prompt prefixes for AI bangs.</p>
-            <p>For example, using <code>!t3a</code> instead of <code>!t3</code> will tell the AI to give you the answer first.</p>
-            
-            <div class="islands-list">
-              ${this.renderIslandsList(duckyIslands)}
-            </div>
-            
-            <button class="add-island-button">Add New Island</button>
-            
-            <div class="island-form-container" style="display: none;">
-              <form class="island-form">
-                <h3>Create New Island</h3>
-                
-                <div class="form-group">
-                  <label for="island-key">Suffix Key:</label>
-                  <input type="text" id="island-key" name="key" class="island-input" maxlength="3" required>
-                  <p class="form-help">The letter(s) to add after a bang (e.g., 'a' for !t3a)</p>
-                </div>
-                
-                <div class="form-group">
-                  <label for="island-name">Island Name:</label>
-                  <input type="text" id="island-name" name="name" class="island-input" required>
-                  <p class="form-help">A descriptive name for this island</p>
-                </div>
-                
-                <div class="form-group">
-                  <label for="island-prompt">Prompt Text:</label>
-                  <textarea id="island-prompt" name="prompt" class="island-textarea" rows="4" required></textarea>
-                  <p class="form-help">The text to inject before your query</p>
-                </div>
-                
-                <div class="form-actions">
-                  <button type="button" class="cancel-button">Cancel</button>
-                  <button type="submit" class="save-button">Save Island</button>
-                </div>
-              </form>
-            </div>
-          </div>
+            <!-- Bang Form Section -->
+            <form class="bang-form">
+              <label for="bang-input">Care to pick a default bang?</label>
+              <div class="bang-container">
+                <input
+                  id="bang-input"
+                  type="text"
+                  class="bang-input"
+                  value="${defaultBang.t}"
+                  list="bang-list"
+                  spellcheck="false"
+                />
+                <input type="submit" value="Apply" class="bang-confirm"/>
+              </div>
+              <datalist id="bang-list"></datalist>
+            </form>
+            <p class="bang-error"></p>
 
-          <!-- Ducklings Section -->
-          <div class="ducklings-container">
-            <h2>Ducklings</h2>
-            <p>Ducklings allow you to create automatic bang redirects for specific patterns.</p>
-            <p>For example, typing <code>shalevari/ducky</code> will automatically use <code>!ghr</code> bang.</p>
-            
-            <div class="ducklings-list">
-              ${this.renderDucklingsList()}
+            <!-- Ducky Islands Section -->
+            <div class="ducky-islands-container">
+              <h2>Ducky Islands</h2>
+              <p>Ducky Islands allow you to create custom prompt prefixes for AI bangs.</p>
+              <p>For example, using <code>!t3a</code> instead of <code>!t3</code> will tell the AI to give you the answer first.</p>
+              
+              <div class="islands-list">
+                ${this.renderIslandsList(duckyIslands)}
+              </div>
+              
+              <button class="add-island-button">Add New Island</button>
+              
+              <div class="island-form-container" style="display: none;">
+                <form class="island-form">
+                  <h3>Create New Island</h3>
+                  
+                  <div class="form-group">
+                    <label for="island-key">Suffix Key:</label>
+                    <input type="text" id="island-key" name="key" class="island-input" maxlength="3" required>
+                    <p class="form-help">The letter(s) to add after a bang (e.g., 'a' for !t3a)</p>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="island-name">Island Name:</label>
+                    <input type="text" id="island-name" name="name" class="island-input" required>
+                    <p class="form-help">A descriptive name for this island</p>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="island-prompt">Prompt Text:</label>
+                    <textarea id="island-prompt" name="prompt" class="island-textarea" rows="4" required></textarea>
+                    <p class="form-help">The text to inject before your query</p>
+                  </div>
+                  
+                  <div class="form-actions">
+                    <button type="button" class="cancel-button">Cancel</button>
+                    <button type="submit" class="save-button">Save Island</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Ducklings Section -->
+            <div class="ducklings-container">
+              <h2>Ducklings</h2>
+              <p>Ducklings allow you to create automatic bang redirects for specific patterns.</p>
+              <p>For example, typing <code>shalevari/ducky</code> will automatically use <code>!ghr</code> bang.</p>
+              
+              <div class="ducklings-list">
+                ${this.renderDucklingsList()}
+              </div>
+              
+              <button class="add-duckling-button">Add New Duckling</button>
+              
+              <div class="duckling-form-container" style="display: none;">
+                <form class="duckling-form">
+                  <h3>Create New Duckling</h3>
+                  
+                  <div class="form-group">
+                    <label for="duckling-pattern">Pattern:</label>
+                    <input type="text" id="duckling-pattern" name="pattern" class="duckling-input" required>
+                    <p class="form-help">The search pattern to match (e.g., 'ducky')</p>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="duckling-bang">Bang Command:</label>
+                    <input type="text" id="duckling-bang" name="bangCommand" class="duckling-input">
+                    <p class="form-help">The bang command to use (e.g., 'ghr'). Optional for direct URLs.</p>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="duckling-target-value">Target Value:</label>
+                    <input type="text" id="duckling-target-value" name="targetValue" class="duckling-input" required>
+                    <p class="form-help">The value to use with the bang command or a direct URL (e.g., 'shalevari/ducky' or 'http://localhost:49152')</p>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="duckling-description">Description:</label>
+                    <input type="text" id="duckling-description" name="description" class="duckling-input" required>
+                    <p class="form-help">A short description of what this duckling does</p>
+                  </div>
+                  
+                  <div class="form-actions">
+                    <button type="button" class="duckling-cancel-button">Cancel</button>
+                    <button type="submit" class="duckling-save-button">Save Duckling</button>
+                  </div>
+                </form>
+              </div>
             </div>
             
-            <button class="add-duckling-button">Add New Duckling</button>
-            
-            <div class="duckling-form-container" style="display: none;">
-              <form class="duckling-form">
-                <h3>Create New Duckling</h3>
-                
-                <div class="form-group">
-                  <label for="duckling-pattern">Pattern:</label>
-                  <input type="text" id="duckling-pattern" name="pattern" class="duckling-input" required>
-                  <p class="form-help">The search pattern to match (e.g., 'ducky')</p>
-                </div>
-                
-                <div class="form-group">
-                  <label for="duckling-bang">Bang Command:</label>
-                  <input type="text" id="duckling-bang" name="bangCommand" class="duckling-input">
-                  <p class="form-help">The bang command to use (e.g., 'ghr'). Optional for direct URLs.</p>
-                </div>
-                
-                <div class="form-group">
-                  <label for="duckling-target-value">Target Value:</label>
-                  <input type="text" id="duckling-target-value" name="targetValue" class="duckling-input" required>
-                  <p class="form-help">The value to use with the bang command or a direct URL (e.g., 'shalevari/ducky' or 'http://localhost:49152')</p>
-                </div>
-                
-                <div class="form-group">
-                  <label for="duckling-description">Description:</label>
-                  <input type="text" id="duckling-description" name="description" class="duckling-input" required>
-                  <p class="form-help">A short description of what this duckling does</p>
-                </div>
-                
-                <div class="form-actions">
-                  <button type="button" class="duckling-cancel-button">Cancel</button>
-                  <button type="submit" class="duckling-save-button">Save Duckling</button>
-                </div>
-              </form>
-            </div>
+            ${recentBangsHtml}
           </div>
-          
-          ${recentBangsHtml}
-        </div>
-        <div class="footer">
-          <p>
-            <a href="https://github.com/ShalevAri/ducky" target="_blank">GitHub</a> | 
-            Made with ❤️ by <a href="https://github.com/ShalevAri" target="_blank">ShalevAri</a>
-          </p>
+          <div class="footer">
+            <p>
+              <a href="https://github.com/ShalevAri/ducky" target="_blank">GitHub</a> | 
+              Made with ❤️ by <a href="https://github.com/ShalevAri" target="_blank">ShalevAri</a>
+            </p>
+          </div>
         </div>
       </div>
     `
