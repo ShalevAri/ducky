@@ -33,16 +33,28 @@ export function saveDucklings(ducklings: Duckling[]): void {
 
 export const defaultDucklings: Duckling[] = [
   {
+    pattern: '21st',
+    bangCommand: 'raw',
+    targetValue: 'https://21st.dev/?tab=components&sort=recommended',
+    description: 'Navigate to the 21st website'
+  },
+  {
+    pattern: 'codepen',
+    bangCommand: 'raw',
+    targetValue: 'https://codepen.io/',
+    description: 'Navigate to CodePen'
+  },
+  {
+    pattern: 'devdocs',
+    bangCommand: 'raw',
+    targetValue: 'https://devdocs.io/',
+    description: 'Search DevDocs API documentation'
+  },
+  {
     pattern: 'ducky',
     bangCommand: 'ghr',
     targetValue: 'ShalevAri/ducky',
     description: 'Go to the Ducky GitHub repository'
-  },
-  {
-    pattern: 'unduck',
-    bangCommand: 'ghr',
-    targetValue: 't3dotgg/unduck',
-    description: 'Go to the unduck GitHub repository'
   },
   {
     pattern: 'duckylocal',
@@ -51,16 +63,28 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the local Ducky server'
   },
   {
+    pattern: 'figma',
+    bangCommand: 'raw',
+    targetValue: 'https://www.figma.com/',
+    description: 'Navigate to Figma'
+  },
+  {
     pattern: 'github',
     bangCommand: 'raw',
     targetValue: 'https://github.com/',
     description: 'Navigate to the GitHub website'
   },
   {
-    pattern: 't3',
+    pattern: 'mdn',
     bangCommand: 'raw',
-    targetValue: 'https://t3.chat/chat',
-    description: 'Navigate to the T3 Chat website'
+    targetValue: 'https://developer.mozilla.org/',
+    description: 'Navigate to Mozilla Developer Network (MDN) documentation'
+  },
+  {
+    pattern: 'npm',
+    bangCommand: 'raw',
+    targetValue: 'https://www.npmjs.com/',
+    description: 'Search NPM packages'
   },
   {
     pattern: 'posthog',
@@ -69,10 +93,10 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the PostHog website'
   },
   {
-    pattern: 'vercel',
+    pattern: 'reddit',
     bangCommand: 'raw',
-    targetValue: 'https://vercel.com/',
-    description: 'Navigate to the Vercel website'
+    targetValue: 'https://reddit.com/',
+    description: 'Navigate to the Reddit website'
   },
   {
     pattern: 'shadcn',
@@ -81,10 +105,22 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the Shadcn UI website'
   },
   {
-    pattern: '21st',
+    pattern: 't3',
     bangCommand: 'raw',
-    targetValue: 'https://21st.dev/?tab=components&sort=recommended',
-    description: 'Navigate to the 21st website'
+    targetValue: 'https://t3.chat/chat',
+    description: 'Navigate to the T3 Chat website'
+  },
+  {
+    pattern: 'unduck',
+    bangCommand: 'ghr',
+    targetValue: 't3dotgg/unduck',
+    description: 'Go to the unduck GitHub repository'
+  },
+  {
+    pattern: 'vercel',
+    bangCommand: 'raw',
+    targetValue: 'https://vercel.com/',
+    description: 'Navigate to the Vercel website'
   }
 ]
 
