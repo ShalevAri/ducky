@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## Formatting
+
+- When you finish writing the necessary code, make sure it is formatted correctly and there are no errors by running the `pnpm approve` command

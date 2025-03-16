@@ -1,0 +1,10 @@
+---
+description: How to use comments
+globs: 
+alwaysApply: true
+---
+
+## Comments
+
+- When creating code, never write unnecessary comments
+- If you do need to create a comment, explain *why* something is being done when there is complex logic, rather than simply saying what is being done
