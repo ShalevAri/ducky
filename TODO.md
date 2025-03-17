@@ -2,11 +2,9 @@
 
 ## In Progress
 
-- [ ] Fix broken reverse bangs
+- [ ] Choose AI model when searching in T3 Chat with `!t3a` bang
 
 ## Coming Soon
-
-- [ ] Choose AI model when searching in T3 Chat with `!t3a` bang
 
 ## Maybe
 
@@ -20,3 +18,4 @@
 - [x] Add some sort of Debug Mode
 - [x] Add CI for linting, formatting, tests, etc.
 - [x] Improve UI/UX
+- [x] Fix broken reverse bangs
