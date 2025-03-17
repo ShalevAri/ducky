@@ -2,8 +2,6 @@
 
 ## In Progress
 
-- [ ] Choose AI model when searching in T3 Chat with `!t3a` bang
-
 ## Coming Soon
 
 ## Maybe
@@ -19,3 +17,4 @@
 - [x] Add CI for linting, formatting, tests, etc.
 - [x] Improve UI/UX
 - [x] Fix broken reverse bangs
+- [x] Choose AI model when searching in T3 Chat with `!t3a` bang
