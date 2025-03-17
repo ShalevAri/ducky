@@ -32,10 +32,6 @@ We solve this by doing all of the work client side so that your device does the 
 
 ## Instructions
 
-The simplest way to use Ducky is to add `https://shalevari.github.io/ducky/` as a custom search engine in your browser.
-
-However, if you want to host your own instance, you can do so by following the instructions below.
-
 1. Clone this repository locally on your computer.
 2. Run `pnpm i` or equivalent to download the (few) dependencies.
 3. Run `pnpm run build` to build the project.
