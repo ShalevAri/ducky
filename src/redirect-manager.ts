@@ -57,12 +57,33 @@ export function getBangRedirectUrl(
     let islandKey = ''
     let injectionPrompt = ''
 
-    for (const key of Object.keys(duckyIslands)) {
-      if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
-        bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
-        islandKey = key
-        injectionPrompt = duckyIslands[key].prompt
-        break
+    // Check if this is a T3 bang variant
+    const isT3Bang = bangWithIslandCandidate.startsWith('t3')
+
+    // For T3 bangs, we need to check for island suffixes after the model specifier
+    if (isT3Bang) {
+      for (const key of Object.keys(duckyIslands)) {
+        // For T3 bangs, the island key should be at the very end
+        if (bangWithIslandCandidate.endsWith(key)) {
+          // Remove the island key from the end
+          bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
+          // Only use this island if the remaining bang is valid
+          if (bangs[bangCandidate]) {
+            islandKey = key
+            injectionPrompt = duckyIslands[key].prompt
+            break
+          }
+        }
+      }
+    } else {
+      // For non-T3 bangs, keep the original logic
+      for (const key of Object.keys(duckyIslands)) {
+        if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
+          bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
+          islandKey = key
+          injectionPrompt = duckyIslands[key].prompt
+          break
+        }
       }
     }
 
