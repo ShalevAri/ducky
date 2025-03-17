@@ -154,7 +154,7 @@ export class RedirectService {
     defaultBang: Bang,
     duckyIslandKeys: string[],
     renderDefaultPage: () => void,
-    duckyIslandsData?: Record<string, DuckyIsland>,
+    duckyIslandsData: Record<string, DuckyIsland> | undefined,
     bangs: Record<string, Bang>
   ): void {
     const startTime = performance.now()

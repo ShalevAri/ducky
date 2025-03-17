@@ -13,6 +13,7 @@ export class UIManager {
   private islandService: IslandService
   private ducklingService: DucklingService
   private storage: StorageService
+  // @ts-expect-error: unused variable
   private performanceMonitor: PerformanceMonitor
 
   private constructor() {
@@ -42,11 +43,10 @@ export class UIManager {
 
   private renderRecentBangs(recentBangs: string[]): string {
     if (recentBangs.length === 0) return ''
-
     const bangsHtml = recentBangs
-      .filter((bangName): bangName is keyof typeof bangs => bangName in bangs)
+      .filter((bangName): bangName is string => typeof bangName === 'string' && bangName in bangs)
       .map((bangName) => {
-        const bang = bangs[bangName]
+        const bang = bangs[bangName as keyof typeof bangs]
         return `<button class="recent-bang" data-bang="${bangName}">!${bangName} (${bang.s})</button>`
       })
       .join('')
