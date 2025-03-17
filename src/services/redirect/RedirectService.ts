@@ -25,8 +25,8 @@ export class RedirectService {
     return RedirectService.instance
   }
 
-  private static readonly BANG_REGEX = /!(\S+)/i
-  private static readonly BANG_REPLACE_REGEX = /!\S+\s*/i
+  private static readonly BANG_REGEX = /!(\S+)|(\S+)!/i
+  private static readonly BANG_REPLACE_REGEX = /!(\S+)\s*|(\S+)!\s*/i
   private static readonly FEELING_LUCKY_REGEX = /^!$/i
 
   updateRecentBangs(bangName: string): void {
@@ -65,7 +65,7 @@ export class RedirectService {
       const bangMatch = RedirectService.BANG_REGEX.exec(query)
 
       if (bangMatch) {
-        const bangWithIslandCandidate = bangMatch?.[1]?.toLowerCase() ?? ''
+        const bangWithIslandCandidate = (bangMatch?.[1] || bangMatch?.[2])?.toLowerCase() ?? ''
 
         let bangCandidate = bangWithIslandCandidate
         let islandKey = ''
@@ -86,7 +86,13 @@ export class RedirectService {
           setTimeout(() => this.updateRecentBangs(bangCandidate), 0)
         }
 
-        const cleanQuery = query.replace(RedirectService.BANG_REPLACE_REGEX, '').trim()
+        let cleanQuery: string
+        if (bangMatch[1]) {
+          cleanQuery = query.replace(RedirectService.BANG_REPLACE_REGEX, '').trim()
+        } else {
+          cleanQuery = query.replace(bangWithIslandCandidate + '!', '').trim()
+        }
+
         if (cleanQuery === '') {
           const result = selectedBang ? `https://${selectedBang.d}` : null
           this.bangCache.set(query, result)
