@@ -14,6 +14,11 @@
     "prettier:fix": "pnpm run prettier --write",
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "lint:fix": "eslint \"src/**/*.{js,ts}\" --fix",
+    "clean:all": "rm -rfv node_modules dist playwright-report test-results",
+    "clean:core": "rm -rfv node_modules dist",
+    "clean:playwright": "rm -rfv playwright-report test-results",
+    "clean:build": "rm -rfv dist",
+    "clean:node": "rm -rfv node_modules",
     "approve": "pnpm run prettier:fix && pnpm run lint:fix"
   },
   "devDependencies": {
