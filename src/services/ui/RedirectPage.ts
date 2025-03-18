@@ -72,8 +72,6 @@ export function renderRedirectPage(targetUrl: string): void {
 
   document.head.appendChild(style)
 
-  // Set the actual redirect to happen after a short delay
-  setTimeout(() => {
-    window.location.href = targetUrl
-  }, 1500) // 1.5 seconds delay
+  // Redirect immediately
+  window.location.href = targetUrl
 }
