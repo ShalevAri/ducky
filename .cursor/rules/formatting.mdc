@@ -1,7 +1,7 @@
 ---
-description: 
+description: How to format code
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 ## Formatting
 
