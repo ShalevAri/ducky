@@ -2,8 +2,6 @@
 
 ## In Progress
 
-- [ ] Add a cute loading page while Ducky is transferring the user’s request
-
 ## Coming Soon
 
 - [ ] Be able to edit current Islands and Ducklings
@@ -22,4 +20,5 @@
 - [x] Improve UI/UX
 - [x] Fix broken reverse bangs
 - [x] Choose AI model when searching in T3 Chat with `!t3a` bang
-- [ ] Search ducklings regularly if they start with a backslash
+- [x] Search ducklings regularly if they start with a backslash
+- [x] Add a funny loading page
