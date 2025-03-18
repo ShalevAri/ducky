@@ -2,13 +2,13 @@
 
 ## In Progress
 
+- [ ] Add Playwright tests
+
 ## Coming Soon
 
 - [ ] Be able to edit current Islands and Ducklings
 
 ## Maybe
-
-- [ ] transition to React w/ Tailwind & Shadcn
 
 ## Done
 
