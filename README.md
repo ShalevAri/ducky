@@ -64,6 +64,14 @@ To enable it, open the `http://localhost:49152` Ducky UI page in your browser, i
 
 Then, open the console and navigate to a website. You'll now see the debug information.
 
+## Local Storage
+
+Ducky provides a few LocalStorage keys to customize your experience.
+
+- `DEBUG_MODE`: Enables Debug Mode.
+- `DISABLE_LOADING_PAGE`: Disables the loading page.
+- `default-bang`: The default bang to use.
+
 ## FAQ
 
 ### How can I change the port?
