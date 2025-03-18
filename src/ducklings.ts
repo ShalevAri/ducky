@@ -12,7 +12,16 @@ const CACHE_SIZE_LIMIT = 100
 const ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
 export function loadDucklings(): Duckling[] {
+  console.log(`Loading ducklings from localStorage`)
   const ducklings = loadFromLocalStorage<Duckling[]>('ducky-ducklings', [])
+  console.log(`Loaded ${ducklings.length} ducklings from localStorage`)
+
+  // If no ducklings are loaded, initialize with default ducklings
+  if (ducklings.length === 0) {
+    console.log(`No ducklings found, returning default ducklings`)
+    return [...defaultDucklings]
+  }
+
   // Migrate old ducklings that don't have targetValue
   return ducklings.map((duckling: Duckling) => {
     if (!duckling.targetValue) {
@@ -45,6 +54,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to CodePen'
   },
   {
+    pattern: 'cursor',
+    bangCommand: 'raw',
+    targetValue: 'https://cursor.com/',
+    description: 'Navigate to Cursor'
+  },
+  {
     pattern: 'devdocs',
     bangCommand: 'raw',
     targetValue: 'https://devdocs.io/',
@@ -65,7 +80,7 @@ export const defaultDucklings: Duckling[] = [
   {
     pattern: 'figma',
     bangCommand: 'raw',
-    targetValue: 'https://www.figma.com/',
+    targetValue: 'https://figma.com/',
     description: 'Navigate to Figma'
   },
   {
@@ -126,17 +141,25 @@ export const defaultDucklings: Duckling[] = [
 
 function getCachedDucklings(): Duckling[] {
   if (ducklingsCache !== null) {
+    console.log(`Using cached ducklings (${ducklingsCache.length} items)`)
     return ducklingsCache
   }
 
+  console.log(`No duckling cache found, loading from storage`)
   const ducklings = loadDucklings()
   ducklingsCache = ducklings
   return ducklings
 }
 
 export function matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
+  // Debug issues with duckling matching
+  console.log(`Duckling match attempt for: '${query}'`)
+
+  // Check cache but leave debugging in place
   if (ducklingMatchResultCache.has(query)) {
-    return ducklingMatchResultCache.get(query) ?? null
+    const cachedResult = ducklingMatchResultCache.get(query)
+    console.log(`Using cached result for '${query}':`, cachedResult)
+    return cachedResult ?? null
   }
 
   // If the query starts with a backslash, strip it and use default search
@@ -146,58 +169,77 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
       bangCommand: 'none', // Special marker for default search
       remainingQuery: searchQuery // The query without the backslash
     }
+    console.log(`Backslash search result:`, result)
+
+    // Manage cache size
     if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
       const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-      if (firstKey) {
-        ducklingMatchResultCache.delete(firstKey)
-      }
+      ducklingMatchResultCache.delete(firstKey)
     }
+
     ducklingMatchResultCache.set(query, result)
     return result
   }
 
   const ducklings = getCachedDucklings()
+  console.log(
+    `Loaded ${ducklings.length} ducklings with patterns:`,
+    ducklings.map((d) => d.pattern)
+  )
   let result: { bangCommand: string; remainingQuery: string } | null = null
 
+  // Check for exact matches first
   for (const duckling of ducklings) {
+    console.log(`Checking exact match: '${query}' === '${duckling.pattern}'`, query === duckling.pattern)
     if (query === duckling.pattern) {
       result = {
         bangCommand: duckling.bangCommand,
         remainingQuery: duckling.targetValue
       }
+      console.log(`Exact match found:`, result)
+
+      // Manage cache size
       if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
         const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-        if (firstKey) {
-          ducklingMatchResultCache.delete(firstKey)
-        }
+        ducklingMatchResultCache.delete(firstKey)
       }
+
       ducklingMatchResultCache.set(query, result)
       return result
     }
   }
 
+  // Then check for pattern + space matches
   for (const duckling of ducklings) {
+    console.log(
+      `Checking prefix match: '${query}' startsWith '${duckling.pattern} '`,
+      query.startsWith(duckling.pattern + ' ')
+    )
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
       const remainingQuery = duckling.targetValue + ' ' + additionalQuery
       result = { bangCommand: duckling.bangCommand, remainingQuery }
+      console.log(`Prefix match found:`, result)
+
+      // Manage cache size
       if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
         const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-        if (firstKey) {
-          ducklingMatchResultCache.delete(firstKey)
-        }
+        ducklingMatchResultCache.delete(firstKey)
       }
+
       ducklingMatchResultCache.set(query, result)
       return result
     }
   }
 
+  console.log(`No duckling match found for: '${query}'`)
+
+  // Manage cache size
   if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
     const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-    if (firstKey) {
-      ducklingMatchResultCache.delete(firstKey)
-    }
+    ducklingMatchResultCache.delete(firstKey)
   }
+
   ducklingMatchResultCache.set(query, null)
   return null
 }

@@ -4,6 +4,7 @@ import { StorageService } from '../storage/StorageService'
 export class DucklingService {
   private static instance: DucklingService
   private storage: StorageService
+  private static readonly STORAGE_KEY = 'ducky-ducklings'
 
   private constructor() {
     this.storage = StorageService.getInstance()
@@ -17,16 +18,24 @@ export class DucklingService {
   }
 
   loadDucklings(): Duckling[] {
-    return this.storage.get<Duckling[]>('ducklings', [])
+    console.log(`DucklingService: Loading ducklings from storage key '${DucklingService.STORAGE_KEY}'`)
+    return this.storage.get<Duckling[]>(DucklingService.STORAGE_KEY, [])
   }
 
   saveDucklings(ducklings: Duckling[]): void {
-    this.storage.set('ducklings', ducklings)
+    console.log(`DucklingService: Saving ${ducklings.length} ducklings to storage key '${DucklingService.STORAGE_KEY}'`)
+    this.storage.set(DucklingService.STORAGE_KEY, ducklings)
   }
 
   initializeDucklings(): void {
-    if (this.loadDucklings().length === 0) {
+    console.log('Initializing ducklings service')
+    const existingDucklings = this.loadDucklings()
+    console.log(`Found ${existingDucklings.length} existing ducklings`)
+
+    if (existingDucklings.length === 0) {
+      console.log('No ducklings found, initializing with default ducklings')
       this.saveDucklings(defaultDucklings)
+      console.log(`Saved ${defaultDucklings.length} default ducklings`)
     }
   }
 
@@ -57,9 +66,21 @@ export class DucklingService {
   matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
     const ducklings = this.loadDucklings()
 
+    // First check for exact matches
     for (const duckling of ducklings) {
-      if (query.includes(duckling.pattern)) {
-        const remainingQuery = duckling.targetValue
+      if (query === duckling.pattern) {
+        return {
+          bangCommand: duckling.bangCommand,
+          remainingQuery: duckling.targetValue
+        }
+      }
+    }
+
+    // Then check for pattern + space matches
+    for (const duckling of ducklings) {
+      if (query.startsWith(duckling.pattern + ' ')) {
+        const additionalQuery = query.slice(duckling.pattern.length + 1)
+        const remainingQuery = duckling.targetValue + ' ' + additionalQuery
         return {
           bangCommand: duckling.bangCommand,
           remainingQuery
