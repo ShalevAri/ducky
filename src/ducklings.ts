@@ -284,47 +284,58 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   )
   let result: { bangCommand: string; remainingQuery: string } | null = null
 
-  // Check for exact matches first
-  for (const duckling of ducklings) {
-    console.log(`Checking exact match: '${query}' === '${duckling.pattern}'`, query === duckling.pattern)
-    if (query === duckling.pattern) {
-      result = {
-        bangCommand: duckling.bangCommand,
-        remainingQuery: duckling.targetValue
-      }
-      console.log(`Exact match found:`, result)
+  // Check if the query is a single word
+  const isSingleWord = !query.includes(' ')
 
-      // Manage cache size
-      if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
-        const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-        ducklingMatchResultCache.delete(firstKey)
-      }
+  // Check for exact matches only for single word queries
+  if (isSingleWord) {
+    for (const duckling of ducklings) {
+      console.log(`Checking exact match: '${query}' === '${duckling.pattern}'`, query === duckling.pattern)
+      if (query === duckling.pattern) {
+        result = {
+          bangCommand: duckling.bangCommand,
+          remainingQuery: duckling.targetValue
+        }
+        console.log(`Exact match found:`, result)
 
-      ducklingMatchResultCache.set(query, result)
-      return result
+        // Manage cache size
+        if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+          const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+          ducklingMatchResultCache.delete(firstKey)
+        }
+
+        ducklingMatchResultCache.set(query, result)
+        return result
+      }
     }
   }
 
-  // Then check for pattern + space matches
+  // Then check for pattern + space matches, but only if the pattern isn't just part of a multi-word query
   for (const duckling of ducklings) {
     console.log(
       `Checking prefix match: '${query}' startsWith '${duckling.pattern} '`,
       query.startsWith(duckling.pattern + ' ')
     )
+    // Only match if the pattern is followed by a space or it's an exact match (already checked above)
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
-      const remainingQuery = duckling.targetValue + ' ' + additionalQuery
-      result = { bangCommand: duckling.bangCommand, remainingQuery }
-      console.log(`Prefix match found:`, result)
 
-      // Manage cache size
-      if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
-        const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
-        ducklingMatchResultCache.delete(firstKey)
+      // If the additional query contains another Duckling's pattern, don't match this as a Duckling+space
+      // This is to prevent matching "github vs gitlab" as a "github" Duckling + "vs gitlab" search
+      if (isSingleWord || !ducklings.some((d) => additionalQuery.includes(d.pattern))) {
+        const remainingQuery = duckling.targetValue + ' ' + additionalQuery
+        result = { bangCommand: duckling.bangCommand, remainingQuery }
+        console.log(`Prefix match found:`, result)
+
+        // Manage cache size
+        if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+          const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+          ducklingMatchResultCache.delete(firstKey)
+        }
+
+        ducklingMatchResultCache.set(query, result)
+        return result
       }
-
-      ducklingMatchResultCache.set(query, result)
-      return result
     }
   }
 
