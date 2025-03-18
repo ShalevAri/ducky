@@ -124,6 +124,13 @@ export function getBangRedirectUrl(
         return remainingQuery
       }
 
+      // Special case for backslash searches
+      if (bangCommand === 'none') {
+        const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
+        bangRedirectCache.set(query, searchUrl)
+        return searchUrl
+      }
+
       if (!bangs[bangCommand]) {
         const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(query).replace(/%2F/g, '/'))
         bangRedirectCache.set(query, searchUrl)

@@ -139,6 +139,23 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
     return ducklingMatchResultCache.get(query) ?? null
   }
 
+  // If the query starts with a backslash, strip it and use default search
+  if (query.startsWith('\\')) {
+    const searchQuery = query.slice(1) // Remove the backslash
+    const result = {
+      bangCommand: 'none', // Special marker for default search
+      remainingQuery: searchQuery // The query without the backslash
+    }
+    if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
+      const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
+      if (firstKey) {
+        ducklingMatchResultCache.delete(firstKey)
+      }
+    }
+    ducklingMatchResultCache.set(query, result)
+    return result
+  }
+
   const ducklings = getCachedDucklings()
   let result: { bangCommand: string; remainingQuery: string } | null = null
 

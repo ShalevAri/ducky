@@ -2,11 +2,10 @@
 
 ## In Progress
 
-- [ ] If the Ducklings end with a space, search them regularly
+- [ ] Be able to edit current Islands and Ducklings
 
 ## Coming Soon
 
-- [ ] Be able to edit current Islands and Ducklings
 - [ ] Add a cute loading page while Ducky is transferring the user’s request
 
 ## Maybe
@@ -23,3 +22,4 @@
 - [x] Improve UI/UX
 - [x] Fix broken reverse bangs
 - [x] Choose AI model when searching in T3 Chat with `!t3a` bang
+- [ ] Search ducklings regularly if they start with a backslash
