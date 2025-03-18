@@ -2,7 +2,12 @@
 
 ## In Progress
 
+- [ ] If the Ducklings end with a space, search them regularly
+
 ## Coming Soon
+
+- [ ] Be able to edit current Islands and Ducklings
+- [ ] Add a cute loading page while Ducky is transferring the user’s request
 
 ## Maybe
 
