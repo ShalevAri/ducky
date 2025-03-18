@@ -10,7 +10,9 @@
 - [x] Choose AI model when searching in T3 Chat with `!t3a` bang
 - [x] Search ducklings regularly if they start with a backslash
 - [x] Add a funny loading page
-- [ ] Add more built-in Islands and Ducklings
-- [ ] Export custom Islands and Ducklings as JSON to share / import
-- [ ] Be able to edit current Islands and Ducklings
-- [ ] Add Playwright tests
+- [x] Add more built-in Islands and Ducklings
+- [ ] BUG: Fix incorrect search results when searching normally but with a duckling at the start
+- [ ] CHORE: Remove unnecessary comments, console logs, etc.
+- [ ] FEAT: Be able to edit current Islands and Ducklings
+- [ ] FEAT: Export custom Islands and Ducklings as JSON to share / import
+- [ ] TEST: Add Playwright tests

@@ -48,6 +48,24 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the 21st website'
   },
   {
+    pattern: 'amazon',
+    bangCommand: 'raw',
+    targetValue: 'https://amazon.com/',
+    description: 'Navigate to Amazon'
+  },
+  {
+    pattern: 'caniuse',
+    bangCommand: 'raw',
+    targetValue: 'https://caniuse.com/',
+    description: 'Check browser compatibility for HTML, CSS, and JavaScript features'
+  },
+  {
+    pattern: 'chatgpt',
+    bangCommand: 'raw',
+    targetValue: 'https://chat.openai.com/',
+    description: 'Navigate to ChatGPT'
+  },
+  {
     pattern: 'codepen',
     bangCommand: 'raw',
     targetValue: 'https://codepen.io/',
@@ -64,6 +82,12 @@ export const defaultDucklings: Duckling[] = [
     bangCommand: 'raw',
     targetValue: 'https://devdocs.io/',
     description: 'Search DevDocs API documentation'
+  },
+  {
+    pattern: 'drive',
+    bangCommand: 'raw',
+    targetValue: 'https://drive.google.com/',
+    description: 'Navigate to Google Drive'
   },
   {
     pattern: 'ducky',
@@ -90,10 +114,34 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the GitHub website'
   },
   {
+    pattern: 'gitlab',
+    bangCommand: 'raw',
+    targetValue: 'https://gitlab.com/',
+    description: 'Navigate to GitLab website'
+  },
+  {
+    pattern: 'gmail',
+    bangCommand: 'raw',
+    targetValue: 'https://mail.google.com/',
+    description: 'Navigate to Gmail'
+  },
+  {
+    pattern: 'linkedin',
+    bangCommand: 'raw',
+    targetValue: 'https://linkedin.com/',
+    description: 'Navigate to LinkedIn'
+  },
+  {
     pattern: 'mdn',
     bangCommand: 'raw',
     targetValue: 'https://developer.mozilla.org/',
     description: 'Navigate to Mozilla Developer Network (MDN) documentation'
+  },
+  {
+    pattern: 'nextjs',
+    bangCommand: 'raw',
+    targetValue: 'https://nextjs.org/docs',
+    description: 'Navigate to Next.js documentation'
   },
   {
     pattern: 'npm',
@@ -108,6 +156,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the PostHog website'
   },
   {
+    pattern: 'react',
+    bangCommand: 'raw',
+    targetValue: 'https://react.dev/',
+    description: 'Navigate to React documentation'
+  },
+  {
     pattern: 'reddit',
     bangCommand: 'raw',
     targetValue: 'https://reddit.com/',
@@ -120,10 +174,40 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the Shadcn UI website'
   },
   {
+    pattern: 'spotify',
+    bangCommand: 'raw',
+    targetValue: 'https://open.spotify.com/',
+    description: 'Navigate to Spotify'
+  },
+  {
+    pattern: 'stackoverflow',
+    bangCommand: 'raw',
+    targetValue: 'https://stackoverflow.com/',
+    description: 'Search Stack Overflow for programming questions'
+  },
+  {
     pattern: 't3',
     bangCommand: 'raw',
     targetValue: 'https://t3.chat/chat',
     description: 'Navigate to the T3 Chat website'
+  },
+  {
+    pattern: 'tailwind',
+    bangCommand: 'raw',
+    targetValue: 'https://tailwindcss.com/docs',
+    description: 'Navigate to Tailwind CSS documentation'
+  },
+  {
+    pattern: 'twitter',
+    bangCommand: 'raw',
+    targetValue: 'https://twitter.com/',
+    description: 'Navigate to Twitter/X'
+  },
+  {
+    pattern: 'typescript',
+    bangCommand: 'raw',
+    targetValue: 'https://www.typescriptlang.org/docs/',
+    description: 'Navigate to TypeScript documentation'
   },
   {
     pattern: 'unduck',
@@ -136,6 +220,18 @@ export const defaultDucklings: Duckling[] = [
     bangCommand: 'raw',
     targetValue: 'https://vercel.com/',
     description: 'Navigate to the Vercel website'
+  },
+  {
+    pattern: 'vscode',
+    bangCommand: 'raw',
+    targetValue: 'https://code.visualstudio.com/',
+    description: 'Navigate to Visual Studio Code website'
+  },
+  {
+    pattern: 'youtube',
+    bangCommand: 'raw',
+    targetValue: 'https://youtube.com/',
+    description: 'Navigate to YouTube'
   }
 ]
 
