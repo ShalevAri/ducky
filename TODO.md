@@ -2,11 +2,11 @@
 
 ## In Progress
 
-- [ ] Be able to edit current Islands and Ducklings
+- [ ] Add a cute loading page while Ducky is transferring the user’s request
 
 ## Coming Soon
 
-- [ ] Add a cute loading page while Ducky is transferring the user’s request
+- [ ] Be able to edit current Islands and Ducklings
 
 ## Maybe
 

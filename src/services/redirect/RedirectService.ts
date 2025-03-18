@@ -3,6 +3,7 @@ import { type Bang } from '../../types/bangs'
 import { type DuckyIsland } from '../../types/islands'
 import { PerformanceMonitor } from '../../utils/performance'
 import { StorageService } from '../storage/StorageService'
+import { renderRedirectPage } from '../ui/RedirectPage'
 
 export class RedirectService {
   private static instance: RedirectService
@@ -179,7 +180,7 @@ export class RedirectService {
         const searchUrl = this.getBangRedirectUrl(query.slice(1), defaultBang, {}, bangs)
         if (!searchUrl) return
 
-        window.location.href = searchUrl
+        renderRedirectPage(searchUrl)
         return
       }
 
@@ -196,7 +197,7 @@ export class RedirectService {
       const searchUrl = this.getBangRedirectUrl(query, defaultBang, duckyIslands, bangs)
       if (!searchUrl) return
 
-      window.location.replace(searchUrl)
+      renderRedirectPage(searchUrl)
     } finally {
       const duration = performance.now() - startTime
       this.performanceMonitor.recordTiming('Redirect Operation', duration)
