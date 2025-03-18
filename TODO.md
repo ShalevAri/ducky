@@ -1,17 +1,5 @@
 # TODO
 
-## In Progress
-
-- [ ] Add Playwright tests
-
-## Coming Soon
-
-- [ ] Be able to edit current Islands and Ducklings
-
-## Maybe
-
-## Done
-
 - [x] v1.0.0
 - [x] Add a "clear recent bangs" button
 - [x] Choose AI model when searching in T3 Chat
@@ -22,3 +10,7 @@
 - [x] Choose AI model when searching in T3 Chat with `!t3a` bang
 - [x] Search ducklings regularly if they start with a backslash
 - [x] Add a funny loading page
+- [ ] Add more built-in Islands and Ducklings
+- [ ] Export custom Islands and Ducklings as JSON to share / import
+- [ ] Be able to edit current Islands and Ducklings
+- [ ] Add Playwright tests
