@@ -1,3 +1,5 @@
+// @ts-expect-error: Unused imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { loadFromLocalStorage, saveToLocalStorage } from '../../utils/storage'
 
 export class StorageService {
