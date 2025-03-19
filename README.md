@@ -2,7 +2,9 @@
 
 A lightning-fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
 
-When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (and more!) with significantly improved performance.
+When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (and more!)
+
+with significantly improved performance.
 
 ## Why Ducky?
 
@@ -39,27 +41,45 @@ typing 'shalevari/ducky' → automatically redirects to this GitHub repository
 
 ## Installation
 
-1. Clone the repository:
+### npm
 
-   ```bash
-   git clone https://github.com/ShalevAri/ducky.git
-   cd ducky
-   ```
+```bash
+git clone https://github.com/ShalevAri/ducky.git
+cd ducky
+npm install
+npm run dev
+```
 
-2. Install dependencies:
+### yarn
 
-   ```bash
-   pnpm i
-   ```
+```bash
+git clone https://github.com/ShalevAri/ducky.git
+cd ducky
+yarn install
+yarn dev
+```
 
-3. run:
+### pnpm
 
-   ```bash
-   pnpm dev
-   ```
+```bash
+git clone https://github.com/ShalevAri/ducky.git
+cd ducky
+pnpm install
+pnpm dev
+```
 
-4. Add Ducky to your browser:
-   - Add `http://localhost:49152?q=%s` as a custom search engine in your browser
+### bun
+
+```bash
+git clone https://github.com/ShalevAri/ducky.git
+cd ducky
+bun install
+bun dev
+```
+
+### Add Ducky to your browser:
+
+- Add `http://localhost:49152?q=%s` as a custom search engine in your browser
 
 ## Configuration
 
