@@ -115,17 +115,16 @@ Special thanks to him for the original project and the inspiration for this work
 
 ### Backlog
 
-- [ ] FEAT: Export custom Islands and Ducklings as JSON to share / import
-- [ ] v2.0.0
+- [ ] Export custom Islands and Ducklings as JSON to share / import
 
 ### Next Up
 
 - [ ] Remove unnecessary comments, console logs, etc and overall clean up the code
-- [ ] FEAT: Be able to edit & delete current Islands and Ducklings
+- [ ] Be able to edit & delete current Islands and Ducklings
 
 ### In Progress
 
-- [ ] TEST: Add Playwright tests
+- [ ] Add Playwright tests
 
 ### Done
 
