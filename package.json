@@ -19,7 +19,7 @@
     "clean:playwright": "rm -rfv playwright-report test-results",
     "clean:build": "rm -rfv dist",
     "clean:node": "rm -rfv node_modules",
-    "approve": "pnpm run prettier:fix && pnpm run lint:fix",
+    "approve": "pnpm run prettier:fix && pnpm run lint:fix && pnpm run test",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
     "test:debug": "pnpm exec playwright test --debug",
