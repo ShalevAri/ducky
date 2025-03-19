@@ -1,97 +1,92 @@
 # Ducky
 
-DuckDuckGo's bang redirects are too slow. When you use Ducky as a custom search engine in your browser, it enables all of DuckDuckGo's bangs (and more!) but much faster and better.
+A lightning-fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
+
+When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (and more!) with significantly improved performance.
+
+## Why Ducky?
+
+DuckDuckGo's bang redirects are processed server-side, leading to slow DNS resolution and redirect times.
+
+Ducky solves this by handling all redirects client-side, resulting in near-instantaneous navigation.
 
 ## Features
 
-### Bangs
+### Bang Commands
 
-Ducky supports all of DuckDuckGo's bangs and processes them client-side for faster redirects.
+- Full support for all DuckDuckGo bangs
+- Client-side processing for faster redirects
+- Zero server latency
 
 ### Ducky Islands
 
-Ducky Islands allow you to create custom prompt prefixes for AI bangs. For example, using `!t3a` instead of `!t3` will tell the AI to give you the answer first.
+Custom prompt prefixes for AI bangs:
+
+```bash
+!t3   # Search regularly in T3 Chat
+!t3a  # Injects a prompt to prioritize direct answers (for when you need a quick answer instead of a wall of text)
+```
 
 ### Ducklings
 
-Ducklings allow you to create automatic bang redirects for specific patterns without having to type the bang command.
+Automatic pattern-based redirects without typing bang commands:
 
-For example, if you add a Duckling for the pattern `shalevari/ducky` with the bang command `ghr`, then typing `shalevari/ducky` in your search bar will automatically redirect you to the GitHub repository as if you had typed `!ghr shalevari/ducky`.
+```bash
+# Pattern: shalevari/ducky
+# Bang: !ghr
+typing 'shalevari/ducky' → automatically redirects to this GitHub repository
+```
 
-This feature is great for:
+## Installation
 
-- Quickly accessing frequently visited GitHub repositories
-- Creating shortcuts for common search patterns
-- Automating navigation to specific websites based on recognizable patterns
+1. Clone the repository:
 
-## How Does It Work?
+   ```bash
+   git clone https://github.com/ShalevAri/ducky.git
+   cd ducky
+   ```
 
-DuckDuckGo does their redirects server side. Their DNS is...not always great. Result is that it often takes ages.
+2. Install dependencies:
 
-We solve this by doing all of the work client side so that your device does the redirects, not me.
+   ```bash
+   pnpm i
+   ```
 
-## Instructions
+3. run:
 
-1. Clone this repository locally on your computer.
-2. Run `pnpm i` or equivalent to download the (few) dependencies.
-3. Run `pnpm run build` to build the project.
-4. Run `pnpm dev` to start the server.
-5. Add `http://localhost:49152?q=%s` to your browser as a custom search engine (I use the Zen browser)
+   ```bash
+   pnpm dev
+   ```
 
-## Example Commands
+4. Add Ducky to your browser:
+   - Add `http://localhost:49152?q=%s` as a custom search engine in your browser
 
-1. `git clone https://github.com/ShalevAri/ducky.git`
-2. `cd ducky`
-3. `pnpm i`
-4. `pnpm run build`
-5. `pnpm dev`
-6. Add `http://localhost:49152?q=%s` to your browser as a custom search engine.
-7. You're done!
+## Configuration
 
-## Speed
+### Debug Mode
 
-Speed is the core focus of Ducky.
+Enable detailed redirect timing information:
 
-I'm optimizing everything to make sure you get every ounce of speed possible.
+1. Either open `http://localhost:49152` or type `duckylocal` to open it automatically
+2. Add `DEBUG_MODE: true` to localStorage
+3. Open the console and navigate to any website, you should now see debug information
 
-The end goal is to get all the benefits of Ducky while having virtually 0 overhead.
+### LocalStorage Options
 
-## Debug Mode
+```javascript
+{
+  "DEBUG_MODE": true/false,           // Enable/disable debug mode
+  "DISABLE_LOADING_PAGE": true/false, // Disable the loading page
+  "default-bang": "string"           // Set the default search engine to use
+}
+```
 
-Ducky has a Debug Mode that allows you to see the time it takes for each redirect to happen.
+### Port Configuration
 
-To enable it, open the `http://localhost:49152` Ducky UI page in your browser, inspect it, add the `DEBUG_MODE` variable to `localStorage` with the value `true` and then refresh the page.
-
-Then, open the console and navigate to a website. You'll now see the debug information.
-
-## Local Storage
-
-Ducky provides a few LocalStorage keys to customize your experience.
-
-- `DEBUG_MODE`: Enables Debug Mode.
-- `DISABLE_LOADING_PAGE`: Disables the loading page.
-- `default-bang`: The default bang to use.
-
-## FAQ
-
-### How can I change the port?
-
-The port itself is hardcoded in the `vite.config.ts` file, however it is also mentioned
-
-in the `src/main.ts` file for instructional purposes. (this one doesn't matter for actual functionality)
-
-### How can I change the default bang?
-
-The default bang is hardcoded in `src/main.ts`.
-
-Change it by first finding the correct bang code in the `src/bang.ts` file
-
-and swapping it in `src/main.ts`.
-
-For example, google's code is `g` and brave's is `brave` (which is the default)
+The default port is `49152`, you can change it by editing the `vite.config.ts` file
 
 ## Credits
 
-Ducky is a (hopefully better!) fork of [Unduck](https://github.com/t3dotgg/unduck) by [Theo](https://github.com/t3dotgg)
+Ducky is a fork of [Unduck](https://github.com/t3dotgg/unduck) by [Theo](https://github.com/t3dotgg) with additional features and performance optimizations.
 
-Credits to him for giving me the inspiration for this project and for releasing the original project as MIT.
+Special thanks to him for the original project and the inspiration for this work.
