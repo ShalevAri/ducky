@@ -1,4 +1,4 @@
-# Ducky
+# 🦆 Ducky
 
 A lightning-fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
 
@@ -6,21 +6,21 @@ When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (a
 
 with significantly improved performance.
 
-## Why Ducky?
+## 🚀 Why Ducky?
 
 DuckDuckGo's bang redirects are processed server-side, leading to slow DNS resolution and redirect times.
 
 Ducky solves this by handling all redirects client-side, resulting in near-instantaneous navigation.
 
-## Features
+## ✨ Features
 
-### Bang Commands
+### 🎯 Bang Commands
 
 - Full support for all DuckDuckGo bangs
 - Client-side processing for faster redirects
 - Zero server latency
 
-### Ducky Islands
+### 🏝️ Ducky Islands
 
 Custom prompt prefixes for AI bangs:
 
@@ -29,7 +29,7 @@ Custom prompt prefixes for AI bangs:
 !t3a  # Injects a prompt to prioritize direct answers (for when you need a quick answer instead of a wall of text)
 ```
 
-### Ducklings
+### 🐥 Ducklings
 
 Automatic pattern-based redirects without typing bang commands:
 
@@ -39,7 +39,7 @@ Automatic pattern-based redirects without typing bang commands:
 typing 'shalevari/ducky' → automatically redirects to this GitHub repository
 ```
 
-## Installation
+## 📦 Installation
 
 ### npm
 
@@ -77,13 +77,13 @@ bun install
 bun dev
 ```
 
-### Add Ducky to your browser:
+### 🔍 Add Ducky to your browser:
 
 - Add `http://localhost:49152?q=%s` as a custom search engine in your browser
 
-## Configuration
+## 🛠️ Configuration
 
-### Debug Mode
+### 🐛 Debug Mode
 
 Enable detailed redirect timing information:
 
@@ -91,7 +91,7 @@ Enable detailed redirect timing information:
 2. Add `DEBUG_MODE: true` to localStorage
 3. Open the console and navigate to any website, you should now see debug information
 
-### LocalStorage Options
+### 🔧 LocalStorage Options
 
 ```javascript
 {
@@ -101,32 +101,32 @@ Enable detailed redirect timing information:
 }
 ```
 
-### Port Configuration
+### 📡 Port Configuration
 
 The default port is `49152`, you can change it by editing the `vite.config.ts` file
 
-## Credits
+## 📝 Credits
 
 Ducky is a fork of [Unduck](https://github.com/t3dotgg/unduck) by [Theo](https://github.com/t3dotgg) with additional features and performance optimizations.
 
 Special thanks to him for the original project and the inspiration for this work.
 
-## Roadmap
+## 🗺️ Roadmap
 
-### Backlog
+### 🗄️ Backlog
 
 - [ ] Export custom Islands and Ducklings as JSON to share / import
 
-### Next Up
+### ⚡ Next Up
 
 - [ ] Remove unnecessary comments, console logs, etc and overall clean up the code
 - [ ] Be able to edit & delete current Islands and Ducklings
 
-### In Progress
+### 🧑‍💻 In Progress
 
 - [ ] Add Playwright tests
 
-### Done
+### 🏁 Done
 
 - [x] v1.0.0
 - [x] Add a "clear recent bangs" button
