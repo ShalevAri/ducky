@@ -5,12 +5,12 @@ import { getRandomSentence } from '../../data/random-sentences'
  * @param targetUrl The URL to redirect to
  */
 export function renderRedirectPage(targetUrl: string): void {
-  // Check if loading page is disabled in LocalStorage
-  const disableLoadingPage = localStorage.getItem('DISABLE_LOADING_PAGE') === 'true'
+  // Check if loading page is enabled in LocalStorage (disabled by default)
+  const enableLoadingPage = localStorage.getItem('ENABLE_LOADING_PAGE') === 'true'
 
-  // If disabled, redirect immediately without showing the loading page
-  if (disableLoadingPage) {
-    window.location.href = targetUrl
+  // If disabled (default), redirect immediately without showing the loading page
+  if (!enableLoadingPage) {
+    window.location.replace(targetUrl)
     return
   }
 

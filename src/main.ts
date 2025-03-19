@@ -25,16 +25,11 @@ const defaultBang: Bang = bangs[LS_DEFAULT_BANG]
 
 // Set up the redirect functionality when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-  const debouncedRedirect = debounce(
-    () =>
-      redirectService.doRedirect(
-        defaultBang,
-        Object.keys(duckyIslands),
-        () => uiManager.renderDefaultPage(defaultBang, duckyIslands),
-        duckyIslands,
-        bangs
-      ),
-    50
+  redirectService.doRedirect(
+    defaultBang,
+    Object.keys(duckyIslands),
+    () => uiManager.renderDefaultPage(defaultBang, duckyIslands),
+    duckyIslands,
+    bangs
   )
-  debouncedRedirect()
 })
