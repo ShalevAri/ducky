@@ -13,6 +13,7 @@
 - [x] Add more built-in Islands and Ducklings
 - [x] BUG: Fix incorrect search results when searching normally but with a duckling at the start
 - [x] Add LocalStorage keys to customize Ducky
+- [ ] TEST: Add Playwright tests
 - [ ] CHORE: Remove unnecessary comments, console logs, etc.
 - [ ] FEAT: Be able to edit current Islands and Ducklings
 - [ ] FEAT: Export custom Islands and Ducklings as JSON to share / import

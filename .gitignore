@@ -25,3 +25,9 @@ dist-ssr
 
 ## Prettier
 .prettiercache
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

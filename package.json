@@ -19,16 +19,23 @@
     "clean:playwright": "rm -rfv playwright-report test-results",
     "clean:build": "rm -rfv dist",
     "clean:node": "rm -rfv node_modules",
-    "approve": "pnpm run prettier:fix && pnpm run lint:fix"
+    "approve": "pnpm run prettier:fix && pnpm run lint:fix",
+    "test": "pnpm exec playwright test",
+    "test:ui": "pnpm exec playwright test --ui",
+    "test:debug": "pnpm exec playwright test --debug",
+    "test:chromium": "pnpm exec playwright test --project=chromium",
+    "test:firefox": "pnpm exec playwright test --project=firefox",
+    "test:webkit": "pnpm exec playwright test --project=webkit"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/node": "^22.13.9",
+    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/parser": "^8.1.0",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
     "typescript": "~5.7.2",
-    "vite": "^6.1.0",
-    "@typescript-eslint/eslint-plugin": "^8.1.0",
-    "@typescript-eslint/parser": "^8.1.0"
+    "vite": "^6.1.0"
   },
   "dependencies": {
     "dedent": "^1.5.3",
