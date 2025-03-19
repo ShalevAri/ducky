@@ -126,6 +126,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to Gmail'
   },
   {
+    pattern: 'jujutsu',
+    bangCommand: 'ghr',
+    targetValue: 'jj-vcs/jj',
+    description: 'Navigate to Jujutsu'
+  },
+  {
     pattern: 'linkedin',
     bangCommand: 'raw',
     targetValue: 'https://linkedin.com/',
