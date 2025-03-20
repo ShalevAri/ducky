@@ -30,11 +30,11 @@
   "devDependencies": {
     "@playwright/test": "^1.51.1",
     "@types/node": "^22.13.9",
-    "@typescript-eslint/eslint-plugin": "^8.1.0",
-    "@typescript-eslint/parser": "^8.1.0",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/parser": "^8.27.0",
+    "eslint": "^9.22.0",
     "prettier": "^3.2.5",
-    "typescript": "~5.7.2",
+    "typescript": "~5.8.2",
     "vite": "^6.1.0"
   },
   "dependencies": {
