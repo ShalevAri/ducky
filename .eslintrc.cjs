@@ -36,7 +36,7 @@ const config = {
       }
     ]
   },
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules', 'playwright-report', 'test-results', 'coverage'],
   root: true
 }
 module.exports = config
