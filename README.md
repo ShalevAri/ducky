@@ -6,6 +6,12 @@ When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (a
 
 with significantly improved performance.
 
+# 🚧 Maintenance Mode
+
+Ducky is currently in maintenance mode.
+
+No new features will be developed, I'm currently focusing on fixing bugs, refactoring code, improving performance, etc.
+
 ## 🚀 Why Ducky?
 
 DuckDuckGo's bang redirects are processed server-side, leading to slow DNS resolution and redirect times.
