@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "dedent": "^1.5.3",
+    "effect": "^3.14.0",
     "vite-plugin-pwa": "^0.21.1"
   },
   "pnpm": {
