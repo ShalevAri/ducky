@@ -16,13 +16,11 @@ export function loadDucklings(): Duckling[] {
   const ducklings = loadFromLocalStorage<Duckling[]>('ducky-ducklings', [])
   console.log(`Loaded ${ducklings.length} ducklings from localStorage`)
 
-  // If no ducklings are loaded, initialize with default ducklings
   if (ducklings.length === 0) {
     console.log(`No ducklings found, returning default ducklings`)
     return [...defaultDucklings]
   }
 
-  // Migrate old ducklings that don't have targetValue
   return ducklings.map((duckling: Duckling) => {
     if (!duckling.targetValue) {
       return {
@@ -254,26 +252,22 @@ function getCachedDucklings(): Duckling[] {
 }
 
 export function matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
-  // Debug issues with duckling matching
   console.log(`Duckling match attempt for: '${query}'`)
 
-  // Check cache but leave debugging in place
   if (ducklingMatchResultCache.has(query)) {
     const cachedResult = ducklingMatchResultCache.get(query)
     console.log(`Using cached result for '${query}':`, cachedResult)
     return cachedResult ?? null
   }
 
-  // If the query starts with a backslash, strip it and use default search
   if (query.startsWith('\\')) {
-    const searchQuery = query.slice(1) // Remove the backslash
+    const searchQuery = query.slice(1)
     const result = {
-      bangCommand: 'none', // Special marker for default search
-      remainingQuery: searchQuery // The query without the backslash
+      bangCommand: 'none',
+      remainingQuery: searchQuery
     }
     console.log(`Backslash search result:`, result)
 
-    // Manage cache size
     if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
       const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
       ducklingMatchResultCache.delete(firstKey)
@@ -290,10 +284,8 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   )
   let result: { bangCommand: string; remainingQuery: string } | null = null
 
-  // Check if the query is a single word
   const isSingleWord = !query.includes(' ')
 
-  // Check for exact matches only for single word queries
   if (isSingleWord) {
     for (const duckling of ducklings) {
       console.log(`Checking exact match: '${query}' === '${duckling.pattern}'`, query === duckling.pattern)
@@ -304,7 +296,6 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
         }
         console.log(`Exact match found:`, result)
 
-        // Manage cache size
         if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
           const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
           ducklingMatchResultCache.delete(firstKey)
@@ -316,24 +307,19 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
     }
   }
 
-  // Then check for pattern + space matches, but only if the pattern isn't just part of a multi-word query
   for (const duckling of ducklings) {
     console.log(
       `Checking prefix match: '${query}' startsWith '${duckling.pattern} '`,
       query.startsWith(duckling.pattern + ' ')
     )
-    // Only match if the pattern is followed by a space or it's an exact match (already checked above)
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
 
-      // If the additional query contains another Duckling's pattern, don't match this as a Duckling+space
-      // This is to prevent matching "github vs gitlab" as a "github" Duckling + "vs gitlab" search
       if (isSingleWord || !ducklings.some((d) => additionalQuery.includes(d.pattern))) {
         const remainingQuery = duckling.targetValue + ' ' + additionalQuery
         result = { bangCommand: duckling.bangCommand, remainingQuery }
         console.log(`Prefix match found:`, result)
 
-        // Manage cache size
         if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
           const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
           ducklingMatchResultCache.delete(firstKey)
@@ -347,7 +333,6 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
 
   console.log(`No duckling match found for: '${query}'`)
 
-  // Manage cache size
   if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
     const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
     ducklingMatchResultCache.delete(firstKey)

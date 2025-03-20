@@ -123,7 +123,6 @@ export class RedirectService {
             return remainingQuery
           }
 
-          // Special case for backslash searches
           if (bangCommand === 'none') {
             const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
             this.bangCache.set(query, searchUrl)

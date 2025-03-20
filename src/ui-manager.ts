@@ -4,9 +4,6 @@ import { renderIslandsList, saveDuckyIslands } from './islands-manager.ts'
 import { type Bang } from './types/bangs.ts'
 import { type DuckyIsland } from './types/islands.ts'
 
-/**
- * Render the default page when no search is being performed
- */
 export function renderDefaultPage(defaultBang: Bang, duckyIslands: Record<string, DuckyIsland>): void {
   const currentUrl = window.location.href.replace(/\/+$/, '')
   const app = document.querySelector<HTMLDivElement>('#app')!
@@ -183,9 +180,6 @@ export function renderDefaultPage(defaultBang: Bang, duckyIslands: Record<string
   setupEventListeners(duckyIslands)
 }
 
-/**
- * Set up all event listeners for the UI
- */
 function setupEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')!
@@ -248,9 +242,6 @@ function setupEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
   setupDucklingEventListeners()
 }
 
-/**
- * Set up event listeners for island management
- */
 function setupIslandEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const addIslandButton = app.querySelector<HTMLButtonElement>('.add-island-button')
@@ -310,9 +301,6 @@ function setupIslandEventListeners(duckyIslands: Record<string, DuckyIsland>): v
   }
 }
 
-/**
- * Attach delete handlers to island delete buttons
- */
 function attachDeleteHandlers(duckyIslands: Record<string, DuckyIsland>): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-island')
@@ -335,9 +323,6 @@ function attachDeleteHandlers(duckyIslands: Record<string, DuckyIsland>): void {
   })
 }
 
-/**
- * Set up event listeners for duckling management
- */
 function setupDucklingEventListeners(): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const addDucklingButton = app.querySelector<HTMLButtonElement>('.add-duckling-button')
@@ -395,9 +380,6 @@ function setupDucklingEventListeners(): void {
   attachDucklingDeleteHandlers()
 }
 
-/**
- * Attach delete handlers to duckling delete buttons
- */
 function attachDucklingDeleteHandlers(): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-duckling')

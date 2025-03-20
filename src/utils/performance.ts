@@ -13,7 +13,6 @@ export class PerformanceMonitor {
   private static readonly DEBUG_MODE_KEY = 'DEBUG_MODE'
 
   private constructor() {
-    // Add beforeunload event listener to show timings before redirect
     window.addEventListener('beforeunload', () => {
       const timings = this.getTimings()
       if (timings.length > 0 && this.isDebugMode()) {
@@ -59,7 +58,6 @@ export class PerformanceMonitor {
 
     saveToLocalStorage(PerformanceMonitor.STORAGE_KEY, timings)
 
-    // Log the new timing immediately
     console.log(
       `%c${new Date(newTiming.timestamp).toLocaleString()}%c ${(newTiming.duration / 1000).toFixed(3)}s %c${newTiming.url}`,
       'color: #888',

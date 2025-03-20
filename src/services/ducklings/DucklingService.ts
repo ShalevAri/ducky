@@ -66,7 +66,6 @@ export class DucklingService {
   matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
     const ducklings = this.loadDucklings()
 
-    // First check for exact matches
     for (const duckling of ducklings) {
       if (query === duckling.pattern) {
         return {
@@ -76,7 +75,6 @@ export class DucklingService {
       }
     }
 
-    // Then check for pattern + space matches
     for (const duckling of ducklings) {
       if (query.startsWith(duckling.pattern + ' ')) {
         const additionalQuery = query.slice(duckling.pattern.length + 1)

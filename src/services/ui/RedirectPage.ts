@@ -5,10 +5,8 @@ import { getRandomSentence } from '../../data/random-sentences'
  * @param targetUrl The URL to redirect to
  */
 export function renderRedirectPage(targetUrl: string): void {
-  // Check if loading page is enabled in LocalStorage (disabled by default)
   const enableLoadingPage = localStorage.getItem('ENABLE_LOADING_PAGE') === 'true'
 
-  // If disabled (default), redirect immediately without showing the loading page
   if (!enableLoadingPage) {
     window.location.replace(targetUrl)
     return
@@ -17,7 +15,6 @@ export function renderRedirectPage(targetUrl: string): void {
   const app = document.querySelector<HTMLDivElement>('#app')!
   const randomMessage = getRandomSentence()
 
-  // Set color to match the theme
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
   const bgColor = isDarkMode ? '#121212' : '#ffffff'
   const textColor = isDarkMode ? '#e0e0e0' : '#1a1a1a'
@@ -32,7 +29,6 @@ export function renderRedirectPage(targetUrl: string): void {
     </div>
   `
 
-  // Add inline styles for the redirect page
   const style = document.createElement('style')
   style.textContent = `
     .redirect-container {
@@ -81,6 +77,5 @@ export function renderRedirectPage(targetUrl: string): void {
 
   document.head.appendChild(style)
 
-  // Redirect immediately
   window.location.href = targetUrl
 }

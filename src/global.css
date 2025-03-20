@@ -1,6 +1,5 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); */
 
-/* Font fallback that closely matches Inter metrics */
 @font-face {
   font-family: 'Inter Fallback';
   size-adjust: 107%;
@@ -28,7 +27,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Light mode variables */
   --bg-color: #ffffff;
   --text-color: #1a1a1a;
   --link-color: #ffffff;
@@ -44,7 +42,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark mode variables */
     --bg-color: #121212;
     --text-color: #e0e0e0;
     --link-color: #ffffff;
@@ -110,7 +107,6 @@ textarea {
   font: inherit;
 }
 
-/* Add these new styles */
 .url-container {
   display: flex;
   align-items: center;
@@ -118,7 +114,6 @@ textarea {
   margin-top: 16px;
 }
 
-/* Add this new style */
 .content-container {
   max-width: 36rem;
   text-align: center;
@@ -126,7 +121,6 @@ textarea {
   margin: 0 auto;
 }
 
-/* Add main heading styles */
 .main-heading {
   font-size: 2.5rem;
   font-weight: 700;
@@ -142,7 +136,6 @@ textarea {
   opacity: 0.9;
 }
 
-/* Update url-input width to be 100% since container will control max width */
 .url-input {
   padding: 8px 12px;
   border: 1px solid var(--input-border);
@@ -180,7 +173,6 @@ textarea {
   background: #28a745;
 }
 
-/* Add footer styles */
 .footer {
   position: fixed;
   bottom: 16px;
@@ -246,7 +238,6 @@ input[type='submit'] {
   color: inherit;
 }
 
-/* Recent bangs styles */
 .recent-bangs-container {
   margin-top: 24px;
   text-align: left;
@@ -305,7 +296,6 @@ input[type='submit'] {
   background-color: var(--button-active-bg);
 }
 
-/* Ducky Islands styles */
 .ducky-islands-container {
   margin-top: 3.5rem;
   text-align: left;
@@ -432,7 +422,6 @@ input[type='submit'] {
   background-color: var(--button-hover-bg);
 }
 
-/* Ducklings styles */
 .ducklings-container {
   margin-top: 3.5rem;
   text-align: left;
@@ -563,7 +552,6 @@ input[type='submit'] {
   background: var(--button-secondary-hover-bg);
 }
 
-/* Center the main container */
 .container {
   display: flex;
   flex-direction: column;
@@ -573,7 +561,6 @@ input[type='submit'] {
   padding: 2rem 0;
 }
 
-/* Adjust table styles for both Islands and Ducklings */
 .ducklings-table th,
 .ducklings-table td,
 .islands-table th,
@@ -590,7 +577,6 @@ input[type='submit'] {
   font-size: 0.9em;
 }
 
-/* Make both lists the same height */
 .islands-list,
 .ducklings-list {
   margin-top: 0.75rem;
@@ -599,7 +585,6 @@ input[type='submit'] {
   margin-bottom: 0.5rem;
 }
 
-/* Adjust cell content */
 .prompt-cell,
 .target-cell {
   max-width: 180px;

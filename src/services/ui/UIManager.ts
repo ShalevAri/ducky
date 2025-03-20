@@ -288,19 +288,14 @@ export class UIManager {
   private setupEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
     const app = document.querySelector<HTMLDivElement>('#app')!
 
-    // Setup copy functionality
     this.setupCopyFunctionality(app)
 
-    // Setup bang form
     this.setupBangForm(app)
 
-    // Setup island form
     this.setupIslandForm(app, duckyIslands)
 
-    // Setup duckling form
     this.setupDucklingForm(app)
 
-    // Setup recent bangs
     this.setupRecentBangs(app)
   }
 

@@ -59,11 +59,11 @@ export default defineConfig({
         drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info', 'console.debug'],
-        passes: 2, // Multiple optimization passes
-        ecma: 2020 // Modern optimization
+        passes: 2,
+        ecma: 2020
       },
       format: {
-        comments: false // Remove comments
+        comments: false
       }
     },
     rollupOptions: {
@@ -78,10 +78,10 @@ export default defineConfig({
         entryFileNames: 'assets/[name].[hash].js'
       }
     },
-    assetsInlineLimit: 4096, // inline assets < 4kb
-    sourcemap: false, // Disable sourcemaps for production
-    reportCompressedSize: false, // Slightly faster build
-    chunkSizeWarningLimit: 1000 // KB
+    assetsInlineLimit: 4096,
+    sourcemap: false,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000
   },
   optimizeDeps: {
     include: ['dedent'],

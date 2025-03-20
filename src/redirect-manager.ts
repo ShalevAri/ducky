@@ -4,18 +4,13 @@ import { type Bang } from './types/bangs.ts'
 import { type DuckyIsland } from './types/islands.ts'
 import { loadFromLocalStorage, saveToLocalStorage } from './utils/storage.ts'
 
-// Cache for bang redirects
 const bangRedirectCache = new Map<string, string | null>()
 const ducklingMatchCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
-// Regular expressions for bang detection
 export const BANG_REGEX = /!(\S+)/i
 export const FEELING_LUCKY_REGEX = /!(?:\s|$)/i
 export const BANG_REPLACE_REGEX = /!\S+\s*/i
 
-/**
- * Updates the list of recently used bangs
- */
 export function updateRecentBangs(bangName: string): void {
   if (!bangName) return
 
@@ -32,9 +27,6 @@ export function updateRecentBangs(bangName: string): void {
   saveToLocalStorage('recent-bangs', recentBangs)
 }
 
-/**
- * Returns the redirect URL for a bang search
- */
 export function getBangRedirectUrl(
   query: string,
   defaultBang: Bang,
@@ -57,17 +49,12 @@ export function getBangRedirectUrl(
     let islandKey = ''
     let injectionPrompt = ''
 
-    // Check if this is a T3 bang variant
     const isT3Bang = bangWithIslandCandidate.startsWith('t3')
 
-    // For T3 bangs, we need to check for island suffixes after the model specifier
     if (isT3Bang) {
       for (const key of Object.keys(duckyIslands)) {
-        // For T3 bangs, the island key should be at the very end
         if (bangWithIslandCandidate.endsWith(key)) {
-          // Remove the island key from the end
           bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
-          // Only use this island if the remaining bang is valid
           if (bangs[bangCandidate]) {
             islandKey = key
             injectionPrompt = duckyIslands[key].prompt
@@ -76,7 +63,6 @@ export function getBangRedirectUrl(
         }
       }
     } else {
-      // For non-T3 bangs, keep the original logic
       for (const key of Object.keys(duckyIslands)) {
         if (bangWithIslandCandidate.endsWith(key) && bangWithIslandCandidate.length > key.length) {
           bangCandidate = bangWithIslandCandidate.slice(0, -key.length)
@@ -124,7 +110,6 @@ export function getBangRedirectUrl(
         return remainingQuery
       }
 
-      // Special case for backslash searches
       if (bangCommand === 'none') {
         const searchUrl = defaultBang.u.replace('{{{s}}}', encodeURIComponent(remainingQuery).replace(/%2F/g, '/'))
         bangRedirectCache.set(query, searchUrl)
@@ -149,9 +134,6 @@ export function getBangRedirectUrl(
   }
 }
 
-/**
- * Returns the redirect URL for a 'feeling lucky' search
- */
 export function feelingLuckyRedirect(query: string): string {
   const cacheKey = `lucky:${query}`
   if (bangRedirectCache.has(cacheKey)) {
@@ -165,9 +147,6 @@ export function feelingLuckyRedirect(query: string): string {
   return url
 }
 
-/**
- * Performs the redirect based on the current URL query
- */
 export function doRedirect(
   defaultBang: { u: string },
   duckyIslandKeys: string[],
@@ -190,8 +169,6 @@ export function doRedirect(
     return
   }
 
-  // If we have the duckyIslandsData, use it directly
-  // Otherwise, convert the array of keys to an empty record
   const duckyIslands =
     duckyIslandsData ??
     duckyIslandKeys.reduce(
