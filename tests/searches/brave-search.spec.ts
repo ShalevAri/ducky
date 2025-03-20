@@ -7,5 +7,5 @@ test('should make sure Brave search works', async ({ page }) => {
   baseUrl.searchParams.set('q', searchTerm)
   baseUrl.searchParams.set('default_bang', 'brave')
   await page.goto(baseUrl.toString())
-  expect(page.url()).toBe(`http://localhost:49152/ducky/?q=${searchTerm}&default_bang=brave`)
+  expect(page.url()).toBe(`https://search.brave.com/search?q=${searchTerm}`)
 })
