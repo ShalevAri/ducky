@@ -21,7 +21,15 @@ export const randomSentences = [
   '🦆 Searching the pond...',
   '🦆 Shaking off water...',
   '🦆 Splish splash...',
-  '🦆 Surfing waves...'
+  '🦆 Surfing waves...',
+  '🦆 Swimming through the pond...',
+  '🦆 Wading through the pond...',
+  '🦆 Taking a break...',
+  '🦆 Cooking a meal...',
+  '🦆 Coming right up...',
+  '🦆 Quack quack...',
+  '🦆 One more search for good luck...',
+  '🦆 Setting up campfire...'
 ]
 
 export const getRandomSentence = (): string => {
