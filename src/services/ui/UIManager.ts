@@ -4,6 +4,7 @@ import { bangs } from '../../hashbang'
 import { type Bang } from '../../types/bangs'
 import { type DuckyIsland } from '../../types/islands'
 import { PerformanceMonitor } from '../../utils/performance'
+import { SuperCacheService } from '../cache/SuperCacheService'
 import { DucklingService } from '../ducklings/DucklingService'
 import { IslandService } from '../islands/IslandService'
 import { StorageService } from '../storage/StorageService'
@@ -13,6 +14,7 @@ export class UIManager {
   private islandService: IslandService
   private ducklingService: DucklingService
   private storage: StorageService
+  private superCache: SuperCacheService
   // @ts-expect-error: unused variable
   private performanceMonitor: PerformanceMonitor
 
@@ -20,6 +22,7 @@ export class UIManager {
     this.islandService = IslandService.getInstance()
     this.ducklingService = DucklingService.getInstance()
     this.storage = StorageService.getInstance()
+    this.superCache = SuperCacheService.getInstance()
     this.performanceMonitor = PerformanceMonitor.getInstance()
   }
 
@@ -89,6 +92,19 @@ export class UIManager {
             <button class="copy-button">
               <img src="/clipboard.svg" alt="Copy" />
             </button>
+          </div>
+
+          <!-- Super Cache Toggle -->
+          <div class="super-cache-container">
+            <label class="super-cache-label">
+              <input 
+                type="checkbox" 
+                class="super-cache-toggle"
+                ${this.superCache.isEnabled() ? 'checked' : ''}
+              />
+              Enable Super Cache
+            </label>
+            <p class="super-cache-description">Cache search results for faster access (up to 100 recent searches)</p>
           </div>
 
           <!-- Bang Form Section -->
@@ -297,6 +313,12 @@ export class UIManager {
     this.setupDucklingForm(app)
 
     this.setupRecentBangs(app)
+
+    // Add super cache toggle listener
+    const superCacheToggle = app.querySelector<HTMLInputElement>('.super-cache-toggle')!
+    superCacheToggle.addEventListener('change', () => {
+      localStorage.setItem('ENABLE_SUPER_CACHE', superCacheToggle.checked.toString())
+    })
   }
 
   private setupCopyFunctionality(app: HTMLDivElement): void {

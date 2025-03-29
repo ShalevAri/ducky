@@ -1,7 +1,9 @@
 import { matchDuckling } from '../../ducklings'
+import { bangs } from '../../hashbang'
 import { type Bang } from '../../types/bangs'
 import { type DuckyIsland } from '../../types/islands'
 import { PerformanceMonitor } from '../../utils/performance'
+import { SuperCacheService } from '../cache/SuperCacheService'
 import { StorageService } from '../storage/StorageService'
 import { renderRedirectPage } from '../ui/RedirectPage'
 
@@ -9,14 +11,16 @@ export class RedirectService {
   private static instance: RedirectService
   private bangCache: Map<string, string | null>
   private ducklingMatchCache: Map<string, { bangCommand: string; remainingQuery: string } | null>
-  private storage: StorageService
   private performanceMonitor: PerformanceMonitor
+  private superCache: SuperCacheService
+  private storage: StorageService
 
   private constructor() {
     this.bangCache = new Map()
     this.ducklingMatchCache = new Map()
-    this.storage = StorageService.getInstance()
     this.performanceMonitor = PerformanceMonitor.getInstance()
+    this.superCache = SuperCacheService.getInstance()
+    this.storage = StorageService.getInstance()
   }
 
   static getInstance(): RedirectService {
@@ -175,10 +179,18 @@ export class RedirectService {
         return
       }
 
+      // Check super cache first
+      const cachedUrl = this.superCache.getCachedUrl(query)
+      if (cachedUrl) {
+        renderRedirectPage(cachedUrl)
+        return
+      }
+
       if (RedirectService.FEELING_LUCKY_REGEX.test(query)) {
         const searchUrl = this.getBangRedirectUrl(query.slice(1), defaultBang, {}, bangs)
         if (!searchUrl) return
 
+        this.superCache.cacheUrl(query, searchUrl)
         renderRedirectPage(searchUrl)
         return
       }
@@ -196,6 +208,7 @@ export class RedirectService {
       const searchUrl = this.getBangRedirectUrl(query, defaultBang, duckyIslands, bangs)
       if (!searchUrl) return
 
+      this.superCache.cacheUrl(query, searchUrl)
       renderRedirectPage(searchUrl)
     } finally {
       const duration = performance.now() - startTime
