@@ -45,6 +45,12 @@ Automatic pattern-based redirects without typing bang commands:
 typing 'shalevari/ducky' → automatically redirects to this GitHub repository
 ```
 
+### 🔍 Super Cache
+
+Super Cache allows Ducky to cache recent search results, so you don't have to wait for the redirect.
+
+The default redirect speed is already very fast, but this may improve it even more.
+
 ## 📦 Installation
 
 ### npm
@@ -101,7 +107,8 @@ Enable detailed redirect timing information:
 
 ```javascript
 {
-  "DEBUG_MODE": true/false,           // Enable/disable debug mode
+  "DEBUG_MODE": true/false,           // Enable/disable Debug Mode
+  "SUPER_CACHE": true/false,          // Enable/disable Super Cache
   "DISABLE_LOADING_PAGE": true/false, // Disable the loading page
   "default-bang": "string"           // Set the default search engine to use
 }
