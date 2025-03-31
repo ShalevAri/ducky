@@ -5,14 +5,26 @@ export enum LogLevel {
   ERROR = 'ERROR'
 }
 
+/**
+ * Structure of a log entry
+ */
 interface LogEntry {
+  /** Timestamp when the log was created */
   timestamp: number
+  /** Log level indicating severity */
   level: LogLevel
+  /** Log message content */
   message: string
+  /** Optional context information */
   context?: string
+  /** Optional additional data */
   data?: unknown
 }
 
+/**
+ * Service for managing application logging
+ * Implements the Singleton pattern to ensure consistent logging across the application
+ */
 export class LoggingService {
   private static _instance: LoggingService | null = null
   private static readonly MAX_LOG_ENTRIES = 1000
@@ -23,6 +35,10 @@ export class LoggingService {
     // Private constructor to prevent direct construction
   }
 
+  /**
+   * Gets the singleton instance of LoggingService
+   * @returns The LoggingService instance
+   */
   public static getInstance(): LoggingService {
     LoggingService._instance ??= new LoggingService()
     return LoggingService._instance
@@ -32,18 +48,42 @@ export class LoggingService {
     this.logLevel = level
   }
 
+  /**
+   * Logs a debug level message
+   * @param message - The message to log
+   * @param context - Optional context information
+   * @param data - Optional additional data
+   */
   debug(message: string, context?: string, data?: unknown): void {
     this.log(LogLevel.DEBUG, message, context, data)
   }
 
+  /**
+   * Logs an info level message
+   * @param message - The message to log
+   * @param context - Optional context information
+   * @param data - Optional additional data
+   */
   info(message: string, context?: string, data?: unknown): void {
     this.log(LogLevel.INFO, message, context, data)
   }
 
+  /**
+   * Logs a warning level message
+   * @param message - The message to log
+   * @param context - Optional context information
+   * @param data - Optional additional data
+   */
   warn(message: string, context?: string, data?: unknown): void {
     this.log(LogLevel.WARN, message, context, data)
   }
 
+  /**
+   * Logs an error level message
+   * @param message - The message to log
+   * @param context - Optional context information
+   * @param data - Optional additional data
+   */
   error(message: string, context?: string, data?: unknown): void {
     this.log(LogLevel.ERROR, message, context, data)
   }

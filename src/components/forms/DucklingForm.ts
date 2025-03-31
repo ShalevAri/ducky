@@ -2,6 +2,9 @@ import { type Duckling } from '../../ducklings'
 import { DucklingService } from '../../services/ducklings/DucklingService'
 import { BaseForm } from './BaseForm'
 
+/**
+ * Form data structure for duckling creation/editing
+ */
 interface DucklingFormData {
   pattern: string
   bangCommand: string
@@ -9,12 +12,24 @@ interface DucklingFormData {
   description: string
 }
 
+/**
+ * Form component for managing ducklings
+ * Extends BaseForm to provide duckling-specific form functionality
+ */
 export class DucklingForm extends BaseForm<DucklingFormData> {
   private ducklingService: DucklingService
   private addButton: HTMLButtonElement
   private cancelButton: HTMLButtonElement
   private onSave?: (duckling: Duckling) => void
 
+  /**
+   * Creates a new DucklingForm instance
+   * @param formElement - The HTML form element
+   * @param formContainer - The container div element
+   * @param addButton - Button to trigger form display for adding a duckling
+   * @param cancelButton - Button to cancel form submission
+   * @param onSave - Optional callback function called when a duckling is saved
+   */
   constructor(
     formElement: HTMLFormElement,
     formContainer: HTMLDivElement,

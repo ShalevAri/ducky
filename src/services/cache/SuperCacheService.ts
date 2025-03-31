@@ -1,12 +1,22 @@
 import { LoggingService } from '../logging/LoggingService'
 import { StorageService } from '../storage/StorageService'
 
+/**
+ * Structure for a cache entry in the SuperCacheService
+ */
 export interface CacheEntry {
+  /** The search query that was cached */
   query: string
+  /** The URL that was generated/resolved for the query */
   url: string
+  /** Timestamp when the entry was created */
   timestamp: number
 }
 
+/**
+ * Advanced caching service for managing URL resolutions and search queries
+ * Implements the Singleton pattern to ensure consistent caching across the application
+ */
 export class SuperCacheService {
   private static _instance: SuperCacheService | null = null
   private static readonly CACHE_KEY = 'ducky-super-cache'
@@ -17,6 +27,10 @@ export class SuperCacheService {
   private storage: StorageService
   private logger: LoggingService
 
+  /**
+   * Private constructor to prevent direct instantiation
+   * Initializes required services
+   */
   private constructor() {
     this.cache = new Map()
     this.storage = StorageService.getInstance()
@@ -24,6 +38,10 @@ export class SuperCacheService {
     this.loadCache()
   }
 
+  /**
+   * Gets the singleton instance of SuperCacheService
+   * @returns The SuperCacheService instance
+   */
   public static getInstance(): SuperCacheService {
     SuperCacheService._instance ??= new SuperCacheService()
     return SuperCacheService._instance

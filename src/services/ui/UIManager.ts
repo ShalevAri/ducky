@@ -8,6 +8,10 @@ import { BangManager } from './components/BangManager'
 import { DucklingManager } from './components/DucklingManager'
 import { IslandManager } from './components/IslandManager'
 
+/**
+ * Core UI management service that coordinates all UI-related functionality
+ * Implements the Singleton pattern to ensure only one instance exists
+ */
 export class UIManager {
   private static _instance: UIManager | null = null
   private storage: StorageService
@@ -18,6 +22,10 @@ export class UIManager {
   private islandManager: IslandManager
   private ducklingManager: DucklingManager
 
+  /**
+   * Private constructor to prevent direct instantiation
+   * Initializes all required services and managers
+   */
   private constructor() {
     this.storage = StorageService.getInstance()
     this.superCache = SuperCacheService.getInstance()
@@ -28,6 +36,11 @@ export class UIManager {
     this.ducklingManager = new DucklingManager()
   }
 
+  /**
+   * Gets the singleton instance of UIManager
+   * Creates a new instance if one doesn't exist
+   * @returns The UIManager instance
+   */
   static getInstance(): UIManager {
     UIManager._instance ??= new UIManager()
     return UIManager._instance

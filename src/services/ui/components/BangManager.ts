@@ -3,10 +3,18 @@ import { type Bang } from '../../../types/bangs'
 import { LoggingService } from '../../logging/LoggingService'
 import { StorageService } from '../../storage/StorageService'
 
+/**
+ * Manager class for handling bang commands in the UI
+ * Provides functionality for managing and executing bang search commands
+ */
 export class BangManager {
   private storage: StorageService
   private logger: LoggingService
 
+  /**
+   * Creates a new BangManager instance
+   * Initializes required services
+   */
   constructor() {
     this.storage = StorageService.getInstance()
     this.logger = LoggingService.getInstance()

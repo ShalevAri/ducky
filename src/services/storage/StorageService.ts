@@ -2,14 +2,27 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { loadFromLocalStorage, saveToLocalStorage } from '../../utils/storage'
 
+/**
+ * Service for managing application storage
+ * Provides a unified interface for caching and persistent storage operations
+ * Implements the Singleton pattern to ensure consistent storage access
+ */
 export class StorageService {
   private static instance: StorageService
   private cache: Map<string, unknown>
 
+  /**
+   * Private constructor to prevent direct instantiation
+   * Initializes the in-memory cache
+   */
   private constructor() {
     this.cache = new Map()
   }
 
+  /**
+   * Gets the singleton instance of StorageService
+   * @returns The StorageService instance
+   */
   static getInstance(): StorageService {
     if (!StorageService.instance) {
       StorageService.instance = new StorageService()
