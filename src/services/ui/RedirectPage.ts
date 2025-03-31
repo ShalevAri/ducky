@@ -5,16 +5,25 @@ import { getRandomSentence } from '../../data/random-sentences'
  * @param targetUrl The URL to redirect to
  */
 export function renderRedirectPage(targetUrl: string): void {
+  console.log('RedirectPage: Starting redirection to:', targetUrl)
+
   const enableLoadingPage = localStorage.getItem('ENABLE_LOADING_PAGE') === 'true'
+  console.log('RedirectPage: Loading page enabled:', enableLoadingPage)
 
   if (!enableLoadingPage) {
+    console.log('RedirectPage: Loading page disabled, redirecting immediately')
     window.location.replace(targetUrl)
     return
   }
 
-  const app = document.querySelector<HTMLDivElement>('#app')!
-  const randomMessage = getRandomSentence()
+  const app = document.querySelector<HTMLDivElement>('#app')
+  if (!app) {
+    console.error('RedirectPage: Could not find app element, redirecting immediately')
+    window.location.replace(targetUrl)
+    return
+  }
 
+  const randomMessage = getRandomSentence()
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
   const bgColor = isDarkMode ? '#121212' : '#ffffff'
   const textColor = isDarkMode ? '#e0e0e0' : '#1a1a1a'
@@ -76,6 +85,5 @@ export function renderRedirectPage(targetUrl: string): void {
   `
 
   document.head.appendChild(style)
-
-  window.location.href = targetUrl
+  window.location.replace(targetUrl)
 }

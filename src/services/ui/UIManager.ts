@@ -1,72 +1,52 @@
-import { DucklingForm } from '../../components/forms/DucklingForm'
-import { IslandForm } from '../../components/forms/IslandForm'
-import { bangs } from '../../hashbang'
 import { type Bang } from '../../types/bangs'
 import { type DuckyIsland } from '../../types/islands'
 import { PerformanceMonitor } from '../../utils/performance'
 import { SuperCacheService } from '../cache/SuperCacheService'
-import { DucklingService } from '../ducklings/DucklingService'
-import { IslandService } from '../islands/IslandService'
+import { LoggingService } from '../logging/LoggingService'
 import { StorageService } from '../storage/StorageService'
+import { BangManager } from './components/BangManager'
+import { DucklingManager } from './components/DucklingManager'
+import { IslandManager } from './components/IslandManager'
 
 export class UIManager {
-  private static instance: UIManager
-  private islandService: IslandService
-  private ducklingService: DucklingService
+  private static _instance: UIManager | null = null
   private storage: StorageService
   private superCache: SuperCacheService
-  // @ts-expect-error: unused variable
   private performanceMonitor: PerformanceMonitor
+  private logger: LoggingService
+  private bangManager: BangManager
+  private islandManager: IslandManager
+  private ducklingManager: DucklingManager
 
   private constructor() {
-    this.islandService = IslandService.getInstance()
-    this.ducklingService = DucklingService.getInstance()
     this.storage = StorageService.getInstance()
     this.superCache = SuperCacheService.getInstance()
     this.performanceMonitor = PerformanceMonitor.getInstance()
+    this.logger = LoggingService.getInstance()
+    this.bangManager = new BangManager()
+    this.islandManager = new IslandManager()
+    this.ducklingManager = new DucklingManager()
   }
 
   static getInstance(): UIManager {
-    if (!UIManager.instance) {
-      UIManager.instance = new UIManager()
-    }
-    return UIManager.instance
+    UIManager._instance ??= new UIManager()
+    return UIManager._instance
   }
 
   renderDefaultPage(defaultBang: Bang, duckyIslands: Record<string, DuckyIsland>): void {
     const currentUrl = window.location.href.replace(/\/+$/, '')
-    const app = document.querySelector<HTMLDivElement>('#app')!
+    const app = document.querySelector<HTMLDivElement>('#app')
+
+    if (!app) {
+      this.logger.error('Failed to find app element')
+      return
+    }
 
     const recentBangs = this.storage.get<string[]>('recent-bangs', [])
-    const recentBangsHtml = this.renderRecentBangs(recentBangs)
+    const recentBangsHtml = this.bangManager.renderRecentBangs(recentBangs)
 
     app.innerHTML = this.getDefaultPageHTML(currentUrl, defaultBang, duckyIslands, recentBangsHtml)
-    this.setupEventListeners(duckyIslands)
-  }
-
-  private renderRecentBangs(recentBangs: string[]): string {
-    if (recentBangs.length === 0) return ''
-    const bangsHtml = recentBangs
-      .filter((bangName): bangName is string => typeof bangName === 'string' && bangName in bangs)
-      .map((bangName) => {
-        const bang = bangs[bangName as keyof typeof bangs]
-        return `<button class="recent-bang" data-bang="${bangName}">!${bangName} (${bang.s})</button>`
-      })
-      .join('')
-
-    if (!bangsHtml) return ''
-
-    return `
-      <div class="recent-bangs-container">
-        <div class="recent-bangs-header">
-          <p>Recently used bangs:</p>
-          <button class="clear-recent-bangs">Clear</button>
-        </div>
-        <div class="recent-bangs">
-          ${bangsHtml}
-        </div>
-      </div>
-    `
+    this.setupEventListeners(app, duckyIslands)
   }
 
   private getDefaultPageHTML(
@@ -100,7 +80,7 @@ export class UIManager {
               <input 
                 type="checkbox" 
                 class="super-cache-toggle"
-                ${this.superCache.isEnabled() ? 'checked' : ''}
+                ${this.storage.get('ENABLE_SUPER_CACHE', false) ? 'checked' : ''}
               />
               Enable Super Cache
             </label>
@@ -132,7 +112,7 @@ export class UIManager {
             <p>For example, using <code>!t3a</code> instead of <code>!t3</code> will tell the AI to give you the answer first.</p>
             
             <div class="islands-list">
-              ${this.renderIslandsList(duckyIslands)}
+              ${this.islandManager.renderIslandsList(duckyIslands)}
             </div>
             
             <button class="add-island-button">Add New Island</button>
@@ -174,7 +154,7 @@ export class UIManager {
             <p>For example, typing <code>shalevari/ducky</code> will automatically use <code>!ghr</code> bang.</p>
             
             <div class="ducklings-list">
-              ${this.renderDucklingsList()}
+              ${this.ducklingManager.renderDucklingsList()}
             </div>
             
             <button class="add-duckling-button">Add New Duckling</button>
@@ -227,239 +207,60 @@ export class UIManager {
     `
   }
 
-  private renderIslandsList(duckyIslands: Record<string, DuckyIsland>): string {
-    const islands = Object.values(duckyIslands)
-    if (islands.length === 0) {
-      return '<p>No islands created yet.</p>'
-    }
-
-    return `
-      <table class="islands-table">
-        <thead>
-          <tr>
-            <th>Suffix</th>
-            <th>Name</th>
-            <th>Prompt</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${islands
-            .map(
-              (island) => `
-                <tr>
-                  <td>${island.key}</td>
-                  <td>${island.name}</td>
-                  <td class="prompt-cell" title="${island.prompt}">${island.prompt}</td>
-                  <td>
-                    <button class="delete-island" data-key="${island.key}">Delete</button>
-                  </td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    `
-  }
-
-  private renderDucklingsList(): string {
-    const ducklings = this.ducklingService.loadDucklings()
-    if (ducklings.length === 0) {
-      return '<p>No ducklings created yet.</p>'
-    }
-
-    return `
-      <table class="ducklings-table">
-        <thead>
-          <tr>
-            <th>Pattern</th>
-            <th>Bang</th>
-            <th>Target</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ducklings
-            .map(
-              (duckling) => `
-                <tr>
-                  <td>${duckling.pattern}</td>
-                  <td>${duckling.bangCommand ? `!${duckling.bangCommand}` : 'Direct URL'}</td>
-                  <td class="target-cell" title="${duckling.targetValue}">${duckling.targetValue}</td>
-                  <td>${duckling.description}</td>
-                  <td>
-                    <button class="delete-duckling" data-pattern="${duckling.pattern}">Delete</button>
-                  </td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    `
-  }
-
-  private setupEventListeners(duckyIslands: Record<string, DuckyIsland>): void {
-    const app = document.querySelector<HTMLDivElement>('#app')!
-
+  private setupEventListeners(app: HTMLDivElement, duckyIslands: Record<string, DuckyIsland>): void {
     this.setupCopyFunctionality(app)
-
-    this.setupBangForm(app)
-
-    this.setupIslandForm(app, duckyIslands)
-
-    this.setupDucklingForm(app)
-
-    this.setupRecentBangs(app)
-
-    // Add super cache toggle listener
-    const superCacheToggle = app.querySelector<HTMLInputElement>('.super-cache-toggle')!
-    superCacheToggle.addEventListener('change', () => {
-      localStorage.setItem('ENABLE_SUPER_CACHE', superCacheToggle.checked.toString())
-    })
+    this.setupSuperCacheToggle(app)
+    this.bangManager.setupBangForm(app)
+    this.islandManager.setupIslandForm(app, duckyIslands)
+    this.ducklingManager.setupDucklingForm(app)
+    this.bangManager.setupRecentBangs(app)
+    this.islandManager.attachIslandDeleteHandlers(app, duckyIslands)
+    this.ducklingManager.attachDucklingDeleteHandlers(app)
   }
 
   private setupCopyFunctionality(app: HTMLDivElement): void {
-    const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')!
-    const copyIcon = copyButton.querySelector('img')!
-    const urlInput = app.querySelector<HTMLInputElement>('.url-input')!
+    const copyButton = app.querySelector<HTMLButtonElement>('.copy-button')
+    const urlInput = app.querySelector<HTMLInputElement>('.url-input')
 
-    const copyUrlToClipboard = async () => {
-      await navigator.clipboard.writeText(urlInput.value)
-      copyIcon.src = '/clipboard-check.svg'
-
-      setTimeout(() => {
-        copyIcon.src = '/clipboard.svg'
-      }, 2000)
+    if (!copyButton || !urlInput) {
+      this.logger.error('Failed to find copy functionality elements')
+      return
     }
 
-    urlInput.addEventListener('keydown', (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'c' && window.getSelection()?.toString() === '') {
-        event.preventDefault()
-        void copyUrlToClipboard()
+    copyButton.addEventListener('click', () => {
+      void this.copyUrlToClipboard(urlInput.value, copyButton)
+    })
+  }
+
+  private async copyUrlToClipboard(text: string, button: HTMLButtonElement): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(text)
+      const img = button.querySelector('img')
+      if (img) {
+        const originalSrc = img.src
+        img.src = '/clipboard-check.svg'
+        setTimeout(() => {
+          img.src = originalSrc
+        }, 2000)
       }
-    })
-
-    copyButton.addEventListener('click', () => void copyUrlToClipboard())
-  }
-
-  private setupBangForm(app: HTMLDivElement): void {
-    const bangDatalist = app.querySelector<HTMLDataListElement>('#bang-list')!
-    const bangForm = app.querySelector<HTMLFormElement>('.bang-form')!
-    const bangInput = app.querySelector<HTMLInputElement>('#bang-input')!
-    const bangErrorDiv = app.querySelector<HTMLParagraphElement>('.bang-error')!
-    const urlInput = app.querySelector<HTMLInputElement>('.url-input')!
-
-    Object.entries(bangs).forEach(([_key, bang]) => {
-      const option = document.createElement('option')
-      option.value = bang.t
-      bangDatalist.appendChild(option)
-    })
-
-    bangForm.addEventListener('submit', (submitEvent: SubmitEvent) => {
-      submitEvent.preventDefault()
-      const bangName = bangInput.value.trim()
-      if (!(bangName in bangs)) {
-        bangErrorDiv.innerHTML = `This bang is not known. Check the <a href="https://duckduckgo.com/bang.html" target="_blank">list of available bangs.</a>`
-        return
+    } catch (error) {
+      if (error instanceof Error) {
+        this.logger.error('Failed to copy URL to clipboard', undefined, error.message)
+      } else {
+        this.logger.error('Failed to copy URL to clipboard', undefined, String(error))
       }
-      bangErrorDiv.innerHTML = ''
-      localStorage.setItem('default-bang', bangName)
-      const currentUrl = window.location.origin + window.location.pathname
-      urlInput.value = `${currentUrl}?q=%s&default_bang=${encodeURIComponent(bangName)}`
-    })
-  }
-
-  private setupIslandForm(app: HTMLDivElement, duckyIslands: Record<string, DuckyIsland>): void {
-    const islandFormElement = app.querySelector<HTMLFormElement>('.island-form')!
-    const islandFormContainer = app.querySelector<HTMLDivElement>('.island-form-container')!
-    const addIslandButton = app.querySelector<HTMLButtonElement>('.add-island-button')!
-    const cancelButton = app.querySelector<HTMLButtonElement>('.cancel-button')!
-
-    void new IslandForm(islandFormElement, islandFormContainer, addIslandButton, cancelButton, (island) => {
-      duckyIslands[island.key] = island
-      const islandsList = app.querySelector<HTMLDivElement>('.islands-list')!
-      islandsList.innerHTML = this.renderIslandsList(duckyIslands)
-      this.attachIslandDeleteHandlers(app, duckyIslands)
-    })
-
-    this.attachIslandDeleteHandlers(app, duckyIslands)
-  }
-
-  private setupDucklingForm(app: HTMLDivElement): void {
-    const ducklingFormElement = app.querySelector<HTMLFormElement>('.duckling-form')!
-    const ducklingFormContainer = app.querySelector<HTMLDivElement>('.duckling-form-container')!
-    const addDucklingButton = app.querySelector<HTMLButtonElement>('.add-duckling-button')!
-    const cancelButton = app.querySelector<HTMLButtonElement>('.duckling-cancel-button')!
-
-    void new DucklingForm(ducklingFormElement, ducklingFormContainer, addDucklingButton, cancelButton, () => {
-      const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')!
-      ducklingsList.innerHTML = this.renderDucklingsList()
-      this.attachDucklingDeleteHandlers(app)
-    })
-
-    this.attachDucklingDeleteHandlers(app)
-  }
-
-  private setupRecentBangs(app: HTMLDivElement): void {
-    const recentBangButtons = app.querySelectorAll<HTMLButtonElement>('.recent-bang')
-    const bangInput = app.querySelector<HTMLInputElement>('#bang-input')!
-    const bangForm = app.querySelector<HTMLFormElement>('.bang-form')!
-    const clearButton = app.querySelector<HTMLButtonElement>('.clear-recent-bangs')
-
-    recentBangButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const bangName = button.dataset.bang ?? ''
-        if (bangName && bangName in bangs) {
-          bangInput.value = bangName
-          bangForm.dispatchEvent(new Event('submit'))
-        }
-      })
-    })
-
-    if (clearButton) {
-      clearButton.addEventListener('click', () => {
-        this.storage.set('recent-bangs', [])
-        const container = app.querySelector('.recent-bangs-container')
-        if (container) {
-          container.remove()
-        }
-      })
     }
   }
 
-  private attachIslandDeleteHandlers(app: HTMLDivElement, duckyIslands: Record<string, DuckyIsland>): void {
-    const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-island')
-    deleteButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const key = button.dataset.key
-        if (key && duckyIslands[key]) {
-          if (confirm(`Are you sure you want to delete the "${duckyIslands[key].name}" island?`)) {
-            this.islandService.removeIsland(key)
-            delete duckyIslands[key]
-            const islandsList = app.querySelector<HTMLDivElement>('.islands-list')!
-            islandsList.innerHTML = this.renderIslandsList(duckyIslands)
-            this.attachIslandDeleteHandlers(app, duckyIslands)
-          }
-        }
-      })
-    })
-  }
+  private setupSuperCacheToggle(app: HTMLDivElement): void {
+    const toggle = app.querySelector<HTMLInputElement>('.super-cache-toggle')
+    if (!toggle) {
+      this.logger.error('Failed to find super cache toggle')
+      return
+    }
 
-  private attachDucklingDeleteHandlers(app: HTMLDivElement): void {
-    const deleteButtons = app.querySelectorAll<HTMLButtonElement>('.delete-duckling')
-    deleteButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const pattern = button.dataset.pattern
-        if (!pattern) return
-
-        this.ducklingService.removeDuckling(pattern)
-        const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')!
-        ducklingsList.innerHTML = this.renderDucklingsList()
-        this.attachDucklingDeleteHandlers(app)
-      })
+    toggle.addEventListener('change', () => {
+      this.storage.set('ENABLE_SUPER_CACHE', toggle.checked)
     })
   }
 }
