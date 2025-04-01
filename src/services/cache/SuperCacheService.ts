@@ -1,3 +1,4 @@
+import { DucklingService } from '../ducklings/DucklingService'
 import { LoggingService } from '../logging/LoggingService'
 import { StorageService } from '../storage/StorageService'
 
@@ -26,6 +27,7 @@ export class SuperCacheService {
   private cache: Map<string, CacheEntry>
   private storage: StorageService
   private logger: LoggingService
+  private ducklingService: DucklingService
 
   /**
    * Private constructor to prevent direct instantiation
@@ -35,6 +37,7 @@ export class SuperCacheService {
     this.cache = new Map()
     this.storage = StorageService.getInstance()
     this.logger = LoggingService.getInstance()
+    this.ducklingService = DucklingService.getInstance()
     this.loadCache()
   }
 
@@ -53,6 +56,13 @@ export class SuperCacheService {
 
   get(query: string): string | null {
     if (!this.isEnabled()) {
+      return null
+    }
+
+    // Check if there's a matching Duckling first
+    const ducklingMatch = this.ducklingService.matchDuckling(query)
+    if (ducklingMatch) {
+      this.logger.debug('Duckling match found, bypassing cache', 'SuperCache', { query })
       return null
     }
 
