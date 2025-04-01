@@ -19,33 +19,35 @@ export class IslandManager {
     }
 
     return `
-      <table class="islands-table">
-        <thead>
-          <tr>
-            <th>Suffix</th>
-            <th>Name</th>
-            <th>Prompt</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${islands
-            .map(
-              (island) => `
-                <tr>
-                  <td>!*${island.key}</td>
-                  <td>${island.name}</td>
-                  <td>${island.prompt}</td>
-                  <td>
-                    <button class="edit-island" data-key="${island.key}">Edit</button>
-                    <button class="delete-island" data-key="${island.key}">Delete</button>
-                  </td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="islands-table">
+          <thead>
+            <tr>
+              <th>Suffix</th>
+              <th>Name</th>
+              <th>Prompt</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${islands
+              .map(
+                (island) => `
+                  <tr>
+                    <td>!*${island.key}</td>
+                    <td>${island.name}</td>
+                    <td class="prompt-cell">${island.prompt}</td>
+                    <td>
+                      <button class="edit-island" data-key="${island.key}">Edit</button>
+                      <button class="delete-island" data-key="${island.key}">Delete</button>
+                    </td>
+                  </tr>
+                `
+              )
+              .join('')}
+          </tbody>
+        </table>
+      </div>
     `
   }
 

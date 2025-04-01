@@ -318,35 +318,85 @@ input[type='submit'] {
   font-family: monospace;
 }
 
-.islands-list {
-  margin-top: 1rem;
-  max-height: 140px;
-  overflow-y: auto;
-  margin-bottom: 0.5rem;
+.islands-list,
+.ducklings-list {
+  margin: 1rem 0;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  max-height: 300px;
+  overflow: auto;
 }
 
-.islands-table {
+.islands-table,
+.ducklings-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0;
+  min-width: 600px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-wrapper {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  background: var(--bg-color);
+}
+
+.islands-table thead,
+.ducklings-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-color);
 }
 
 .islands-table th,
-.islands-table td {
-  padding: 6px 8px;
-  text-align: left;
-  border-bottom: 1px solid var(--input-border);
-}
-
-.islands-table th {
+.ducklings-table th {
+  padding: 12px 8px;
   font-weight: 600;
+  background-color: var(--input-bg);
+  border-bottom: 2px solid var(--input-border);
 }
 
-.prompt-cell {
-  max-width: 200px;
+.islands-table td,
+.ducklings-table td {
+  padding: 8px;
+  vertical-align: middle;
+  background: var(--bg-color);
+}
+
+.prompt-cell,
+.target-cell {
+  max-width: 250px;
+  min-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Add scrollbar styling for better visibility */
+.islands-list::-webkit-scrollbar,
+.ducklings-list::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.islands-list::-webkit-scrollbar-track,
+.ducklings-list::-webkit-scrollbar-track {
+  background: var(--input-bg);
+  border-radius: 4px;
+}
+
+.islands-list::-webkit-scrollbar-thumb,
+.ducklings-list::-webkit-scrollbar-thumb {
+  background: var(--input-border);
+  border-radius: 4px;
+}
+
+.islands-list::-webkit-scrollbar-thumb:hover,
+.ducklings-list::-webkit-scrollbar-thumb:hover {
+  background: var(--button-hover-bg);
 }
 
 .add-island-button {
@@ -436,13 +486,6 @@ input[type='submit'] {
   margin-bottom: 16px;
 }
 
-.ducklings-list {
-  margin-top: 1rem;
-  max-height: 140px;
-  overflow-y: auto;
-  margin-bottom: 0.5rem;
-}
-
 .add-duckling-button {
   margin-top: 0.5rem;
   background-color: var(--input-bg);
@@ -464,12 +507,6 @@ input[type='submit'] {
   background-color: var(--input-bg);
   padding: 16px;
   border-radius: 4px;
-}
-
-.ducklings-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 0;
 }
 
 .ducklings-table th,
@@ -618,4 +655,68 @@ input[type='submit'] {
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
   color: #666;
+}
+
+.edit-island,
+.edit-duckling {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9em;
+  margin-right: 8px;
+}
+
+.edit-island:hover,
+.edit-duckling:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.islands-table td,
+.ducklings-table td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.islands-table th,
+.ducklings-table th {
+  padding: 8px;
+  font-weight: 600;
+  background-color: var(--input-bg);
+}
+
+.islands-table tr:last-child td,
+.ducklings-table tr:last-child td {
+  border-bottom: none;
+}
+
+.islands-table td:first-child,
+.ducklings-table td:first-child {
+  padding-left: 12px;
+}
+
+.islands-table td:last-child,
+.ducklings-table td:last-child {
+  padding-right: 12px;
+  text-align: right;
+}
+
+.prompt-cell,
+.target-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+}
+
+.add-island-button,
+.add-duckling-button {
+  margin-top: 1rem;
 }

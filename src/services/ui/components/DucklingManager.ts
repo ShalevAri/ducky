@@ -19,35 +19,37 @@ export class DucklingManager {
     }
 
     return `
-      <table class="ducklings-table">
-        <thead>
-          <tr>
-            <th>Pattern</th>
-            <th>Bang</th>
-            <th>Target</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${ducklings
-            .map(
-              (duckling) => `
-                <tr>
-                  <td>${duckling.pattern}</td>
-                  <td>${duckling.bangCommand ? `!${duckling.bangCommand}` : 'Direct'}</td>
-                  <td>${duckling.targetValue}</td>
-                  <td>${duckling.description}</td>
-                  <td>
-                    <button class="edit-duckling" data-pattern="${duckling.pattern}">Edit</button>
-                    <button class="delete-duckling" data-pattern="${duckling.pattern}">Delete</button>
-                  </td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="ducklings-table">
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Bang</th>
+              <th>Target</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ducklings
+              .map(
+                (duckling) => `
+                  <tr>
+                    <td>${duckling.pattern}</td>
+                    <td>${duckling.bangCommand ? `!${duckling.bangCommand}` : 'Direct'}</td>
+                    <td class="target-cell">${duckling.targetValue}</td>
+                    <td class="prompt-cell">${duckling.description}</td>
+                    <td>
+                      <button class="edit-duckling" data-pattern="${duckling.pattern}">Edit</button>
+                      <button class="delete-duckling" data-pattern="${duckling.pattern}">Delete</button>
+                    </td>
+                  </tr>
+                `
+              )
+              .join('')}
+          </tbody>
+        </table>
+      </div>
     `
   }
 
