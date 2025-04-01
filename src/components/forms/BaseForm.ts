@@ -27,10 +27,11 @@ export abstract class BaseForm<T> {
   protected abstract handleSubmit(event: SubmitEvent): void
 
   /**
-   * Abstract method to reset the form
-   * Must be implemented by derived classes
+   * Resets the form to its initial state
    */
-  protected abstract resetForm(): void
+  protected resetForm(): void {
+    this.formElement.reset()
+  }
 
   /**
    * Attaches base event listeners to the form

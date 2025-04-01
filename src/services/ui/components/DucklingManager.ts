@@ -39,6 +39,7 @@ export class DucklingManager {
                   <td>${duckling.targetValue}</td>
                   <td>${duckling.description}</td>
                   <td>
+                    <button class="edit-duckling" data-pattern="${duckling.pattern}">Edit</button>
                     <button class="delete-duckling" data-pattern="${duckling.pattern}">Delete</button>
                   </td>
                 </tr>
@@ -62,11 +63,10 @@ export class DucklingManager {
     }
 
     const ducklingForm = new DucklingForm(form, formContainer, addButton, cancelButton, (duckling) => {
-      this.ducklingService.addDuckling(duckling)
       const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')
       if (ducklingsList) {
         ducklingsList.innerHTML = this.renderDucklingsList()
-        this.attachDucklingDeleteHandlers(app)
+        this.attachDucklingHandlers(app, ducklingForm)
       }
     })
 
@@ -79,6 +79,28 @@ export class DucklingManager {
       formContainer.style.display = 'none'
       addButton.style.display = 'block'
       form.reset()
+    })
+
+    this.attachDucklingHandlers(app, ducklingForm)
+  }
+
+  private attachDucklingHandlers(app: HTMLDivElement, ducklingForm: DucklingForm): void {
+    this.attachDucklingDeleteHandlers(app)
+    this.attachDucklingEditHandlers(app, ducklingForm)
+  }
+
+  private attachDucklingEditHandlers(app: HTMLDivElement, ducklingForm: DucklingForm): void {
+    const editButtons = app.querySelectorAll<HTMLButtonElement>('.edit-duckling')
+    editButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const pattern = button.dataset.pattern
+        if (!pattern) return
+
+        const duckling = this.ducklingService.getDuckling(pattern)
+        if (duckling) {
+          ducklingForm.setEditMode(duckling)
+        }
+      })
     })
   }
 

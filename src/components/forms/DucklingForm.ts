@@ -21,6 +21,8 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
   private addButton: HTMLButtonElement
   private cancelButton: HTMLButtonElement
   private onSave?: (duckling: Duckling) => void
+  private isEditing = false
+  private editingPattern: string | null = null
 
   /**
    * Creates a new DucklingForm instance
@@ -55,6 +57,26 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
     })
   }
 
+  setEditMode(duckling: Duckling): void {
+    this.isEditing = true
+    this.editingPattern = duckling.pattern
+    this.setFormData({
+      pattern: duckling.pattern,
+      bangCommand: duckling.bangCommand,
+      targetValue: duckling.targetValue,
+      description: duckling.description
+    })
+    this.show()
+    const patternInput = this.formElement.querySelector<HTMLInputElement>('#duckling-pattern')
+    if (patternInput) {
+      patternInput.readOnly = true
+    }
+    const submitButton = this.formElement.querySelector<HTMLButtonElement>('.duckling-save-button')
+    if (submitButton) {
+      submitButton.textContent = 'Update Duckling'
+    }
+  }
+
   protected handleSubmit(event: SubmitEvent): void {
     event.preventDefault()
 
@@ -76,13 +98,40 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
       description: formData.description
     }
 
-    this.ducklingService.addDuckling(duckling)
+    if (this.isEditing) {
+      const ducklings = this.ducklingService.loadDucklings()
+      const index = ducklings.findIndex((d) => d.pattern === this.editingPattern)
+      if (index !== -1) {
+        ducklings[index] = duckling
+        this.ducklingService.saveDucklings(ducklings)
+      }
+    } else {
+      const ducklings = this.ducklingService.loadDucklings()
+      const existingDuckling = ducklings.find((d) => d.pattern === duckling.pattern)
+      if (existingDuckling) {
+        alert(`Duckling with pattern "${duckling.pattern}" already exists. Please choose a different pattern.`)
+        return
+      }
+      this.ducklingService.addDuckling(duckling)
+    }
+
     this.onSave?.(duckling)
+    this.resetForm()
     this.hide()
   }
 
   protected resetForm(): void {
-    this.formElement.reset()
+    super.resetForm()
+    this.isEditing = false
+    this.editingPattern = null
+    const patternInput = this.formElement.querySelector<HTMLInputElement>('#duckling-pattern')
+    if (patternInput) {
+      patternInput.readOnly = false
+    }
+    const submitButton = this.formElement.querySelector<HTMLButtonElement>('.duckling-save-button')
+    if (submitButton) {
+      submitButton.textContent = 'Save Duckling'
+    }
   }
 
   private validateForm(): boolean {

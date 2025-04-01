@@ -37,6 +37,7 @@ export class IslandManager {
                   <td>${island.name}</td>
                   <td>${island.prompt}</td>
                   <td>
+                    <button class="edit-island" data-key="${island.key}">Edit</button>
                     <button class="delete-island" data-key="${island.key}">Delete</button>
                   </td>
                 </tr>
@@ -60,11 +61,15 @@ export class IslandManager {
     }
 
     const islandForm = new IslandForm(form, formContainer, addButton, cancelButton, (island) => {
-      this.islandService.addIsland(island)
+      if (duckyIslands[island.key]) {
+        duckyIslands[island.key] = island
+      } else {
+        duckyIslands[island.key] = island
+      }
       const islandsList = app.querySelector<HTMLDivElement>('.islands-list')
       if (islandsList) {
         islandsList.innerHTML = this.renderIslandsList(duckyIslands)
-        this.attachIslandDeleteHandlers(app, duckyIslands)
+        this.attachIslandHandlers(app, duckyIslands, islandForm)
       }
     })
 
@@ -77,6 +82,36 @@ export class IslandManager {
       formContainer.style.display = 'none'
       addButton.style.display = 'block'
       form.reset()
+    })
+
+    this.attachIslandHandlers(app, duckyIslands, islandForm)
+  }
+
+  private attachIslandHandlers(
+    app: HTMLDivElement,
+    duckyIslands: Record<string, DuckyIsland>,
+    islandForm: IslandForm
+  ): void {
+    this.attachIslandDeleteHandlers(app, duckyIslands)
+    this.attachIslandEditHandlers(app, duckyIslands, islandForm)
+  }
+
+  private attachIslandEditHandlers(
+    app: HTMLDivElement,
+    duckyIslands: Record<string, DuckyIsland>,
+    islandForm: IslandForm
+  ): void {
+    const editButtons = app.querySelectorAll<HTMLButtonElement>('.edit-island')
+    editButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.key
+        if (!key) return
+
+        const island = duckyIslands[key]
+        if (island) {
+          islandForm.setEditMode(island)
+        }
+      })
     })
   }
 
