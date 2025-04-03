@@ -64,6 +64,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to ChatGPT'
   },
   {
+    pattern: 'clerk',
+    bangCommand: 'raw',
+    targetValue: 'https://clerk.com/',
+    description: 'Navigate to Clerk'
+  },
+  {
     pattern: 'codepen',
     bangCommand: 'raw',
     targetValue: 'https://codepen.io/',
