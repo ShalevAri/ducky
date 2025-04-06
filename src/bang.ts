@@ -1,78 +1,188 @@
 // This file was (mostly) ripped from https://duckduckgo.com/bang.js
 
 export const bangs = [
+  // T3 Chat Start
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
     s: 'T3 Chat',
     sc: 'AI',
     t: 't3',
-    u: 'https://www.t3.chat/new?q={{{s}}}'
+    u: 'https://t3.chat/new?q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ GPT-4o',
+    s: 'T3 Chat (Llama 4 Scout)',
     sc: 'AI',
-    t: 't3-4o',
+    t: 't3-scout',
+    u: 'https://t3.chat/new?model=llama-4-scout&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (Llama 4 Maverick)',
+    sc: 'AI',
+    t: 't3-maverick',
+    u: 'https://t3.chat/new?model=llama-4-maverick&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (Quasar Alpha)',
+    sc: 'AI',
+    t: 't3-quasar',
+    u: 'https://t3.chat/new?model=quasar-alpha&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (GPT-4o-mini)',
+    sc: 'AI',
+    t: 't3-gpt-4o-mini',
+    u: 'https://t3.chat/new?model=gpt-4o-mini&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (GPT-4o)',
+    sc: 'AI',
+    t: 't3-gpt-4o',
     u: 'https://t3.chat/new?model=gpt-4o&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ GPT-o3-mini',
+    s: 'T3 Chat (GPT-o3-mini)',
     sc: 'AI',
-    t: 't3-o3',
+    t: 't3-gpt-o3-mini',
     u: 'https://t3.chat/new?model=gpt-o3-mini&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ Claude 3.5',
+    s: 'T3 Chat (Claude 3.5 Sonnet)',
     sc: 'AI',
-    t: 't3-cl3.5',
+    t: 't3-claude-3.5',
     u: 'https://t3.chat/new?model=claude-3.5&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ Claude 3.7',
+    s: 'T3 Chat (Claude 3.7 Sonnet)',
     sc: 'AI',
-    t: 't3-cl3.7',
+    t: 't3-claude-3.7',
     u: 'https://t3.chat/new?model=claude-3.7&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ Claude 3.7 Reasoning',
+    s: 'T3 Chat (Claude 3.7 Sonnet Reasoning)',
     sc: 'AI',
-    t: 't3-cl3.7r',
+    t: 't3-claude-3.7-r',
     u: 'https://t3.chat/new?model=claude-3.7-reasoning&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ DeepSeek R1-Groq',
+    s: 'T3 Chat (Llama 3.3 70b)',
     sc: 'AI',
-    t: 't3-r1l',
+    t: 't3-llama-3.3',
+    u: 'https://t3.chat/new?model=llama-3.3-70b&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (Gemini 2.0 Flash Lite)',
+    sc: 'AI',
+    t: 't3-gemini-lite',
+    u: 'https://t3.chat/new?model=gemini-2.0-flash-lite-preview-02-05&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (Gemini 2.5 Pro)',
+    sc: 'AI',
+    t: 't3-gemini-2.5-pro',
+    u: 'https://t3.chat/new?model=gemini-2.5-pro&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (DeepSeek v3 Fireworks)',
+    sc: 'AI',
+    t: 't3-deepseek-v3-fireworks',
+    u: 'https://t3.chat/new?model=deepseek-v3-fireworks&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (DeepSeek v3 0324)',
+    sc: 'AI',
+    t: 't3-deepseek-v3-0324',
+    u: 'https://t3.chat/new?model=deepseek-chat-v3-0324&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (DeepSeek r1 OpenRouter)',
+    sc: 'AI',
+    t: 't3-deepseek-r1-openrouter',
+    u: 'https://t3.chat/new?model=deepseek-r1-openrouter&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (DeepSeek r1 Llama Distilled)',
+    sc: 'AI',
+    t: 't3-deepseek-r1-llama-distilled',
     u: 'https://t3.chat/new?model=deepseek-r1-groq&q={{{s}}}'
   },
   {
     c: 'AI',
-    d: 'www.t3.chat',
+    d: 't3.chat',
     r: 0,
-    s: 'T3 Chat w/ QWQ-32B',
+    s: 'T3 Chat (DeepSeek r1 Qwen Distilled)',
+    sc: 'AI',
+    t: 't3-deepseek-r1-qwen-distilled',
+    u: 'https://t3.chat/new?model=deepseek-r1-distill-qwen-32b-groq&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (Qwen 2.5 32b)',
+    sc: 'AI',
+    t: 't3-qwen-2.5',
+    u: 'https://t3.chat/new?model=qwen-2.5-32b-groq&q={{{s}}}'
+  },
+  {
+    c: 'AI',
+    d: 't3.chat',
+    r: 0,
+    s: 'T3 Chat (QwQ 32b)',
     sc: 'AI',
     t: 't3-qwq',
     u: 'https://t3.chat/new?model=qwq-32b&q={{{s}}}'
   },
+  // T3 Chat End
   {
     c: 'AI',
     d: 'www.perplexity.ai',
