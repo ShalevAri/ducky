@@ -30,6 +30,21 @@ Automatic pattern-based redirects without typing bang commands:
 typing 'shalevari/ducky' → automatically redirects to this GitHub repository
 ```
 
+You can also set a URL to redirect to:
+
+```bash
+# Pattern: ducky
+# Bang: N/A
+# URL: https://github.com/ShalevAri/ducky
+typing 'ducky' → automatically redirects to https://github.com/ShalevAri/ducky
+```
+
+If you want to search a term you used as a Duckling regularly (for example `ducky`), simply add a `\` before the term:
+
+```bash
+typing `\ducky` → searches the word `ducky` regularly
+```
+
 ### Ducky Islands
 
 Custom prompt prefixes for AI bangs:
