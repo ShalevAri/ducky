@@ -14,9 +14,6 @@ importers:
       effect:
         specifier: ^3.14.6
         version: 3.14.6
-      vite-plugin-pwa:
-        specifier: ^0.21.2
-        version: 0.21.2(vite@6.2.5(@types/node@22.14.0)(terser@5.39.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -48,6 +45,9 @@ importers:
       vite:
         specifier: ^6.2.5
         version: 6.2.5(@types/node@22.14.0)(terser@5.39.0)
+      vite-plugin-pwa:
+        specifier: ^0.21.2
+        version: 0.21.2(vite@6.2.5(@types/node@22.14.0)(terser@5.39.0))(workbox-build@7.3.0)(workbox-window@7.3.0)
 
 packages:
 
