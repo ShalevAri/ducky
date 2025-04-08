@@ -18,24 +18,18 @@ export class DucklingService {
   }
 
   loadDucklings(): Duckling[] {
-    console.log(`DucklingService: Loading ducklings from storage key '${DucklingService.STORAGE_KEY}'`)
     return this.storage.get<Duckling[]>(DucklingService.STORAGE_KEY, [])
   }
 
   saveDucklings(ducklings: Duckling[]): void {
-    console.log(`DucklingService: Saving ${ducklings.length} ducklings to storage key '${DucklingService.STORAGE_KEY}'`)
     this.storage.set(DucklingService.STORAGE_KEY, ducklings)
   }
 
   initializeDucklings(): void {
-    console.log('Initializing ducklings service')
     const existingDucklings = this.loadDucklings()
-    console.log(`Found ${existingDucklings.length} existing ducklings`)
 
     if (existingDucklings.length === 0) {
-      console.log('No ducklings found, initializing with default ducklings')
       this.saveDucklings(defaultDucklings)
-      console.log(`Saved ${defaultDucklings.length} default ducklings`)
     }
   }
 

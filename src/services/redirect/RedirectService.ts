@@ -174,11 +174,7 @@ export class RedirectService {
       const url = new URL(window.location.href)
       const query = url.searchParams.get('q')?.trim() ?? ''
 
-      console.log('RedirectService: Starting redirect with query:', query)
-      console.log('RedirectService: Default bang:', defaultBang)
-
       if (!query) {
-        console.log('RedirectService: No query, rendering default page')
         renderDefaultPage()
         return
       }
@@ -186,21 +182,17 @@ export class RedirectService {
       // Check super cache first
       const cachedUrl = this.superCache.get(query)
       if (cachedUrl) {
-        console.log('RedirectService: Using cached URL:', cachedUrl)
         renderRedirectPage(cachedUrl)
         return
       }
 
       if (RedirectService.FEELING_LUCKY_REGEX.test(query)) {
-        console.log('RedirectService: Handling feeling lucky search')
         const searchUrl = this.getBangRedirectUrl(query.slice(1), defaultBang, {}, bangs)
         if (!searchUrl) {
-          console.log('RedirectService: No search URL found for feeling lucky')
           return
         }
 
         this.superCache.set(query, searchUrl)
-        console.log('RedirectService: Redirecting to feeling lucky URL:', searchUrl)
         renderRedirectPage(searchUrl)
         return
       }
@@ -216,15 +208,12 @@ export class RedirectService {
         )
 
       const searchUrl = this.getBangRedirectUrl(query, defaultBang, duckyIslands, bangs)
-      console.log('RedirectService: Generated search URL:', searchUrl)
 
       if (!searchUrl) {
-        console.log('RedirectService: No search URL generated')
         return
       }
 
       this.superCache.set(query, searchUrl)
-      console.log('RedirectService: Redirecting to:', searchUrl)
       renderRedirectPage(searchUrl)
     } finally {
       const duration = performance.now() - startTime

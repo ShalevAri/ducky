@@ -12,12 +12,9 @@ const CACHE_SIZE_LIMIT = 100
 const ducklingMatchResultCache = new Map<string, { bangCommand: string; remainingQuery: string } | null>()
 
 export function loadDucklings(): Duckling[] {
-  console.log(`Loading ducklings from localStorage`)
   const ducklings = loadFromLocalStorage<Duckling[]>('ducky-ducklings', [])
-  console.log(`Loaded ${ducklings.length} ducklings from localStorage`)
 
   if (ducklings.length === 0) {
-    console.log(`No ducklings found, returning default ducklings`)
     return [...defaultDucklings]
   }
 
@@ -247,22 +244,17 @@ export const defaultDucklings: Duckling[] = [
 
 function getCachedDucklings(): Duckling[] {
   if (ducklingsCache !== null) {
-    console.log(`Using cached ducklings (${ducklingsCache.length} items)`)
     return ducklingsCache
   }
 
-  console.log(`No duckling cache found, loading from storage`)
   const ducklings = loadDucklings()
   ducklingsCache = ducklings
   return ducklings
 }
 
 export function matchDuckling(query: string): { bangCommand: string; remainingQuery: string } | null {
-  console.log(`Duckling match attempt for: '${query}'`)
-
   if (ducklingMatchResultCache.has(query)) {
     const cachedResult = ducklingMatchResultCache.get(query)
-    console.log(`Using cached result for '${query}':`, cachedResult)
     return cachedResult ?? null
   }
 
@@ -272,7 +264,6 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
       bangCommand: 'none',
       remainingQuery: searchQuery
     }
-    console.log(`Backslash search result:`, result)
 
     if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
       const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
@@ -284,23 +275,17 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   }
 
   const ducklings = getCachedDucklings()
-  console.log(
-    `Loaded ${ducklings.length} ducklings with patterns:`,
-    ducklings.map((d) => d.pattern)
-  )
   let result: { bangCommand: string; remainingQuery: string } | null = null
 
   const isSingleWord = !query.includes(' ')
 
   if (isSingleWord) {
     for (const duckling of ducklings) {
-      console.log(`Checking exact match: '${query}' === '${duckling.pattern}'`, query === duckling.pattern)
       if (query === duckling.pattern) {
         result = {
           bangCommand: duckling.bangCommand,
           remainingQuery: duckling.targetValue
         }
-        console.log(`Exact match found:`, result)
 
         if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
           const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
@@ -314,17 +299,12 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   }
 
   for (const duckling of ducklings) {
-    console.log(
-      `Checking prefix match: '${query}' startsWith '${duckling.pattern} '`,
-      query.startsWith(duckling.pattern + ' ')
-    )
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
 
       if (isSingleWord || !ducklings.some((d) => additionalQuery.includes(d.pattern))) {
         const remainingQuery = duckling.targetValue + ' ' + additionalQuery
         result = { bangCommand: duckling.bangCommand, remainingQuery }
-        console.log(`Prefix match found:`, result)
 
         if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
           const firstKey = Array.from(ducklingMatchResultCache.keys())[0]
@@ -336,8 +316,6 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
       }
     }
   }
-
-  console.log(`No duckling match found for: '${query}'`)
 
   if (ducklingMatchResultCache.size >= CACHE_SIZE_LIMIT) {
     const firstKey = Array.from(ducklingMatchResultCache.keys())[0]

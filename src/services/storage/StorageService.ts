@@ -31,23 +31,18 @@ export class StorageService {
   }
 
   get<T>(key: string, defaultValue: T): T {
-    console.log(`StorageService: Getting value for key '${key}'`)
-
     if (this.cache.has(key)) {
-      console.log(`StorageService: Using cached value for key '${key}'`)
       return this.cache.get(key) as T
     }
 
     try {
       const value = localStorage.getItem(key)
       if (value === null) {
-        console.log(`StorageService: No value found for key '${key}', using default`)
         this.cache.set(key, defaultValue)
         return defaultValue
       }
 
       const parsedValue = JSON.parse(value) as T
-      console.log(`StorageService: Successfully retrieved value for key '${key}'`)
       this.cache.set(key, parsedValue)
       return parsedValue
     } catch (error) {
@@ -58,11 +53,9 @@ export class StorageService {
   }
 
   set<T>(key: string, value: T): void {
-    console.log(`StorageService: Setting value for key '${key}'`)
     try {
       this.cache.set(key, value)
       localStorage.setItem(key, JSON.stringify(value))
-      console.log(`StorageService: Successfully set value for key '${key}'`)
     } catch (error) {
       console.error(`StorageService: Error setting value for key '${key}'`, error)
     }
