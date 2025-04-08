@@ -14,8 +14,10 @@ alwaysApply: true
 ├── docker-compose.yml
 ├── eslint.config.mjs
 ├── index.html
-├── node_modules
 ├── package.json
+├── playwright-report
+│   ├── data
+│   └── index.html
 ├── playwright.config.ts
 ├── pnpm-lock.yaml
 ├── public
@@ -41,20 +43,30 @@ alwaysApply: true
 │   ├── main.ts
 │   ├── redirect-manager.ts
 │   ├── services
+│   │   ├── base
+│   │   │   └── BaseSingleton.ts
 │   │   ├── cache
+│   │   │   ├── CacheService.ts
 │   │   │   └── SuperCacheService.ts
 │   │   ├── ducklings
 │   │   │   └── DucklingService.ts
 │   │   ├── error
 │   │   ├── islands
 │   │   │   └── IslandService.ts
+│   │   ├── logging
+│   │   │   └── LoggingService.ts
+│   │   ├── performance
 │   │   ├── redirect
 │   │   │   └── RedirectService.ts
 │   │   ├── storage
 │   │   │   └── StorageService.ts
 │   │   ├── ui
 │   │   │   ├── RedirectPage.ts
-│   │   │   └── UIManager.ts
+│   │   │   ├── UIManager.ts
+│   │   │   └── components
+│   │   │       ├── BangManager.ts
+│   │   │       ├── DucklingManager.ts
+│   │   │       └── IslandManager.ts
 │   │   └── version
 │   ├── types
 │   │   ├── bangs.ts
@@ -65,6 +77,7 @@ alwaysApply: true
 │   │   ├── performance.ts
 │   │   └── storage.ts
 │   └── vite-env.d.ts
+├── test-results
 ├── tests
 │   ├── ducklings
 │   │   └── github-duckling.spec.ts
@@ -74,10 +87,5 @@ alwaysApply: true
 │       ├── bang-selector.spec.ts
 │       ├── headings.spec.ts
 │       └── url-bar.spec.ts
-├── tools
-│   ├── llm_api.py
-│   ├── screenshot_utils.py
-│   ├── search_engine.py
-│   └── web_scraper.py
 ├── tsconfig.json
 └── vite.config.ts
