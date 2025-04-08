@@ -1,41 +1,26 @@
-# 🦆 Ducky
+# Ducky
 
-A lightning-fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
+A (very) fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
 
-When used as a custom search engine, Ducky provides all of DuckDuckGo's bangs (and more!)
+And when I say it's fast, I mean it. Go ahead and snap your fingers. Saw that duration? That's how fast the redirect is.
 
-with significantly improved performance.
-
-# 🚧 Maintenance Mode
-
-Ducky is currently in maintenance mode.
-
-No new features will be developed, I'm currently focusing on fixing bugs, refactoring code, improving performance, etc.
-
-## 🚀 Why Ducky?
+## Why Ducky?
 
 DuckDuckGo's bang redirects are processed server-side, leading to slow DNS resolution and redirect times.
 
-Ducky solves this by handling all redirects client-side, resulting in near-instantaneous navigation.
+Ducky solves this by handling all redirects client-side, resulting in very fast navigation.
 
-## ✨ Features
+## Features
 
-### 🎯 Bang Commands
+### Bang Commands
 
 - Full support for all DuckDuckGo bangs
-- Client-side processing for faster redirects
-- Zero server latency
+- Client-side processing for extremely fast redirects
+- Ducklings (more on that below)
+- Islands (more on that below)
+- Super Cache (more on that below)
 
-### 🏝️ Ducky Islands
-
-Custom prompt prefixes for AI bangs:
-
-```bash
-!t3   # Search regularly in T3 Chat
-!t3a  # Injects a prompt to prioritize direct answers (for when you need a quick answer instead of a wall of text)
-```
-
-### 🐥 Ducklings
+### Ducklings
 
 Automatic pattern-based redirects without typing bang commands:
 
@@ -45,13 +30,20 @@ Automatic pattern-based redirects without typing bang commands:
 typing 'shalevari/ducky' → automatically redirects to this GitHub repository
 ```
 
-### 🔍 Super Cache
+### Ducky Islands
 
-Super Cache allows Ducky to cache recent search results, so you don't have to wait for the redirect.
+Custom prompt prefixes for AI bangs:
 
-The default redirect speed is already very fast, but this may improve it even more.
+```bash
+!t3   # Directly search T3 Chat as usual
+!t3a  # Injects a prompt before your search to prioritize direct answers
+```
 
-## 📦 Installation
+### Super Cache
+
+Super Cache allows Ducky to cache the last 100 search results, so you don't even have to wait for the (already very fast) redirect.
+
+## Installation
 
 ### npm
 
@@ -89,69 +81,43 @@ bun install
 bun dev
 ```
 
-### 🔍 Add Ducky to your browser:
+### Add Ducky to your browser:
 
 - Add `http://localhost:49152?q=%s` as a custom search engine in your browser
 
-## 🛠️ Configuration
+## Configuration
 
-### 🐛 Debug Mode
+### Debug Mode
 
 Enable detailed redirect timing information:
 
-1. Either open `http://localhost:49152` or type `duckylocal` to open it automatically
-2. Add `DEBUG_MODE: true` to localStorage
-3. Open the console and navigate to any website, you should now see debug information
+1. Either open `http://localhost:49152` or search `duckylocal` to open it automatically
+2. Right click and inspect the page
+3. Add `DEBUG_MODE` to LocalStorage and set it to `true`
+4. In your current webpage, open the console. Then, search anything and you should see the debug information
 
-### 🔧 LocalStorage Options
+### LocalStorage Options
 
 ```javascript
 {
-  "DEBUG_MODE": true/false,           // Enable/disable Debug Mode
-  "SUPER_CACHE": true/false,          // Enable/disable Super Cache
-  "DISABLE_LOADING_PAGE": true/false, // Disable the loading page
-  "default-bang": "string"           // Set the default search engine to use
+  "DEBUG_MODE": true/false,              // Enable/disable Debug Mode
+  "DISABLE_LOADING_PAGE": true/false,    // Disable the loading page
+  "SUPER_CACHE": true/false,             // Enable/disable Super Cache
 }
 ```
 
-### 📡 Port Configuration
+### Port Configuration
 
 The default port is `49152`, you can change it by editing the `vite.config.ts` file
 
-## 📝 Credits
+## Roadmap
+
+- [ ] Export user config as JSON
+- [ ] Add more Playwright tests
+- [ ] `!!` to open subpage of a website (e.g. `!! example/path` would open `https://example.com/path`)
+
+## Credits
 
 Ducky is a fork of [Unduck](https://github.com/t3dotgg/unduck) by [Theo](https://github.com/t3dotgg) with additional features and performance optimizations.
 
-Special thanks to him for the original project and the inspiration for this work.
-
-## 🗺️ Roadmap
-
-### 🗄️ Backlog
-
-- [ ] Export custom Islands and Ducklings as JSON to share / import
-
-### ⚡ Next Up
-
-- [ ] Remove unnecessary comments, console logs, etc and overall clean up the code
-- [ ] Be able to edit & delete current Islands and Ducklings
-
-### 🧑‍💻 In Progress
-
-- [ ] Add Playwright tests
-
-### 🏁 Done
-
-- [x] v1.0.0
-- [x] Add a "clear recent bangs" button
-- [x] Choose AI model when searching in T3 Chat
-- [x] Add some sort of Debug Mode
-- [x] Add CI for linting, formatting, tests, etc.
-- [x] Improve UI/UX
-- [x] Fix broken reverse bangs
-- [x] Choose AI model when searching in T3 Chat with `!t3a` bang
-- [x] Search ducklings regularly if they start with a backslash
-- [x] Add a funny loading page
-- [x] Add more built-in Islands and Ducklings
-- [x] Fix incorrect search results when searching normally but with a duckling at the start
-- [x] Add LocalStorage keys to customize Ducky
-- [x] Create a new README file
+Special thanks to him for inspiring me to make this project.
