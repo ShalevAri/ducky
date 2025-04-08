@@ -29,19 +29,19 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.23.0",
+    "@eslint/js": "^9.24.0",
     "@playwright/test": "^1.51.1",
-    "@types/node": "^22.13.16",
-    "@typescript-eslint/eslint-plugin": "^8.29.0",
-    "@typescript-eslint/parser": "^8.29.0",
-    "eslint": "^9.23.0",
+    "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^9.24.0",
     "prettier": "^3.5.3",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.4"
+    "typescript": "~5.8.3",
+    "vite": "^6.2.5"
   },
   "dependencies": {
     "dedent": "^1.5.3",
-    "effect": "^3.14.4",
+    "effect": "^3.14.6",
     "vite-plugin-pwa": "^0.21.2"
   },
   "pnpm": {
