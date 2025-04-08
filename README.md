@@ -60,6 +60,16 @@ Super Cache allows Ducky to cache the last 100 search results, so you don't even
 
 ## Installation
 
+The easiest way to install Ducky is by running the `setup.sh` script.
+
+You can do that with the following command:
+
+```bash
+curl -sSf https://raw.githubusercontent.com/ShalevAri/ducky/main/setup.sh | bash
+```
+
+If you'd like to install manually, here are the steps:
+
 ### npm
 
 ```bash
