@@ -117,6 +117,5 @@ esac
 
 if [ "$RUN_IN_BACKGROUND" = true ]; then
     print_status "To use Ducky, add 'http://localhost:$PORT?q=%s' as a custom search engine in your browser."
-    print_status "To stop Ducky later, you can use: pkill -f 'vite'"
     print_status "If you want to stop Ducky, run 'lsof -i :$PORT' and then 'kill -9 <PID>'. Replace $PORT if you've set a custom port, and <PID> with the actual PID of the process."
 fi
