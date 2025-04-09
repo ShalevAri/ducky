@@ -33,7 +33,7 @@ export class RedirectService {
   private static readonly BANG_REGEX = /!(\S+)|(\S+)!/i
   private static readonly BANG_REPLACE_REGEX = /!(\S+)\s*|(\S+)!\s*/i
   private static readonly FEELING_LUCKY_REGEX = /^!$/i
-  private static readonly DOUBLE_BANG_REGEX = /^!!\s*(\S+?)\/(\S+)/i
+  private static readonly DOUBLE_BANG_REGEX = /^!!\s*(?:(\.\w+)\s+)?(\S+?)\/(\S+)/i
 
   updateRecentBangs(bangName: string): void {
     if (!bangName) return
@@ -63,14 +63,16 @@ export class RedirectService {
     try {
       if (!query) return null
 
-      // Check for !! feature first
       const doubleBangMatch = RedirectService.DOUBLE_BANG_REGEX.exec(query)
       if (doubleBangMatch) {
-        const domain = doubleBangMatch[1]
-        const path = doubleBangMatch[2]
-        if (domain && path) {
-          const result = `https://${domain}.com/${path}`
-          this.bangCache.set(query, result) // Use the same cache for simplicity
+        const specifiedTld = doubleBangMatch[1]
+        const domainPart = doubleBangMatch[2]
+        const path = doubleBangMatch[3]
+
+        if (domainPart && path) {
+          const tld = specifiedTld || '.com'
+          const result = `https://${domainPart}${tld}/${path}`
+          this.bangCache.set(query, result)
           return result
         }
       }
