@@ -58,6 +58,10 @@ Custom prompt prefixes for AI bangs:
 
 Super Cache allows Ducky to cache the last 100 search results, so you don't even have to wait for the (already very fast) redirect.
 
+### Sub-pages
+
+You can now use `!!` to open sub-pages of a website (e.g. `!! example/path` would open `https://example.com/path`).
+
 ## Installation
 
 The easiest way to install Ducky is by running the `setup.sh` script.
@@ -139,7 +143,6 @@ The default port is `49152`, you can change it by editing the `vite.config.ts` f
 
 - [ ] Export user config as JSON
 - [ ] Add more Playwright tests
-- [ ] `!!` to open subpage of a website (e.g. `!! example/path` would open `https://example.com/path`)
 
 ## Credits
 
