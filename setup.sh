@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# TODO:
-# - Use a variable for the port
-# - Use a variable for the repository URL
+PORT=49152
+REPO_URL="https://github.com/ShalevAri/ducky.git"
 
 print_status() {
     echo -e "\033[1;34m>>> $1\033[0m"
@@ -58,7 +57,7 @@ if [ -d "$DUCKY_DIR" ]; then
 fi
 
 print_status "Cloning Ducky repository to $DUCKY_DIR..."
-git clone https://github.com/ShalevAri/ducky.git "$DUCKY_DIR"
+git clone "$REPO_URL" "$DUCKY_DIR"
 cd "$DUCKY_DIR"
 
 read -p "Would you like to run Ducky in the background? (y/N) " -n 1 -r
@@ -76,7 +75,7 @@ case $PACKAGE_MANAGER in
         print_status "Starting development server with pnpm..."
         if [ "$RUN_IN_BACKGROUND" = true ]; then
             pnpm dev &
-            print_status "Ducky is running in the background at http://localhost:49152"
+            print_status "Ducky is running in the background at http://localhost:$PORT"
         else
             pnpm dev
         fi
@@ -87,7 +86,7 @@ case $PACKAGE_MANAGER in
         print_status "Starting development server with bun..."
         if [ "$RUN_IN_BACKGROUND" = true ]; then
             bun dev &
-            print_status "Ducky is running in the background at http://localhost:49152"
+            print_status "Ducky is running in the background at http://localhost:$PORT"
         else
             bun dev
         fi
@@ -98,7 +97,7 @@ case $PACKAGE_MANAGER in
         print_status "Starting development server with yarn..."
         if [ "$RUN_IN_BACKGROUND" = true ]; then
             yarn dev &
-            print_status "Ducky is running in the background at http://localhost:49152"
+            print_status "Ducky is running in the background at http://localhost:$PORT"
         else
             yarn dev
         fi
@@ -109,7 +108,7 @@ case $PACKAGE_MANAGER in
         print_status "Starting development server with npm..."
         if [ "$RUN_IN_BACKGROUND" = true ]; then
             npm run dev &
-            print_status "Ducky is running in the background at http://localhost:49152"
+            print_status "Ducky is running in the background at http://localhost:$PORT"
         else
             npm run dev
         fi
@@ -117,7 +116,7 @@ case $PACKAGE_MANAGER in
 esac
 
 if [ "$RUN_IN_BACKGROUND" = true ]; then
-    print_status "To use Ducky, add 'http://localhost:49152?q=%s' as a custom search engine in your browser."
+    print_status "To use Ducky, add 'http://localhost:$PORT?q=%s' as a custom search engine in your browser."
     print_status "To stop Ducky later, you can use: pkill -f 'vite'"
-    print_status "If you want to stop Ducky, run 'lsof -i :49152' and then 'kill -9 <PID>'. Replace 49152 if you've set a custom port, and <PID> with the actual PID of the process."
+    print_status "If you want to stop Ducky, run 'lsof -i :$PORT' and then 'kill -9 <PID>'. Replace $PORT if you've set a custom port, and <PID> with the actual PID of the process."
 fi
