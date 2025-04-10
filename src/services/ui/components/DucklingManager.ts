@@ -20,6 +20,12 @@ export class DucklingManager {
 
     return `
       <div class="table-wrapper">
+        <div class="table-header">
+          <h2>Ducklings</h2>
+          <div class="table-actions">
+            <button class="delete-all-ducklings action-button">Delete All</button>
+          </div>
+        </div>
         <table class="ducklings-table">
           <thead>
             <tr>
@@ -89,6 +95,7 @@ export class DucklingManager {
   private attachDucklingHandlers(app: HTMLDivElement, ducklingForm: DucklingForm): void {
     this.attachDucklingDeleteHandlers(app)
     this.attachDucklingEditHandlers(app, ducklingForm)
+    this.attachDucklingDeleteAllHandler(app)
   }
 
   private attachDucklingEditHandlers(app: HTMLDivElement, ducklingForm: DucklingForm): void {
@@ -118,6 +125,31 @@ export class DucklingManager {
         ducklingsList.innerHTML = this.renderDucklingsList()
         this.attachDucklingDeleteHandlers(app)
       })
+    })
+  }
+
+  private attachDucklingDeleteAllHandler(app: HTMLDivElement): void {
+    const deleteAllButton = app.querySelector<HTMLButtonElement>('.delete-all-ducklings')
+    if (!deleteAllButton) return
+
+    deleteAllButton.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete all ducklings? This action cannot be undone.')) {
+        this.ducklingService.clearAllDucklings()
+        const ducklingsList = app.querySelector<HTMLDivElement>('.ducklings-list')!
+        ducklingsList.innerHTML = this.renderDucklingsList()
+        const form = new DucklingForm(
+          app.querySelector('.duckling-form')!,
+          app.querySelector('.duckling-form-container')!,
+          app.querySelector('.add-duckling-button')!,
+          app.querySelector('.duckling-cancel-button')!,
+          (duckling) => {
+            this.ducklingService.addDuckling(duckling)
+            ducklingsList.innerHTML = this.renderDucklingsList()
+            this.attachDucklingHandlers(app, form)
+          }
+        )
+        this.attachDucklingHandlers(app, form)
+      }
     })
   }
 }

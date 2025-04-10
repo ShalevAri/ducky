@@ -58,4 +58,8 @@ export class IslandService {
     islands[key] = island
     this.saveIslands(islands)
   }
+
+  clearAllIslands(): void {
+    this.saveIslands({})
+  }
 }

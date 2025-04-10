@@ -320,11 +320,10 @@ input[type='submit'] {
 
 .islands-list,
 .ducklings-list {
-  margin: 1rem 0;
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  max-height: 300px;
-  overflow: auto;
+  margin-top: 0.75rem;
+  max-height: 130px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
 }
 
 .islands-table,
@@ -336,11 +335,46 @@ input[type='submit'] {
 }
 
 .table-wrapper {
-  position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-  background: var(--bg-color);
+  margin: 20px 0;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background: var(--button-hover-bg);
+}
+
+.action-button:active {
+  background: var(--button-active-bg);
 }
 
 .islands-table thead,
@@ -612,14 +646,6 @@ input[type='submit'] {
 .islands-table th {
   font-weight: 600;
   font-size: 0.9em;
-}
-
-.islands-list,
-.ducklings-list {
-  margin-top: 0.75rem;
-  max-height: 130px;
-  overflow-y: auto;
-  margin-bottom: 0.5rem;
 }
 
 .prompt-cell,

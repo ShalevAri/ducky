@@ -82,4 +82,8 @@ export class DucklingService {
 
     return null
   }
+
+  clearAllDucklings(): void {
+    this.saveDucklings([])
+  }
 }

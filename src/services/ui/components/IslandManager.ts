@@ -20,6 +20,12 @@ export class IslandManager {
 
     return `
       <div class="table-wrapper">
+        <div class="table-header">
+          <h2>Islands</h2>
+          <div class="table-actions">
+            <button class="delete-all-islands action-button">Delete All</button>
+          </div>
+        </div>
         <table class="islands-table">
           <thead>
             <tr>
@@ -96,6 +102,7 @@ export class IslandManager {
   ): void {
     this.attachIslandDeleteHandlers(app, duckyIslands)
     this.attachIslandEditHandlers(app, duckyIslands, islandForm)
+    this.attachIslandDeleteAllHandler(app, duckyIslands)
   }
 
   private attachIslandEditHandlers(
@@ -130,6 +137,32 @@ export class IslandManager {
         islandsList.innerHTML = this.renderIslandsList(duckyIslands)
         this.attachIslandDeleteHandlers(app, duckyIslands)
       })
+    })
+  }
+
+  private attachIslandDeleteAllHandler(app: HTMLDivElement, duckyIslands: Record<string, DuckyIsland>): void {
+    const deleteAllButton = app.querySelector<HTMLButtonElement>('.delete-all-islands')
+    if (!deleteAllButton) return
+
+    deleteAllButton.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete all islands? This action cannot be undone.')) {
+        this.islandService.clearAllIslands()
+        Object.keys(duckyIslands).forEach((key) => delete duckyIslands[key])
+        const islandsList = app.querySelector<HTMLDivElement>('.islands-list')!
+        islandsList.innerHTML = this.renderIslandsList(duckyIslands)
+        const form = new IslandForm(
+          app.querySelector('.island-form')!,
+          app.querySelector('.island-form-container')!,
+          app.querySelector('.add-island-button')!,
+          app.querySelector('.cancel-button')!,
+          (island) => {
+            duckyIslands[island.key] = island
+            islandsList.innerHTML = this.renderIslandsList(duckyIslands)
+            this.attachIslandHandlers(app, duckyIslands, form)
+          }
+        )
+        this.attachIslandHandlers(app, duckyIslands, form)
+      }
     })
   }
 }
