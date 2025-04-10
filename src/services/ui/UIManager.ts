@@ -196,7 +196,7 @@ export class UIManager {
                 
                 <div class="form-group">
                   <label for="duckling-description">Description:</label>
-                  <input type="text" id="duckling-description" name="description" class="duckling-input" required>
+                  <input type="text" id="duckling-description" name="description" class="duckling-input">
                   <p class="form-help">A short description of what this duckling does</p>
                 </div>
                 

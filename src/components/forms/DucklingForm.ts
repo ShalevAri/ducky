@@ -55,6 +55,22 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
     this.cancelButton.addEventListener('click', () => {
       this.hide()
     })
+
+    // Add event listener for the pattern input
+    const patternInput = this.formElement.querySelector<HTMLInputElement>('#duckling-pattern')
+    const descriptionInput = this.formElement.querySelector<HTMLInputElement>('#duckling-description')
+
+    if (patternInput && descriptionInput) {
+      patternInput.addEventListener('input', () => {
+        const patternValue = patternInput.value.trim()
+        if (patternValue) {
+          descriptionInput.placeholder = `Navigate to the ${patternValue} website`
+        } else {
+          // Reset to default placeholder if needed, or leave blank
+          descriptionInput.placeholder = "Describe the duckling's purpose" // Or your desired default
+        }
+      })
+    }
   }
 
   setEditMode(duckling: Duckling): void {
@@ -81,11 +97,17 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
     event.preventDefault()
 
     if (!this.validateForm()) {
-      alert('All fields are required')
+      alert('All fields are required except possibly Bang Command')
       return
     }
 
     const formData = this.getFormData()
+
+    // If description is empty, use the dynamic placeholder text
+    if (!formData.description.trim()) {
+      formData.description = `Navigate to the ${formData.pattern} website`
+    }
+
     const bangCommand = formData.bangCommand.trim().replace(/^!/, '')
     const targetValue = formData.targetValue.trim()
     const isDirectUrl = targetValue.startsWith('http://') || targetValue.startsWith('https://')
@@ -125,8 +147,14 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
     this.isEditing = false
     this.editingPattern = null
     const patternInput = this.formElement.querySelector<HTMLInputElement>('#duckling-pattern')
+    const descriptionInput = this.formElement.querySelector<HTMLInputElement>('#duckling-description') // Get description input
+
     if (patternInput) {
       patternInput.readOnly = false
+    }
+    // Reset description placeholder on form reset
+    if (descriptionInput) {
+      descriptionInput.placeholder = "Describe the duckling's purpose" // Reset to default
     }
     const submitButton = this.formElement.querySelector<HTMLButtonElement>('.duckling-save-button')
     if (submitButton) {
@@ -136,7 +164,8 @@ export class DucklingForm extends BaseForm<DucklingFormData> {
 
   private validateForm(): boolean {
     const formData = this.getFormData()
-    const requiredFields: (keyof DucklingFormData)[] = ['pattern', 'targetValue', 'description']
+    // Description is no longer strictly required as it can be auto-generated
+    const requiredFields: (keyof DucklingFormData)[] = ['pattern', 'targetValue']
 
     if (!this.validateRequired(requiredFields)) {
       return false
