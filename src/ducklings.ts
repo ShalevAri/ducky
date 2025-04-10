@@ -151,16 +151,34 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to Next.js documentation'
   },
   {
+    pattern: 'nixpkgs',
+    bangCommand: 'raw',
+    targetValue: 'https://search.nixos.org/packages',
+    description: 'Search Nix Packages'
+  },
+  {
     pattern: 'npm',
     bangCommand: 'raw',
     targetValue: 'https://www.npmjs.com/',
     description: 'Search NPM packages'
   },
   {
+    pattern: 'ollama',
+    bangCommand: 'raw',
+    targetValue: 'https://ollama.com/',
+    description: 'Navigate to Ollama'
+  },
+  {
     pattern: 'posthog',
     bangCommand: 'raw',
     targetValue: 'https://posthog.com/',
     description: 'Navigate to the PostHog website'
+  },
+  {
+    pattern: 'protondb',
+    bangCommand: 'raw',
+    targetValue: 'https://www.protondb.com/',
+    description: 'Navigate to ProtonDB'
   },
   {
     pattern: 'react',
