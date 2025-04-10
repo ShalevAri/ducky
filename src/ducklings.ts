@@ -317,6 +317,10 @@ export function matchDuckling(query: string): { bangCommand: string; remainingQu
   }
 
   for (const duckling of ducklings) {
+    if (duckling.bangCommand === 'raw') {
+      continue
+    }
+
     if (query.startsWith(duckling.pattern + ' ')) {
       const additionalQuery = query.slice(duckling.pattern.length + 1)
 
