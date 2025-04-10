@@ -194,7 +194,18 @@ export class RedirectService {
         return
       }
 
-      // Check super cache first
+      if (query !== '!!' && query.trim() !== '') {
+        localStorage.setItem('last-search', query)
+      }
+
+      if (query === '!!') {
+        const lastSearch = localStorage.getItem('last-search')
+        if (lastSearch) {
+          window.location.href = `${window.location.origin}${window.location.pathname}?q=${encodeURIComponent(lastSearch)}`
+          return
+        }
+      }
+
       const cachedUrl = this.superCache.get(query)
       if (cachedUrl) {
         renderRedirectPage(cachedUrl)
