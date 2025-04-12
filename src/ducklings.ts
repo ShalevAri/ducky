@@ -43,10 +43,22 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the 21st website'
   },
   {
+    pattern: 'aliexpress',
+    bangCommand: 'raw',
+    targetValue: 'https://aliexpress.com/',
+    description: 'Navigate to the AliExpress website'
+  },
+  {
     pattern: 'amazon',
     bangCommand: 'raw',
     targetValue: 'https://amazon.com/',
     description: 'Navigate to Amazon'
+  },
+  {
+    pattern: 'apple',
+    bangCommand: 'raw',
+    targetValue: 'https://apple.com/',
+    description: 'Navigate to the Apple website'
   },
   {
     pattern: 'caniuse',
@@ -71,6 +83,18 @@ export const defaultDucklings: Duckling[] = [
     bangCommand: 'raw',
     targetValue: 'https://codepen.io/',
     description: 'Navigate to CodePen'
+  },
+  {
+    pattern: 'cookie-clicker',
+    bangCommand: 'raw',
+    targetValue: 'https://orteil.dashnet.org/cookieclicker/',
+    description: 'Navigate to the Cookie Clicker website'
+  },
+  {
+    pattern: 'coolors',
+    bangCommand: 'raw',
+    targetValue: 'https://coolors.co/',
+    description: 'Navigate to the Coolors website'
   },
   {
     pattern: 'cursor',
@@ -103,6 +127,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the local Ducky server'
   },
   {
+    pattern: 'facebook',
+    bangCommand: 'raw',
+    targetValue: 'https://facebook.com/',
+    description: 'Navigate to the Facebook website'
+  },
+  {
     pattern: 'figma',
     bangCommand: 'raw',
     targetValue: 'https://figma.com/',
@@ -127,10 +157,34 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to Gmail'
   },
   {
+    pattern: 'hacker-news',
+    bangCommand: 'raw',
+    targetValue: 'https://news.ycombinator.com/',
+    description: 'Navigate to the Hacker News website'
+  },
+  {
+    pattern: 'hn',
+    bangCommand: 'raw',
+    targetValue: 'https://news.ycombinator.com/',
+    description: 'Navigate to the Hacker News website'
+  },
+  {
+    pattern: 'instagram',
+    bangCommand: 'raw',
+    targetValue: 'https://instagram.com/',
+    description: 'Navigate to the Instagram website'
+  },
+  {
     pattern: 'jujutsu',
     bangCommand: 'ghr',
     targetValue: 'jj-vcs/jj',
     description: 'Navigate to Jujutsu'
+  },
+  {
+    pattern: 'ksp',
+    bangCommand: 'raw',
+    targetValue: 'https://ksp.co.il/web/',
+    description: 'Navigate to the KSP website'
   },
   {
     pattern: 'linkedin',
@@ -143,6 +197,12 @@ export const defaultDucklings: Duckling[] = [
     bangCommand: 'raw',
     targetValue: 'https://developer.mozilla.org/',
     description: 'Navigate to Mozilla Developer Network (MDN) documentation'
+  },
+  {
+    pattern: 'netflix',
+    bangCommand: 'raw',
+    targetValue: 'https://netflix.com/',
+    description: 'Navigate to the Netflix website'
   },
   {
     pattern: 'nextjs',
@@ -161,6 +221,12 @@ export const defaultDucklings: Duckling[] = [
     bangCommand: 'raw',
     targetValue: 'https://www.npmjs.com/',
     description: 'Search NPM packages'
+  },
+  {
+    pattern: 'office',
+    bangCommand: 'raw',
+    targetValue: 'https://office.com/',
+    description: 'Navigate to the Office website'
   },
   {
     pattern: 'ollama',
@@ -223,10 +289,16 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to Tailwind CSS documentation'
   },
   {
+    pattern: 'tms',
+    bangCommand: 'raw',
+    targetValue: 'https://tms.co.il/',
+    description: 'Navigate to the TMS website'
+  },
+  {
     pattern: 'twitter',
     bangCommand: 'raw',
-    targetValue: 'https://twitter.com/',
-    description: 'Navigate to Twitter/X'
+    targetValue: 'https://x.com/',
+    description: 'Navigate to the X (formerly Twitter) website'
   },
   {
     pattern: 'typescript',
@@ -253,10 +325,34 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to Visual Studio Code website'
   },
   {
+    pattern: 'x',
+    bangCommand: 'raw',
+    targetValue: 'https://x.com/',
+    description: 'Navigate to the X (formerly Twitter) website'
+  },
+  {
+    pattern: 'y',
+    bangCommand: 'raw',
+    targetValue: 'https://youtube.com/',
+    description: 'Navigate to the YouTube website'
+  },
+  {
+    pattern: 'you',
+    bangCommand: 'raw',
+    targetValue: 'https://youtube.com/',
+    description: 'Navigate to the YouTube website'
+  },
+  {
     pattern: 'youtube',
     bangCommand: 'raw',
     targetValue: 'https://youtube.com/',
-    description: 'Navigate to YouTube'
+    description: 'Navigate to the YouTube website'
+  },
+  {
+    pattern: 'yt',
+    bangCommand: 'raw',
+    targetValue: 'https://youtube.com/',
+    description: 'Navigate to the YouTube website'
   }
 ]
 
