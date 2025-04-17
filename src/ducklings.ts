@@ -319,6 +319,12 @@ export const defaultDucklings: Duckling[] = [
     description: 'Navigate to the Vercel website'
   },
   {
+    pattern: 'virustotal',
+    bangCommand: 'raw',
+    targetValue: 'https://virustotal.com/',
+    description: 'Navigate to the Virustotal website'
+  },
+  {
     pattern: 'vscode',
     bangCommand: 'raw',
     targetValue: 'https://code.visualstudio.com/',
