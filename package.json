@@ -2,7 +2,7 @@
   "name": "ducky",
   "private": true,
   "version": "1.0.0",
-  "description": "The fastest search router!",
+  "description": "A (really) fast & fully local search router.",
   "author": "Shalev Ari",
   "type": "module",
   "license": "AGPL-3.0-only",
