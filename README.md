@@ -2,7 +2,7 @@
 
 A (very) fast alternative to DuckDuckGo's bang redirects, designed for speed and efficiency.
 
-And when I say it's fast, I mean it. Go ahead and snap your fingers. Saw that duration? That's how fast the redirect is.
+And when I say it's fast, I mean it. Ducky has finished doing its job before you can lift your finger from the enter key.
 
 ## Why Ducky?
 
